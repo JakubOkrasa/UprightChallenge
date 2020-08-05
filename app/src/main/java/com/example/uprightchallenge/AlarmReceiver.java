@@ -35,6 +35,7 @@ public class AlarmReceiver extends BroadcastReceiver {
                 .setContentTitle("Are you straighten up?")
                 .setSmallIcon(R.drawable.ic_notify)
                 .setAutoCancel(true)
+                .setContentIntent(notifPendingIntent)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setDefaults(NotificationCompat.DEFAULT_ALL);
         mNotificationManager.notify(NOTIFICATION_ID, builder.build());
