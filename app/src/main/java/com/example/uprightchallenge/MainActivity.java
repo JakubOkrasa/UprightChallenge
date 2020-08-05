@@ -1,24 +1,17 @@
 package com.example.uprightchallenge;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-
-import android.Manifest;
 import android.app.AlarmManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.os.Vibrator;
 import android.widget.CompoundButton;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
     private NotificationManager mNotifyManager;
@@ -41,8 +34,8 @@ public class MainActivity extends AppCompatActivity {
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                         String toastMessage = "error: AlarmManager is null";
                         if(isChecked) {
-//                            long repeatInterval = AlarmManager.INTERVAL_FIFTEEN_MINUTES;
-                            long repeatInterval = 30000;
+//                          long repeatInterval = AlarmManager.INTERVAL_FIFTEEN_MINUTES;
+                            long repeatInterval = 30000; //short interval only for debug
                             long triggerTime = SystemClock.elapsedRealtime() + repeatInterval;
                             if(mAlarmManager!=null) {
                                 mAlarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerTime, repeatInterval, alarmPendingIntent);
@@ -60,31 +53,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
         );
-//        ctx = getApplicationContext();
-//        durationSpinner = (Spinner) findViewById(R.id.duration_spinner);
-//        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.duration_array, android.R.layout.simple_spinner_item);
-//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        durationSpinner.setAdapter(adapter);
-//        vibrator = (Vibrator) ctx.getSystemService(Context.VIBRATOR_SERVICE);
-//        timer = new CountDownTimer(10000, 1000) {
-//            @Override
-//            public void onTick(long millisUntilFinished) {
-//
-//            }
-//
-//            @Override
-//            public void onFinish() {
-//                Button buttonVibe = findViewById(R.id.btnvibe);
-//                buttonVibe.setText("vibing");
-//                //startVibrate();
-//                timer.start();
-//            }
-//        };
-
     }
-
-
-
 
     private void createNotificationChannel() {
         mNotifyManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
@@ -100,16 +69,4 @@ public class MainActivity extends AppCompatActivity {
             mNotifyManager.createNotificationChannel(notificationChannel);
         }
     }
-
-    /*
-    public void runTimer(View view) {
-        timer.start();
-    }
-
-    private void startVibrate() {
-        vibrator.vibrate(1000);
-    }
-    */
-
-
 }
