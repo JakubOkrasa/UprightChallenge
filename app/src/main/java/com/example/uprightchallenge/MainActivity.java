@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
         ToggleButton notifToggle = findViewById(R.id.notify_toggle);
         final AlarmManager mAlarmManager = (AlarmManager) this.getSystemService(ALARM_SERVICE);
         Intent alarmIntent = new Intent(this, AlarmReceiver.class);
+        notifToggle.setChecked(PendingIntent.getBroadcast(this, NOTIFICATION_ID, alarmIntent, PendingIntent.FLAG_NO_CREATE) != null); // check if notifications were turned on before the new MainActivity was stopped
         final PendingIntent alarmPendingIntent = PendingIntent.getBroadcast(this, NOTIFICATION_ID, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         notifToggle.setOnCheckedChangeListener(
                 new CompoundButton.OnCheckedChangeListener() {
