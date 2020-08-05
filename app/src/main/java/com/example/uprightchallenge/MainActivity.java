@@ -5,6 +5,7 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.widget.CompoundButton;
@@ -17,6 +18,8 @@ public class MainActivity extends AppCompatActivity {
     private NotificationManager mNotifyManager;
     private static final int NOTIFICATION_ID = 0;
     private static final String PRIMARY_CHANNEL_ID = "primary_notification_channel";
+    private YesPostureReceiver mYesReceiver = new YesPostureReceiver();
+    private static final String POSTURE_YES_ACTION = BuildConfig.APPLICATION_ID + ".POSTURE_YES_ACTION"; //the same line of code in AlarmReceiver (!)
 
 
     @Override
@@ -29,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
         Intent alarmIntent = new Intent(this, AlarmReceiver.class);
         notifToggle.setChecked(PendingIntent.getBroadcast(this, NOTIFICATION_ID, alarmIntent, PendingIntent.FLAG_NO_CREATE) != null); // check if notifications were turned on before the new MainActivity was stopped
         final PendingIntent alarmPendingIntent = PendingIntent.getBroadcast(this, NOTIFICATION_ID, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        registerReceiver(mYesReceiver, new IntentFilter(POSTURE_YES_ACTION));
         notifToggle.setOnCheckedChangeListener(
                 new CompoundButton.OnCheckedChangeListener() {
                     @Override
@@ -54,6 +58,12 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
         );
+    }
+
+    @Override
+    protected void onDestroy() {
+        unregisterReceiver(mYesReceiver);
+        super.onDestroy();
     }
 
     private void createNotificationChannel() {

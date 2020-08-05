@@ -14,9 +14,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <receiver
-            android:name=".AlarmReceiver"
+            android:name=".YesPostureReceiver"
             android:enabled="true"
             android:exported="false"></receiver>
+        <receiver
+            android:name=".AlarmReceiver"
+            android:enabled="true"
+            android:exported="false" />
 
         <activity android:name=".MainActivity">
             <intent-filter>
