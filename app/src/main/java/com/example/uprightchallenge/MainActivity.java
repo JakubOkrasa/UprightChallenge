@@ -1,34 +1,26 @@
 package com.example.uprightchallenge;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NotificationCompat;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
 import android.app.AlarmManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.media.AudioAttributes;
-import android.media.RingtoneManager;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.os.SystemClock;
 import android.os.Vibrator;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.Spinner;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
 public class MainActivity extends AppCompatActivity {
-
-    //CountDownTimer timer;
-   // Vibrator vibrator;
     private NotificationManager mNotifyManager;
     private static final int NOTIFICATION_ID = 0;
     private static final String PRIMARY_CHANNEL_ID = "primary_notification_channel";
@@ -41,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
         createNotificationChannel();
         ToggleButton notifToggle = findViewById(R.id.notify_toggle);
         final AlarmManager mAlarmManager = (AlarmManager) this.getSystemService(ALARM_SERVICE);
-        final Vibrator mVibrator = (Vibrator) this.getSystemService(VIBRATOR_SERVICE);
         Intent alarmIntent = new Intent(this, AlarmReceiver.class);
         final PendingIntent alarmPendingIntent = PendingIntent.getBroadcast(this, NOTIFICATION_ID, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         notifToggle.setOnCheckedChangeListener(
@@ -92,17 +83,20 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
+
+
     private void createNotificationChannel() {
         mNotifyManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        long[] vibPattern = {0, 100, 200, 100, 200};
+        long[] vibPattern = {0, 200, 200, 200, 200, 200}; //{delay1, vibDuration1, delay2, vibDuration2...}
         if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             NotificationChannel notificationChannel = new NotificationChannel(
                     PRIMARY_CHANNEL_ID,
                     "Check posture notification",
                     NotificationManager.IMPORTANCE_HIGH);
+            notificationChannel.setDescription("notification check posture");
             notificationChannel.enableVibration(true);
             notificationChannel.setVibrationPattern(vibPattern);
-            notificationChannel.setDescription("notification check posture");
             mNotifyManager.createNotificationChannel(notificationChannel);
         }
     }
