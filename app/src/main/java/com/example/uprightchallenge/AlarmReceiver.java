@@ -16,7 +16,7 @@ public class AlarmReceiver extends BroadcastReceiver {
     private static final int NOTIFICATION_ID = 0;
     private static final String PRIMARY_CHANNEL_ID = "primary_notification_channel";
     private static final String LOG_TAG = AlarmReceiver.class.getSimpleName();
-    private static final String POSTURE_YES_ACTION = BuildConfig.APPLICATION_ID + ".POSTURE_YES_ACTION";
+    private static final String POSTURE_YES_ACTION = BuildConfig.APPLICATION_ID + ".POSTURE_YES_ACTION"; //the same line of code in MainActivity (!)
 
     @Override
     public void onReceive(Context context, Intent intent) {

@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <receiver
-            android:name=".YesPostureReceiver"
+            android:name=".CorrectPostureReceiver"
             android:enabled="true"
             android:exported="false"></receiver>
         <receiver
