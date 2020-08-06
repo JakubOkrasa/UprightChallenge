@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.uprightchallenge.MainActivity;
 import com.example.uprightchallenge.R;
@@ -24,7 +25,8 @@ class CorrectPostureReceiver extends BroadcastReceiver {
         Log.d(LOG_TAG, "yes option clicked");
         mTxtCount = mainActivity.findViewById(R.id.txt_count);
         if (mTxtCount != null) {
-            mTxtCount.setText(Integer.toString(mCount++));
+            mCount++;
+            mTxtCount.setText(Integer.toString(mCount));
         }
     }
 

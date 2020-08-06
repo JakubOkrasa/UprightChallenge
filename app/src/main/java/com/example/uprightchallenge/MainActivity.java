@@ -9,12 +9,14 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.widget.CompoundButton;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
+// todo #bug notif toggle is on at the beginning (sometimes?)
+// todo #later show number of daily count in notification
 public class MainActivity extends AppCompatActivity {
     private static String CORRECT_POSTURE_COUNT;
     private NotificationManager mNotifyManager;
@@ -28,7 +30,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         createNotificationChannel();
         ToggleButton notifToggle = findViewById(R.id.notify_toggle);
         final AlarmManager mAlarmManager = (AlarmManager) this.getSystemService(ALARM_SERVICE);
