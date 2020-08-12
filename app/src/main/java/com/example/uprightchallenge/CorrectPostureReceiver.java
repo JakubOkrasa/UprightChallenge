@@ -33,7 +33,6 @@ class CorrectPostureReceiver extends BroadcastReceiver {
     public int getCount() {
         return mCount;
     }
-
     public TextView getTxtCount() {
         return mTxtCount;
     }
