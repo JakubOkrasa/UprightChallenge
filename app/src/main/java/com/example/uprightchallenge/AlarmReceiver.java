@@ -17,12 +17,6 @@ public class AlarmReceiver extends BroadcastReceiver {
     private static final int NOTIFICATION_ID = 0;
     private static final String PRIMARY_CHANNEL_ID = "primary_notification_channel";
     private static final String LOG_TAG = AlarmReceiver.class.getSimpleName();
-//    private TextView mCount;
-
-//    public AlarmReceiver() {
-//        super();
-//        mCount =
-//    }
 
     @Override
     public void onReceive(Context context, Intent intent) {

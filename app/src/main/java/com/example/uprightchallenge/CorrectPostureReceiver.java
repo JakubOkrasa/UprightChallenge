@@ -5,10 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.example.uprightchallenge.MainActivity;
-import com.example.uprightchallenge.R;
 
 class CorrectPostureReceiver extends BroadcastReceiver {
 
