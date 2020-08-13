@@ -2,10 +2,14 @@
     <string name="app_name">Upright Challenge</string>
     <string name="toggle_notifications_on">notifications on</string>
     <string name="toggle_notifications_off">notifications off</string>
+    <string name="preferences_notifications_cat">Notifications</string>
     <string-array name="duration_array">
         <item>5 seconds</item>
         <item>5 minutes</item>
         <item>30 minutes</item>
         <item>1 hour</item>
     </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
