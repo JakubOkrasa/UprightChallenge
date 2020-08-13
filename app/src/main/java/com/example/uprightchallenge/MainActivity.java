@@ -14,8 +14,10 @@ import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+import android.widget.Toolbar;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 // todo #bug notif toggle is on at the beginning (sometimes?)
 // todo #later show number of daily count in notification
@@ -31,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     static final String POSTURE_YES_ACTION = BuildConfig.APPLICATION_ID + ".POSTURE_YES_ACTION";
     private int mCorrectPostureCount;
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +43,9 @@ public class MainActivity extends AppCompatActivity {
 
         ToggleButton mNotifToggle = findViewById(R.id.notify_toggle);
         TextView mCorrectPostureTextView = findViewById(R.id.txt_count);
+
+        androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         //set alarmPendingIntent to deliver repeating notifications
         final AlarmManager mAlarmManager = (AlarmManager) this.getSystemService(ALARM_SERVICE);
