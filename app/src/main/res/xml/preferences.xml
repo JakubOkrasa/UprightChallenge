@@ -3,12 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
-    <androidx.preference.PreferenceCategory android:title="Preference category">
+    <androidx.preference.PreferenceCategory android:title="@string/prefs_notifications_cat">
 
         <androidx.preference.SwitchPreferenceCompat
             android:defaultValue="false"
             android:key="switch_notifications"
-            android:summary="Set or off reminders to correct your posture"
+            android:summary="@string/prefs_notif_switch_summary"
             android:switchTextOff="Notifications off"
             android:switchTextOn="Notifications on"
             android:title="Notifications" />
