@@ -13,6 +13,7 @@ import android.os.SystemClock;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,8 +49,7 @@ public class MainActivity extends AppCompatActivity {
 
         registerReceiver(mCorrectPostureReceiver, new IntentFilter(POSTURE_YES_ACTION));
 
-        String sharedPrefsFile = BuildConfig.APPLICATION_ID;
-        SharedPreferences preferences = getSharedPreferences(sharedPrefsFile, MODE_PRIVATE);
+
 
 
         if(savedInstanceState != null) {
@@ -90,6 +90,16 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        TextView notifOffInfo = findViewById(R.id.notif_off_warning);
+        String sharedPrefsFile = BuildConfig.APPLICATION_ID;
+        SharedPreferences preferences = getSharedPreferences(sharedPrefsFile, MODE_PRIVATE);
+        boolean notificationsOn = preferences.getBoolean("switch_notifications", true); //defValue must be the same in preferences.xml
+        if(!notificationsOn) {
+            notifOffInfo.setVisibility(View.VISIBLE);
+        }
+        else {
+            notifOffInfo.setVisibility(View.GONE);
+        }
         Log.d(LOG_TAG, "A: started");
 
     }

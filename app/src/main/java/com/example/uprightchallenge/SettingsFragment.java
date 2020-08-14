@@ -6,6 +6,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -30,12 +31,16 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     private static final int NOTIFICATION_ID = 0;
     private static final String PRIMARY_CHANNEL_ID = "primary_notification_channel";
     private NotificationManager mNotifyManager;
-
+    private String sharedPrefsFile = BuildConfig.APPLICATION_ID;
+    private SharedPreferences preferences;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.preferences, rootKey);
 
+        if(getActivity().getSharedPreferences(sharedPrefsFile, Context.MODE_PRIVATE)!=null) {
+            preferences = getActivity().getSharedPreferences(sharedPrefsFile, Context.MODE_PRIVATE);
+        }
         //set alarmPendingIntent to deliver repeating notifications
         final AlarmManager mAlarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
         Intent alarmIntent = new Intent(getContext(), AlarmReceiver.class);
@@ -49,6 +54,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object notificationsOnObject) {
                     boolean notificationsOn = (Boolean) notificationsOnObject;
+
                     if(notificationsOn) {
                         long repeatInterval;
                         if (Build.FINGERPRINT.startsWith("google/sdk_gphone_x86/generic")) { repeatInterval = 30000; }//short interval only for debug
@@ -65,6 +71,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                             mAlarmManager.cancel(alarmPendingIntent);
                         }
                     }
+                    SharedPreferences.Editor prefsEditor = preferences.edit();
+                    prefsEditor.putBoolean(preference.getKey(), notificationsOn).apply();
                     return true;
                 }
             });
