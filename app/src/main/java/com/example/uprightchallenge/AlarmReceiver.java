@@ -29,7 +29,6 @@ public class AlarmReceiver extends BroadcastReceiver {
     private void deliverNotification(Context context) {
         //this intent causes that when the notification is clicked, the MainActivity is launched
         Intent notifClickIntent = new Intent(context, MainActivity.class);
-        notifClickIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP); // not sure if works with different activieties in the app
         PendingIntent notifClickPendingIntent = PendingIntent.getActivity(
                 context,
                 NOTIFICATION_ID,
