@@ -6,6 +6,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -42,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
         createNotificationChannel();
 
-        ToggleButton mNotifToggle = findViewById(R.id.notify_toggle);
+        //ToggleButton mNotifToggle = findViewById(R.id.notify_toggle);
         TextView mCorrectPostureTextView = findViewById(R.id.txt_count);
 
         androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.toolbar);
@@ -51,11 +52,14 @@ public class MainActivity extends AppCompatActivity {
         //set alarmPendingIntent to deliver repeating notifications
         final AlarmManager mAlarmManager = (AlarmManager) this.getSystemService(ALARM_SERVICE);
         Intent alarmIntent = new Intent(this, AlarmReceiver.class);
-        mNotifToggle.setChecked(PendingIntent.getBroadcast(this, NOTIFICATION_ID, alarmIntent, PendingIntent.FLAG_NO_CREATE) != null); // check if notifications were turned on before the new MainActivity was stopped
+        //mNotifToggle.setChecked(PendingIntent.getBroadcast(this, NOTIFICATION_ID, alarmIntent, PendingIntent.FLAG_NO_CREATE) != null); // check if notifications were turned on before the new MainActivity was stopped
         final PendingIntent alarmPendingIntent = PendingIntent.getBroadcast(this, NOTIFICATION_ID, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         registerReceiver(mCorrectPostureReceiver, new IntentFilter(POSTURE_YES_ACTION));
 
+        String sharedPrefsFile = BuildConfig.APPLICATION_ID;
+        SharedPreferences preferences = getSharedPreferences(sharedPrefsFile, MODE_PRIVATE);
+        /*
         mNotifToggle.setOnCheckedChangeListener(
                  new CompoundButton.OnCheckedChangeListener() {
                     @Override
@@ -63,13 +67,9 @@ public class MainActivity extends AppCompatActivity {
                         String toastMessage = "error: AlarmManager is null";
                         if(isChecked) {
                             long repeatInterval;
-                            repeatInterval = 30000; //short interval only for debug
-//                            if(Build.FINGERPRINT.startsWith("google/sdk_gphone_x86/generic")) { todo uncomment before commit
-//                                repeatInterval = 30000; //short interval only for debug
-//                            }
-//                            else {
-//                                repeatInterval = AlarmManager.INTERVAL_HALF_HOUR;
-//                            }
+                            if(Build.FINGERPRINT.startsWith("google/sdk_gphone_x86/generic")) { repeatInterval = 30000; }//short interval only for debug
+                            else { repeatInterval = AlarmManager.INTERVAL_HALF_HOUR; }
+
                             long triggerTime = SystemClock.elapsedRealtime() + repeatInterval;
                             if(mAlarmManager!=null) {
                                 mAlarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerTime, repeatInterval, alarmPendingIntent);
@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(MainActivity.this, toastMessage, Toast.LENGTH_SHORT).show();
                     }
                 }
-        );
+        ); */
 
         if(savedInstanceState != null) {
             int count = savedInstanceState.getInt(CORRECT_POSTURE_COUNT_KEY);
