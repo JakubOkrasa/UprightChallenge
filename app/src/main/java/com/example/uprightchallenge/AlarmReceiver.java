@@ -5,10 +5,13 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.TextView;
 
 import androidx.core.app.NotificationCompat;
+
+import static android.content.Context.MODE_PRIVATE;
 
 //receive periodically notifications pending intents
 public class AlarmReceiver extends BroadcastReceiver {
@@ -18,11 +21,11 @@ public class AlarmReceiver extends BroadcastReceiver {
     private static final String PRIMARY_CHANNEL_ID = "primary_notification_channel";
     private static final String LOG_TAG = AlarmReceiver.class.getSimpleName();
 
+
     @Override
     public void onReceive(Context context, Intent intent) {
         mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         deliverNotification(context);
-
         Log.d(LOG_TAG, "notification fired!");
     }
 
@@ -50,4 +53,6 @@ public class AlarmReceiver extends BroadcastReceiver {
                 .setDefaults(NotificationCompat.DEFAULT_ALL);
         mNotificationManager.notify(NOTIFICATION_ID, builder.build());
     }
+
+
 }

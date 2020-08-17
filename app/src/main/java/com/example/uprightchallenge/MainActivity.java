@@ -23,16 +23,17 @@ import android.widget.Toolbar;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-// todo #bug notif toggle is on at the beginning (sometimes?)
 // todo #later show number of daily count in notification
-// todo show info in MainActivity when notification are turned off
+// todo #bug notifications aren't turn on directly after installing the app. User have to turn off and on notifications switch at the beginning
 
 // todo #note when I added if(savedInstanceState != null) {..} and onRestore lines, AND in the app click BACK button to check the right count number, nothing happens
 public class MainActivity extends AppCompatActivity {
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
-    private static final String CORRECT_POSTURE_COUNT_KEY = "count";
-    private CorrectPostureReceiver mCorrectPostureReceiver = new CorrectPostureReceiver(this);
+    private CorrectPostureReceiver mCorrectPostureReceiver = new CorrectPostureReceiver(this); //todo needed?
     static final String POSTURE_YES_ACTION = BuildConfig.APPLICATION_ID + ".POSTURE_YES_ACTION";
+    private SharedPreferences preferences;
+    TextView mCorrectPostureTextView;
+    private static final String KEY_YES_POSTURE_COUNT = "yes_posture_count";
 
     //@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -40,27 +41,27 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        final String sharedPrefFile = BuildConfig.APPLICATION_ID;
+        preferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
 
         //ToggleButton mNotifToggle = findViewById(R.id.notify_toggle);
-        TextView mCorrectPostureTextView = findViewById(R.id.txt_count);
+        mCorrectPostureTextView = findViewById(R.id.txt_count);
 
         androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         registerReceiver(mCorrectPostureReceiver, new IntentFilter(POSTURE_YES_ACTION));
+        //todo dlaczego nie ma rejestracji mAlarmManager?
 
 
-
-
-        if(savedInstanceState != null) {
-            int count = savedInstanceState.getInt(CORRECT_POSTURE_COUNT_KEY);
-            if (count != 0) {
-                mCorrectPostureTextView.setText(String.format("%s", count));
-            }
-
-        }
 
         Log.d(LOG_TAG, "A: created");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
     }
 
     @Override
@@ -100,32 +101,17 @@ public class MainActivity extends AppCompatActivity {
         else {
             notifOffInfo.setVisibility(View.GONE);
         }
-        Log.d(LOG_TAG, "A: started");
+        mCorrectPostureTextView.setText(String.format("%d", preferences.getInt(KEY_YES_POSTURE_COUNT, 0)));
 
+        Log.d(LOG_TAG, "A: started");
     }
 
     @Override
     protected void onStop() {
-        Log.d(LOG_TAG, "A: stopped");
         super.onStop();
+        Log.d(LOG_TAG, "A: stopped");
     }
 
-
-
-    @Override
-    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
-//        super.onRestoreInstanceState(savedInstanceState);  //should be commmented?
-        //mCorrectPostureReceiver.getTxtCount().setText(savedInstanceState.getString(CORRECT_POSTURE_COUNT_STRING)); // todo check if needed!!
-    }
-
-    @Override
-    protected void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-//        int receivedCount = mCorrectPostureReceiver.getCount();
-//        if (receivedCount!=0) {
-            outState.putInt(CORRECT_POSTURE_COUNT_KEY, mCorrectPostureReceiver.getCount());
-//        }
-    }
 
     @Override
     protected void onDestroy() {

@@ -16,6 +16,7 @@ import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreferenceCompat;
 
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,9 +56,9 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 public boolean onPreferenceChange(Preference preference, Object notificationsOnObject) {
                     boolean notificationsOn = (Boolean) notificationsOnObject;
 
-                    if(notificationsOn) {
+                    if(notificationsOn) { //true part should be performed onCreate in MainActivity
                         long repeatInterval;
-                        if (Build.FINGERPRINT.startsWith("google/sdk_gphone_x86/generic")) { repeatInterval = 30000; }//short interval only for debug
+                        if (Build.FINGERPRINT.startsWith("google/sdk_gphone_x86/generic") || Build.FINGERPRINT.startsWith("samsung")) { repeatInterval = 30000; }//short interval only for debug
                         else { repeatInterval = AlarmManager.INTERVAL_HALF_HOUR; }
 
                         long triggerTime = SystemClock.elapsedRealtime() + repeatInterval;
