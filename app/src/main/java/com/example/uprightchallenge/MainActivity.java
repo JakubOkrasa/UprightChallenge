@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
         TextView notifOffInfo = findViewById(R.id.notif_off_warning);
         String sharedPrefsFile = BuildConfig.APPLICATION_ID;
         SharedPreferences preferences = getSharedPreferences(sharedPrefsFile, MODE_PRIVATE);
-        boolean notificationsOn = preferences.getBoolean("switch_notifications", true); //defValue must be the same in preferences.xml
+        boolean notificationsOn = preferences.getBoolean("switch_notifications", false); //defValue must be the same in preferences.xml
         if(!notificationsOn) {
             notifOffInfo.setVisibility(View.VISIBLE);
         }
