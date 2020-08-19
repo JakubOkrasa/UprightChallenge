@@ -29,7 +29,7 @@ import androidx.appcompat.app.AppCompatActivity;
 // todo #note when I added if(savedInstanceState != null) {..} and onRestore lines, AND in the app click BACK button to check the right count number, nothing happens
 public class MainActivity extends AppCompatActivity {
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
-    private CorrectPostureReceiver mCorrectPostureReceiver = new CorrectPostureReceiver();
+    private CorrectPostureReceiver mCorrectPostureReceiver = new CorrectPostureReceiver(this);
     static final String POSTURE_YES_ACTION = BuildConfig.APPLICATION_ID + ".POSTURE_YES_ACTION";
     private SharedPreferences preferences;
     TextView mCorrectPostureTextView;
