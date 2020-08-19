@@ -4,14 +4,21 @@
     <string name="toggle_notifications_off">notifications off</string>
     <string name="prefs_notifications_cat">Notifications</string>
     <string name="prefs_notif_switch_summary">turn on or turn off reminders to correct your posture</string>
-    <string-array name="duration_array">
-        <item>5 seconds</item>
-        <item>5 minutes</item>
+    <string-array name="intervals_array_labels">
+        <item>30 seconds</item>
+        <item>15 minutes</item>
         <item>30 minutes</item>
         <item>1 hour</item>
+    </string-array>
+    <string-array name="intervals_array_values">
+        <item>30</item>
+        <item>900</item>
+        <item>1800</item>
+        <item>3600</item>
     </string-array>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="notif_off_warning">Warning: Notifications that remind you to correct your posture are turned off. In order to turn on, go to the settings.</string>
+    <string name="interval_list_pref">Repeat interval</string>
 </resources>

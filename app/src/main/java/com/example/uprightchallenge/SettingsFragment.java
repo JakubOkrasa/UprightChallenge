@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreferenceCompat;
@@ -74,6 +75,19 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     }
                     SharedPreferences.Editor prefsEditor = preferences.edit();
                     prefsEditor.putBoolean(preference.getKey(), notificationsOn).apply();
+                    return true;
+                }
+            });
+        }
+
+        ListPreference intervalListPref = findPreference("list_intervals");
+
+        if(intervalListPref!=null) {
+            intervalListPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    String interval =(String) newValue;
+                    Toast.makeText(getContext(), interval, Toast.LENGTH_SHORT).show();
                     return true;
                 }
             });
