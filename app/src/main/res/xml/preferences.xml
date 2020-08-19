@@ -10,8 +10,9 @@
         android:defaultValue="false"
         android:entries="@array/intervals_array_labels"
         android:entryValues="@array/intervals_array_values"
-        android:key="list_intervals"
-        android:title="@string/interval_list_pref" />
+        android:key="@string/key_pref_interval"
+        android:title="@string/interval_list_pref"
+        android:summary="%s"/>
     <androidx.preference.CheckBoxPreference
         android:defaultValue="true"
         android:key="checkbox_vibrate"

@@ -16,9 +16,10 @@
         <item>1800</item>
         <item>3600</item>
     </string-array>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="notif_off_warning">Warning: Notifications that remind you to correct your posture are turned off. In order to turn on, go to the settings.</string>
     <string name="interval_list_pref">Repeat interval</string>
+
+    <string name="key_pref_interval">key_pref_interval</string>
+
+
 </resources>

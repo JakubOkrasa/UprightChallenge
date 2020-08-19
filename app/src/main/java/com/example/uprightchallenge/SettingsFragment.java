@@ -35,6 +35,12 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     private NotificationManager mNotifyManager;
     private String sharedPrefsFile = BuildConfig.APPLICATION_ID;
     private SharedPreferences preferences;
+    private AlarmManager mAlarmManager;
+    private PendingIntent alarmPendingIntent;
+    private SharedPreferences.Editor prefsEditor;
+//    private final int KEY_PREF_INTERVAL = R.string.key_pref_interval;
+
+    private final String LOG_TAG = SettingsFragment.class.getSimpleName();
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -44,9 +50,9 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             preferences = getActivity().getSharedPreferences(sharedPrefsFile, Context.MODE_PRIVATE);
         }
         //set alarmPendingIntent to deliver repeating notifications
-        final AlarmManager mAlarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
+        mAlarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
         Intent alarmIntent = new Intent(getContext(), AlarmReceiver.class);
-        final PendingIntent alarmPendingIntent = PendingIntent.getBroadcast(getContext(), NOTIFICATION_ID, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        alarmPendingIntent = PendingIntent.getBroadcast(getContext(), NOTIFICATION_ID, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         createNotificationChannel();
         SwitchPreferenceCompat notificationSwitch = findPreference("switch_notifications");
@@ -56,24 +62,20 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object notificationsOnObject) {
                     boolean notificationsOn = (Boolean) notificationsOnObject;
-
-                    if(notificationsOn) { //true part should be performed onCreate in MainActivity
-                        long repeatInterval;
-                        if (Build.FINGERPRINT.startsWith("google/sdk_gphone_x86/generic") || Build.FINGERPRINT.startsWith("samsung")) { repeatInterval = 30000; }//short interval only for debug
-                        else { repeatInterval = AlarmManager.INTERVAL_HALF_HOUR; }
-
-                        long triggerTime = SystemClock.elapsedRealtime() + repeatInterval;
-                        if (mAlarmManager != null) {
-                            mAlarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerTime, repeatInterval, alarmPendingIntent);
+                    if(notificationsOn) {
+                        if(preferences!=null) {
+                            setAlarmPendingIntent();
+                        }
+                        else {  //todo this should be avoided with setting defauld prefs ealier ( this 'if .. else' is only for debug)
+                            Log.e(LOG_TAG, "AlarmPendingIntent not set (prefs were null)");
                         }
                     }
                     else {
-                        mNotifyManager.cancelAll();
-                        if (mAlarmManager!=null) {
-                            mAlarmManager.cancel(alarmPendingIntent);
-                        }
+                        mNotifyManager.cancelAll(); // cancel existing notifications
+                        cancelAlarmPendingIntent(); // cancel repeating intent messages for AlarmReceiver
                     }
-                    SharedPreferences.Editor prefsEditor = preferences.edit();
+                    // save changes to SharedPreferences
+                    prefsEditor = preferences.edit();
                     prefsEditor.putBoolean(preference.getKey(), notificationsOn).apply();
                     return true;
                 }
@@ -87,7 +89,10 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
                     String interval =(String) newValue;
-                    Toast.makeText(getContext(), interval, Toast.LENGTH_SHORT).show();
+                    prefsEditor = preferences.edit();
+                    prefsEditor.putLong(preference.getKey(), Long.parseLong(interval)).apply();
+                    Log.d(LOG_TAG, "interval set: " + Long.parseLong(interval));
+                    updateAlarmPendingIntent();
                     return true;
                 }
             });
@@ -106,6 +111,26 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             notificationChannel.enableVibration(true);
             notificationChannel.setVibrationPattern(vibPattern);
             mNotifyManager.createNotificationChannel(notificationChannel);
+        }
+    }
+
+    private void updateAlarmPendingIntent() {
+        cancelAlarmPendingIntent();
+        setAlarmPendingIntent();
+    }
+
+    private void setAlarmPendingIntent() {
+        long repeatInterval = preferences.getLong(getResources().getString(R.string.interval_list_pref), 1800); //1800ms = 30min
+//        if (Build.FINGERPRINT.startsWith("google/sdk_gphone_x86/generic") || Build.FINGERPRINT.startsWith("samsung")) { repeatInterval = 30000; }//short interval only for debug
+        long triggerTime = SystemClock.elapsedRealtime() + repeatInterval;
+        if (mAlarmManager != null) {
+            mAlarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerTime, repeatInterval, alarmPendingIntent);
+        }
+    }
+
+    private void cancelAlarmPendingIntent() {
+        if (mAlarmManager!=null) {
+            mAlarmManager.cancel(alarmPendingIntent);
         }
     }
 }
