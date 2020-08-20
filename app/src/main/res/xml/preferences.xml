@@ -7,12 +7,12 @@
         android:summary="@string/prefs_notif_switch_summary"
         android:title="Notifications" />
     <androidx.preference.ListPreference
-        android:defaultValue="false"
+        android:defaultValue="1800000"
         android:entries="@array/intervals_array_labels"
         android:entryValues="@array/intervals_array_values"
         android:key="@string/key_pref_interval"
-        android:title="@string/interval_list_pref"
-        android:summary="%s"/>
+        android:summary="%s"
+        android:title="@string/interval_list_pref" />
     <androidx.preference.CheckBoxPreference
         android:defaultValue="true"
         android:key="checkbox_vibrate"
