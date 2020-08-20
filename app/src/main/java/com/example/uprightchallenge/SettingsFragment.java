@@ -60,9 +60,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         }
         //set alarmPendingIntent to deliver repeating notifications
         mAlarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
-        Intent alarmIntent = new Intent(getContext(), AlarmReceiver.class);
 //        alarmPendingIntent = PendingIntent.getBroadcast(getContext(), NOTIFICATION_ID, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        alarmPendingIntent = PendingIntent.getBroadcast(getContext(), NOTIFICATION_ID, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT); //todo check if cancelling always onCreate doesn't cancel needed intents
 
         createNotificationChannel();
         SwitchPreferenceCompat notificationSwitch = findPreference("switch_notifications");
@@ -128,6 +126,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     }
 
     private void setAlarmPendingIntent() {
+        Intent alarmIntent = new Intent(getContext(), AlarmReceiver.class);
+        alarmPendingIntent = PendingIntent.getBroadcast(getContext(), NOTIFICATION_ID, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT); //todo check if cancelling always onCreate doesn't cancel needed intents
         long repeatInterval = preferences.getLong("key_pref_interval", 1800000); //1800000ms = 30min
 //        if (Build.FINGERPRINT.startsWith("google/sdk_gphone_x86/generic") || Build.FINGERPRINT.startsWith("samsung")) { repeatInterval = 30000; }//short interval only for debug
         long triggerTime = SystemClock.elapsedRealtime() + repeatInterval;
