@@ -27,9 +27,11 @@ import androidx.appcompat.app.AppCompatActivity;
 // todo #bug notifications aren't turn on directly after installing the app. User have to turn off and on notifications switch at the beginning
 
 // todo #note when I added if(savedInstanceState != null) {..} and onRestore lines, AND in the app click BACK button to check the right count number, nothing happens
+// todo change package name
+// todo decide about minimum sdk
 public class MainActivity extends AppCompatActivity {
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
-    private CorrectPostureReceiver mCorrectPostureReceiver = new CorrectPostureReceiver();
+    private CorrectPostureReceiver mCorrectPostureReceiver = new CorrectPostureReceiver(this);
     static final String POSTURE_YES_ACTION = BuildConfig.APPLICATION_ID + ".POSTURE_YES_ACTION";
     private SharedPreferences preferences;
     TextView mCorrectPostureTextView;

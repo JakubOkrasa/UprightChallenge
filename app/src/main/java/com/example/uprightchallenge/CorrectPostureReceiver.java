@@ -15,8 +15,10 @@ class CorrectPostureReceiver extends BroadcastReceiver {
     private TextView mTxtCount;
     private final String LOG_TAG = CorrectPostureReceiver.class.getSimpleName();
     private static final String KEY_YES_POSTURE_COUNT = "yes_posture_count";
+    private MainActivity mainActivity;
 
-    public CorrectPostureReceiver() {
+    public CorrectPostureReceiver(MainActivity mainActivity) {
+        this.mainActivity = mainActivity;
     }
 
     @Override
@@ -27,5 +29,9 @@ class CorrectPostureReceiver extends BroadcastReceiver {
         SharedPreferences preferences =  context.getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
         SharedPreferences.Editor prefEditor = preferences.edit();
         prefEditor.putInt(KEY_YES_POSTURE_COUNT, mCount).apply();
+        mTxtCount = mainActivity.findViewById(R.id.txt_count);
+        if (mTxtCount != null) {
+            mTxtCount.setText(Integer.toString(mCount));
+        }
     }
 }
