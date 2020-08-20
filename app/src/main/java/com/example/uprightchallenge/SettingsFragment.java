@@ -119,13 +119,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         }
     }
 
-    private void updateAlarmPendingIntent() {
-        cancelAlarmPendingIntent();
-        setAlarmPendingIntent();
-    }
-
     private void setAlarmPendingIntent() {
-        long repeatInterval = preferences.getLong(getResources().getString(R.string.interval_list_pref), 1800); //1800ms = 30min
+        long repeatInterval = preferences.getLong("key_pref_interval", 1800000); //1800000ms = 30min
 //        if (Build.FINGERPRINT.startsWith("google/sdk_gphone_x86/generic") || Build.FINGERPRINT.startsWith("samsung")) { repeatInterval = 30000; }//short interval only for debug
         long triggerTime = SystemClock.elapsedRealtime() + repeatInterval;
         Log.d(LOG_TAG, "repeat interval: " + repeatInterval);

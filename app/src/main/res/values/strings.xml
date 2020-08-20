@@ -11,10 +11,10 @@
         <item>1 hour</item>
     </string-array>
     <string-array name="intervals_array_values">
-        <item>30</item>
-        <item>900</item>
-        <item>1800</item>
-        <item>3600</item>
+        <item>30000</item>
+        <item>900000</item>
+        <item>1800000</item>
+        <item>3600000</item>
     </string-array>
     <string name="notif_off_warning">Warning: Notifications that remind you to correct your posture are turned off. In order to turn on, go to the settings.</string>
     <string name="interval_list_pref">Repeat interval</string>
