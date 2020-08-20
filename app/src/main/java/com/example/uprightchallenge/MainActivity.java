@@ -19,7 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 // todo decide about minimum sdk
 public class MainActivity extends AppCompatActivity {
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
-    private CorrectPostureReceiver mCorrectPostureReceiver = new CorrectPostureReceiver(this);
+    private GoodPostureReceiver mGoodPostureReceiver = new GoodPostureReceiver(this);
     static final String POSTURE_YES_ACTION = BuildConfig.APPLICATION_ID + ".POSTURE_YES_ACTION";
     private SharedPreferences preferences;
     TextView mCorrectPostureTextView;
@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        registerReceiver(mCorrectPostureReceiver, new IntentFilter(POSTURE_YES_ACTION));
+        registerReceiver(mGoodPostureReceiver, new IntentFilter(POSTURE_YES_ACTION));
         //todo dlaczego nie ma rejestracji mAlarmManager?
 
 
@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        unregisterReceiver(mCorrectPostureReceiver);
+        unregisterReceiver(mGoodPostureReceiver);
         Log.d(LOG_TAG, "A: destroying");
         super.onDestroy();
     }
