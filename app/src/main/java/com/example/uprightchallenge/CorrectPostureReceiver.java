@@ -29,7 +29,7 @@ class CorrectPostureReceiver extends BroadcastReceiver {
         SharedPreferences preferences =  context.getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
         SharedPreferences.Editor prefEditor = preferences.edit();
         prefEditor.putInt(KEY_YES_POSTURE_COUNT, mCount).apply();
-        mTxtCount = mainActivity.findViewById(R.id.txt_count);
+        mTxtCount = mainActivity.findViewById(R.id.txt_good_posture_count);
         if (mTxtCount != null) {
             mTxtCount.setText(Integer.toString(mCount));
         }

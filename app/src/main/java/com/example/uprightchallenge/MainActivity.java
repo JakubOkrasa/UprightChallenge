@@ -1,27 +1,15 @@
 package com.example.uprightchallenge;
 
-import android.app.AlarmManager;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.CompoundButton;
 import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.ToggleButton;
-import android.widget.Toolbar;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 // todo #later show number of daily count in notification
 // todo #bug notifications aren't turn on directly after installing the app. User have to turn off and on notifications switch at the beginning
@@ -47,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
         preferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
 
         //ToggleButton mNotifToggle = findViewById(R.id.notify_toggle);
-        mCorrectPostureTextView = findViewById(R.id.txt_count);
+        mCorrectPostureTextView = findViewById(R.id.txt_good_posture_count);
 
         androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
