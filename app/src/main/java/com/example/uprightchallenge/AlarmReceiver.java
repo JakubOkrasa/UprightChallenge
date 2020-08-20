@@ -5,10 +5,13 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.TextView;
 
 import androidx.core.app.NotificationCompat;
+
+import static android.content.Context.MODE_PRIVATE;
 
 //receive periodically notifications pending intents
 public class AlarmReceiver extends BroadcastReceiver {
@@ -17,25 +20,18 @@ public class AlarmReceiver extends BroadcastReceiver {
     private static final int NOTIFICATION_ID = 0;
     private static final String PRIMARY_CHANNEL_ID = "primary_notification_channel";
     private static final String LOG_TAG = AlarmReceiver.class.getSimpleName();
-//    private TextView mCount;
 
-//    public AlarmReceiver() {
-//        super();
-//        mCount =
-//    }
 
     @Override
     public void onReceive(Context context, Intent intent) {
         mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         deliverNotification(context);
-
         Log.d(LOG_TAG, "notification fired!");
     }
 
     private void deliverNotification(Context context) {
         //this intent causes that when the notification is clicked, the MainActivity is launched
         Intent notifClickIntent = new Intent(context, MainActivity.class);
-        notifClickIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP); // not sure if works with different activieties in the app
         PendingIntent notifClickPendingIntent = PendingIntent.getActivity(
                 context,
                 NOTIFICATION_ID,
@@ -57,4 +53,6 @@ public class AlarmReceiver extends BroadcastReceiver {
                 .setDefaults(NotificationCompat.DEFAULT_ALL);
         mNotificationManager.notify(NOTIFICATION_ID, builder.build());
     }
+
+
 }
