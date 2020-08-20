@@ -12,13 +12,16 @@
         android:entryValues="@array/intervals_array_values"
         android:key="@string/key_pref_interval"
         android:summary="%s"
-        android:title="@string/interval_list_pref" />
+        android:title="@string/interval_list_pref"
+        android:enabled="false"/>
     <androidx.preference.CheckBoxPreference
         android:defaultValue="true"
         android:key="checkbox_vibrate"
-        android:title="Vibrate" />
+        android:title="Vibrate"
+        android:enabled="false"/>
     <androidx.preference.CheckBoxPreference
         android:defaultValue="true"
         android:key="checkbox_sound"
-        android:title="Sound" />
+        android:title="Sound"
+        android:enabled="false"/>
 </androidx.preference.PreferenceScreen>

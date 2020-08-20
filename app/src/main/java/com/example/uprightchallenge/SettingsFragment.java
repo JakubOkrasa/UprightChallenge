@@ -58,13 +58,16 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         if(getActivity().getSharedPreferences(sharedPrefsFile, Context.MODE_PRIVATE)!=null) {
             preferences = getActivity().getSharedPreferences(sharedPrefsFile, Context.MODE_PRIVATE);
         }
+
+        SwitchPreferenceCompat notificationSwitch = findPreference("switch_notifications");
+        final ListPreference intervalListPref = findPreference("key_pref_interval"); //todo not sure if it can be final
+//        ListPreference intervalListPref = findPreference(getResources().getString(R.string.interval_list_pref)); // this way (getResources()) doesn't work
+
         //set alarmPendingIntent to deliver repeating notifications
         mAlarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
 //        alarmPendingIntent = PendingIntent.getBroadcast(getContext(), NOTIFICATION_ID, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         createNotificationChannel();
-        SwitchPreferenceCompat notificationSwitch = findPreference("switch_notifications");
-
         if(notificationSwitch!=null) {
             notificationSwitch.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
@@ -85,13 +88,13 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     // save changes to SharedPreferences
                     prefsEditor = preferences.edit();
                     prefsEditor.putBoolean(preference.getKey(), notificationsOn).apply();
+                    intervalListPref.setEnabled(notificationsOn);
                     return true;
                 }
             });
         }
 
-        ListPreference intervalListPref = findPreference("key_pref_interval");
-//        ListPreference intervalListPref = findPreference(getResources().getString(R.string.interval_list_pref)); // this way (getResources()) doesn't work
+
         if(intervalListPref!=null) {
             Log.d(LOG_TAG,"intervalListPref: " + intervalListPref.toString());
             intervalListPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
