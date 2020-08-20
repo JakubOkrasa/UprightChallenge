@@ -87,20 +87,23 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             });
         }
 
-        ListPreference intervalListPref = findPreference("list_intervals");
-
+        ListPreference intervalListPref = findPreference("key_pref_interval");
+//        ListPreference intervalListPref = findPreference(getResources().getString(R.string.interval_list_pref)); // this way (getResources()) doesn't work
         if(intervalListPref!=null) {
+            Log.d(LOG_TAG,"intervalListPref: " + intervalListPref.toString());
             intervalListPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
                     String interval =(String) newValue;
                     prefsEditor = preferences.edit();
                     prefsEditor.putLong(preference.getKey(), Long.parseLong(interval)).apply();
-                    Log.d(LOG_TAG, "interval set: " + Long.parseLong(interval));
-                    updateAlarmPendingIntent();
+                    setAlarmPendingIntent();
                     return true;
                 }
             });
+        }
+        else{
+            Log.e(LOG_TAG, "preference interval is null");
         }
     }
 
