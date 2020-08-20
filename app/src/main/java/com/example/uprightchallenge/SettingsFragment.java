@@ -29,6 +29,11 @@ import static android.content.Context.ALARM_SERVICE;
 /**
  * A simple {@link Fragment} subclass.
  */
+
+/*
+//todo #note :
+    After turning on notif, (default is 30 minutes interval) notifications appear very often, maybe even less than 30 seconds.
+ */
 public class SettingsFragment extends PreferenceFragmentCompat {
     private static final int NOTIFICATION_ID = 0;
     private static final String PRIMARY_CHANNEL_ID = "primary_notification_channel";
@@ -39,7 +44,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     private PendingIntent alarmPendingIntent;
     private SharedPreferences.Editor prefsEditor;
 //    private final int KEY_PREF_INTERVAL = R.string.key_pref_interval;
-
     private final String LOG_TAG = SettingsFragment.class.getSimpleName();
 
     @Override
@@ -123,6 +127,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         long repeatInterval = preferences.getLong(getResources().getString(R.string.interval_list_pref), 1800); //1800ms = 30min
 //        if (Build.FINGERPRINT.startsWith("google/sdk_gphone_x86/generic") || Build.FINGERPRINT.startsWith("samsung")) { repeatInterval = 30000; }//short interval only for debug
         long triggerTime = SystemClock.elapsedRealtime() + repeatInterval;
+        Log.d(LOG_TAG, "repeat interval: " + repeatInterval);
         if (mAlarmManager != null) {
             mAlarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerTime, repeatInterval, alarmPendingIntent);
         }
