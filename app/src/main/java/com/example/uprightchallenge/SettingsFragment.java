@@ -24,6 +24,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
+
 import static android.content.Context.ALARM_SERVICE;
 
 /**
@@ -129,6 +134,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         Log.d(LOG_TAG, "repeat interval: " + repeatInterval);
         if (mAlarmManager != null) {
             mAlarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerTime, repeatInterval, alarmPendingIntent);
+            Log.d(LOG_TAG, "notif. set at: " + milisToTime(triggerTime));
         }
     }
 
@@ -136,5 +142,13 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         if (mAlarmManager!=null) {
             mAlarmManager.cancel(alarmPendingIntent);
         }
+    }
+
+    //only for debug
+    private String milisToTime(long milis) {
+        Date date = new Date(milis);
+        DateFormat formatter = new SimpleDateFormat("HH:mm:ss.SSS");
+        formatter.setTimeZone(TimeZone.getTimeZone("GMT+02:00")); // timezone is wrong
+        return formatter.format(date);
     }
 }
