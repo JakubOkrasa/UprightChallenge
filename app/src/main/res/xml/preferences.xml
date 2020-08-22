@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <androidx.preference.SwitchPreferenceCompat
         android:defaultValue="false"
-        android:key="switch_notifications"
+        android:key="key_pref_switch_notifications"
         android:summary="@string/prefs_notif_switch_summary"
         android:title="Notifications" />
     <androidx.preference.ListPreference
@@ -12,8 +12,7 @@
         android:entryValues="@array/intervals_array_values"
         android:key="@string/pref_key_interval"
         android:summary="%s"
-        android:title="@string/interval_list_pref"
-        android:enabled="false"/>
+        android:title="@string/interval_list_pref" />
     <androidx.preference.CheckBoxPreference
         android:defaultValue="true"
         android:key="checkbox_vibrate"

@@ -59,7 +59,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             preferences = getActivity().getSharedPreferences(sharedPrefsFile, Context.MODE_PRIVATE);
         }
 
-        SwitchPreferenceCompat notificationSwitch = findPreference("switch_notifications");
+        SwitchPreferenceCompat notificationSwitch = findPreference("key_pref_switch_notifications");
         final ListPreference intervalListPref = findPreference("key_pref_interval"); //todo not sure if it can be final
 //        ListPreference intervalListPref = findPreference(getResources().getString(R.string.interval_list_pref)); // this way (getResources()) doesn't work
 
@@ -111,6 +111,10 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         else{
             Log.e(LOG_TAG, "preference interval is null");
         }
+
+            //disable interval preference in UI if notifications are turned off
+            ListPreference notifIntervalListPref = findPreference("key_pref_interval");
+            notifIntervalListPref.setEnabled(preferences.getBoolean("key_pref_switch_notifications", true));
     }
 
     private void createNotificationChannel() {
