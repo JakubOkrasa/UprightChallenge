@@ -13,7 +13,7 @@ public class BadPostureReceiver extends BroadcastReceiver {
     private int mCount = 0;
     private TextView mTxtCount;
     private final String LOG_TAG = GoodPostureReceiver.class.getSimpleName();
-    private static final String KEY_NO_POSTURE_COUNT = "no_posture_count";
+    private static final String PREF_KEY_BAD_POSTURE_COUNT = "bad_posture_count";
     private MainActivity mainActivity;
 
     public BadPostureReceiver(MainActivity mainActivity) {
@@ -27,7 +27,7 @@ public class BadPostureReceiver extends BroadcastReceiver {
         final String sharedPrefFile = BuildConfig.APPLICATION_ID;
         SharedPreferences preferences =  context.getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
         SharedPreferences.Editor prefEditor = preferences.edit();
-        prefEditor.putInt(KEY_NO_POSTURE_COUNT, mCount).apply();
+        prefEditor.putInt(PREF_KEY_BAD_POSTURE_COUNT, mCount).apply();
         mTxtCount = mainActivity.findViewById(R.id.txt_bad_posture_count);
         if (mTxtCount != null) {
             mTxtCount.setText(Integer.toString(mCount));

@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 // todo #later show number of daily count in notification
-// todo #bug notifications aren't turn on directly after installing the app. User have to turn off and on notifications switch at the beginning
 
 // todo #note when I added if(savedInstanceState != null) {..} and onRestore lines, AND in the app click BACK button to check the right count number, nothing happens
 // todo change package name
@@ -21,12 +20,12 @@ public class MainActivity extends AppCompatActivity {
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
     private GoodPostureReceiver mGoodPostureReceiver = new GoodPostureReceiver(this);
     private BadPostureReceiver mBadPostureReceiver = new BadPostureReceiver(this);
-    static final String POSTURE_YES_ACTION = BuildConfig.APPLICATION_ID + ".POSTURE_YES_ACTION";
-    static final String POSTURE_NO_ACTION = BuildConfig.APPLICATION_ID + ".POSTURE_NO_ACTION";
+    static final String GOOD_POSTURE_ACTION = BuildConfig.APPLICATION_ID + ".GOOD_POSTURE_ACTION";
+    static final String BAD_POSTURE_ACTION = BuildConfig.APPLICATION_ID + ".BAD_POSTURE_ACTION";
     TextView mGoodPostureTextView;
     TextView mBadPostureTextView;
-    private static final String KEY_YES_POSTURE_COUNT = "yes_posture_count";
-    private static final String KEY_NO_POSTURE_COUNT = "no_posture_count";
+    private static final String PREF_KEY_GOOD_POSTURE_COUNT = "good_posture_count";
+    private static final String PREF_KEY_BAD_POSTURE_COUNT = "bad_posture_count";
 
     //@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -41,8 +40,8 @@ public class MainActivity extends AppCompatActivity {
         androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        registerReceiver(mGoodPostureReceiver, new IntentFilter(POSTURE_YES_ACTION));
-        registerReceiver(mBadPostureReceiver, new IntentFilter(POSTURE_NO_ACTION));
+        registerReceiver(mGoodPostureReceiver, new IntentFilter(GOOD_POSTURE_ACTION));
+        registerReceiver(mBadPostureReceiver, new IntentFilter(BAD_POSTURE_ACTION));
         //todo dlaczego nie ma rejestracji mAlarmManager?
 
         Log.d(LOG_TAG, "A: created");
@@ -91,8 +90,8 @@ public class MainActivity extends AppCompatActivity {
         else {
             notifOffInfo.setVisibility(View.GONE);
         }
-        mGoodPostureTextView.setText(String.format("%d", preferences.getInt(KEY_YES_POSTURE_COUNT, 0)));
-        mBadPostureTextView.setText(String.format("%d", preferences.getInt(KEY_NO_POSTURE_COUNT, 0)));
+        mGoodPostureTextView.setText(String.format("%d", preferences.getInt(PREF_KEY_GOOD_POSTURE_COUNT, 0)));
+        mBadPostureTextView.setText(String.format("%d", preferences.getInt(PREF_KEY_BAD_POSTURE_COUNT, 0)));
 
         Log.d(LOG_TAG, "A: started");
     }
