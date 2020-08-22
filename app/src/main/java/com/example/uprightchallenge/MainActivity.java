@@ -20,10 +20,14 @@ import androidx.appcompat.app.AppCompatActivity;
 public class MainActivity extends AppCompatActivity {
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
     private GoodPostureReceiver mGoodPostureReceiver = new GoodPostureReceiver(this);
+    private BadPostureReceiver mBadPostureReceiver = new BadPostureReceiver(this);
     static final String POSTURE_YES_ACTION = BuildConfig.APPLICATION_ID + ".POSTURE_YES_ACTION";
+    static final String POSTURE_NO_ACTION = BuildConfig.APPLICATION_ID + ".POSTURE_NO_ACTION";
     private SharedPreferences preferences;
-    TextView mCorrectPostureTextView;
+    TextView mGoodPostureTextView;
+    TextView mBadPostureTextView;
     private static final String KEY_YES_POSTURE_COUNT = "yes_posture_count";
+    private static final String KEY_NO_POSTURE_COUNT = "no_posture_count";
 
     //@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -35,15 +39,15 @@ public class MainActivity extends AppCompatActivity {
         preferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
 
         //ToggleButton mNotifToggle = findViewById(R.id.notify_toggle);
-        mCorrectPostureTextView = findViewById(R.id.txt_good_posture_count);
+        mGoodPostureTextView = findViewById(R.id.txt_good_posture_count);
+        mBadPostureTextView = findViewById(R.id.txt_bad_posture_count);
 
         androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         registerReceiver(mGoodPostureReceiver, new IntentFilter(POSTURE_YES_ACTION));
+        registerReceiver(mBadPostureReceiver, new IntentFilter(POSTURE_NO_ACTION));
         //todo dlaczego nie ma rejestracji mAlarmManager?
-
-
 
         Log.d(LOG_TAG, "A: created");
     }
@@ -91,7 +95,8 @@ public class MainActivity extends AppCompatActivity {
         else {
             notifOffInfo.setVisibility(View.GONE);
         }
-        mCorrectPostureTextView.setText(String.format("%d", preferences.getInt(KEY_YES_POSTURE_COUNT, 0)));
+        mGoodPostureTextView.setText(String.format("%d", preferences.getInt(KEY_YES_POSTURE_COUNT, 0)));
+        mBadPostureTextView.setText(String.format("%d", preferences.getInt(KEY_NO_POSTURE_COUNT, 0)));
 
         Log.d(LOG_TAG, "A: started");
     }
@@ -106,11 +111,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         unregisterReceiver(mGoodPostureReceiver);
+        unregisterReceiver(mBadPostureReceiver);
         Log.d(LOG_TAG, "A: destroying");
         super.onDestroy();
     }
-
-
-
-
 }
