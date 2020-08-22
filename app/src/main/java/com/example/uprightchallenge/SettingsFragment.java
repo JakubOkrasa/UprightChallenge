@@ -114,7 +114,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
             //disable interval preference in UI if notifications are turned off
             ListPreference notifIntervalListPref = findPreference("key_pref_interval");
-            notifIntervalListPref.setEnabled(preferences.getBoolean("key_pref_switch_notifications", true));
+            notifIntervalListPref.setEnabled(preferences.getBoolean("key_pref_switch_notifications", false));
     }
 
     private void createNotificationChannel() {
