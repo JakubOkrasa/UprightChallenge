@@ -23,7 +23,6 @@ public class MainActivity extends AppCompatActivity {
     private BadPostureReceiver mBadPostureReceiver = new BadPostureReceiver(this);
     static final String POSTURE_YES_ACTION = BuildConfig.APPLICATION_ID + ".POSTURE_YES_ACTION";
     static final String POSTURE_NO_ACTION = BuildConfig.APPLICATION_ID + ".POSTURE_NO_ACTION";
-    private SharedPreferences preferences;
     TextView mGoodPostureTextView;
     TextView mBadPostureTextView;
     private static final String KEY_YES_POSTURE_COUNT = "yes_posture_count";
@@ -34,9 +33,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        final String sharedPrefFile = BuildConfig.APPLICATION_ID;
-        preferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
 
         //ToggleButton mNotifToggle = findViewById(R.id.notify_toggle);
         mGoodPostureTextView = findViewById(R.id.txt_good_posture_count);
