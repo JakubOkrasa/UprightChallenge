@@ -5,13 +5,9 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.util.Log;
-import android.widget.TextView;
 
 import androidx.core.app.NotificationCompat;
-
-import static android.content.Context.MODE_PRIVATE;
 
 //receive periodically notifications pending intents
 public class AlarmReceiver extends BroadcastReceiver {
@@ -40,8 +36,11 @@ public class AlarmReceiver extends BroadcastReceiver {
         );
 
         // after you click action button on notification, the intent will be sent
-        Intent postureYesIntent = new Intent(MainActivity.POSTURE_YES_ACTION);
+        Intent postureYesIntent = new Intent(MainActivity.GOOD_POSTURE_ACTION);
         PendingIntent yesPendingIntent = PendingIntent.getBroadcast(context, NOTIFICATION_ID, postureYesIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Intent postureNoIntent = new Intent(MainActivity.BAD_POSTURE_ACTION);
+        PendingIntent noPendingIntent = PendingIntent.getBroadcast(context, NOTIFICATION_ID, postureNoIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, PRIMARY_CHANNEL_ID)
                 .setContentTitle("Are you straighten up?")
@@ -49,6 +48,7 @@ public class AlarmReceiver extends BroadcastReceiver {
                 .setAutoCancel(true) // closes the notification when user taps on it
                 .setContentIntent(notifClickPendingIntent)
                 .addAction(R.drawable.ic_posture_yes, "yes", yesPendingIntent)
+                .addAction(R.drawable.ic_posture_no, "no", noPendingIntent)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setDefaults(NotificationCompat.DEFAULT_ALL);
         mNotificationManager.notify(NOTIFICATION_ID, builder.build());

@@ -9,27 +9,26 @@ import android.widget.TextView;
 
 import static android.content.Context.MODE_PRIVATE;
 
-class CorrectPostureReceiver extends BroadcastReceiver {
-
+public class BadPostureReceiver extends BroadcastReceiver {
     private int mCount = 0;
     private TextView mTxtCount;
-    private final String LOG_TAG = CorrectPostureReceiver.class.getSimpleName();
-    private static final String KEY_YES_POSTURE_COUNT = "yes_posture_count";
+    private final String LOG_TAG = GoodPostureReceiver.class.getSimpleName();
+    private static final String PREF_KEY_BAD_POSTURE_COUNT = "bad_posture_count";
     private MainActivity mainActivity;
 
-    public CorrectPostureReceiver(MainActivity mainActivity) {
+    public BadPostureReceiver(MainActivity mainActivity) {
         this.mainActivity = mainActivity;
     }
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.d(LOG_TAG, "yes option clicked");
+        Log.d(LOG_TAG, "no option clicked");
         mCount++;
         final String sharedPrefFile = BuildConfig.APPLICATION_ID;
         SharedPreferences preferences =  context.getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
         SharedPreferences.Editor prefEditor = preferences.edit();
-        prefEditor.putInt(KEY_YES_POSTURE_COUNT, mCount).apply();
-        mTxtCount = mainActivity.findViewById(R.id.txt_count);
+        prefEditor.putInt(PREF_KEY_BAD_POSTURE_COUNT, mCount).apply();
+        mTxtCount = mainActivity.findViewById(R.id.txt_bad_posture_count);
         if (mTxtCount != null) {
             mTxtCount.setText(Integer.toString(mCount));
         }

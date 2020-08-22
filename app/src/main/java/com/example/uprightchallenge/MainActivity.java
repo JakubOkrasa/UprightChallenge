@@ -1,41 +1,31 @@
 package com.example.uprightchallenge;
 
-import android.app.AlarmManager;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.CompoundButton;
 import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.ToggleButton;
-import android.widget.Toolbar;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 // todo #later show number of daily count in notification
-// todo #bug notifications aren't turn on directly after installing the app. User have to turn off and on notifications switch at the beginning
 
 // todo #note when I added if(savedInstanceState != null) {..} and onRestore lines, AND in the app click BACK button to check the right count number, nothing happens
 // todo change package name
 // todo decide about minimum sdk
 public class MainActivity extends AppCompatActivity {
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
-    private CorrectPostureReceiver mCorrectPostureReceiver = new CorrectPostureReceiver(this);
-    static final String POSTURE_YES_ACTION = BuildConfig.APPLICATION_ID + ".POSTURE_YES_ACTION";
-    private SharedPreferences preferences;
-    TextView mCorrectPostureTextView;
-    private static final String KEY_YES_POSTURE_COUNT = "yes_posture_count";
+    private GoodPostureReceiver mGoodPostureReceiver = new GoodPostureReceiver(this);
+    private BadPostureReceiver mBadPostureReceiver = new BadPostureReceiver(this);
+    static final String GOOD_POSTURE_ACTION = BuildConfig.APPLICATION_ID + ".GOOD_POSTURE_ACTION";
+    static final String BAD_POSTURE_ACTION = BuildConfig.APPLICATION_ID + ".BAD_POSTURE_ACTION";
+    TextView mGoodPostureTextView;
+    TextView mBadPostureTextView;
+    private static final String PREF_KEY_GOOD_POSTURE_COUNT = "good_posture_count";
+    private static final String PREF_KEY_BAD_POSTURE_COUNT = "bad_posture_count";
 
     //@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -43,19 +33,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final String sharedPrefFile = BuildConfig.APPLICATION_ID;
-        preferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
-
         //ToggleButton mNotifToggle = findViewById(R.id.notify_toggle);
-        mCorrectPostureTextView = findViewById(R.id.txt_count);
+        mGoodPostureTextView = findViewById(R.id.txt_good_posture_count);
+        mBadPostureTextView = findViewById(R.id.txt_bad_posture_count);
 
         androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        registerReceiver(mCorrectPostureReceiver, new IntentFilter(POSTURE_YES_ACTION));
+        registerReceiver(mGoodPostureReceiver, new IntentFilter(GOOD_POSTURE_ACTION));
+        registerReceiver(mBadPostureReceiver, new IntentFilter(BAD_POSTURE_ACTION));
         //todo dlaczego nie ma rejestracji mAlarmManager?
-
-
 
         Log.d(LOG_TAG, "A: created");
     }
@@ -103,7 +90,8 @@ public class MainActivity extends AppCompatActivity {
         else {
             notifOffInfo.setVisibility(View.GONE);
         }
-        mCorrectPostureTextView.setText(String.format("%d", preferences.getInt(KEY_YES_POSTURE_COUNT, 0)));
+        mGoodPostureTextView.setText(String.format("%d", preferences.getInt(PREF_KEY_GOOD_POSTURE_COUNT, 0)));
+        mBadPostureTextView.setText(String.format("%d", preferences.getInt(PREF_KEY_BAD_POSTURE_COUNT, 0)));
 
         Log.d(LOG_TAG, "A: started");
     }
@@ -117,12 +105,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        unregisterReceiver(mCorrectPostureReceiver);
+        unregisterReceiver(mGoodPostureReceiver);
+        unregisterReceiver(mBadPostureReceiver);
         Log.d(LOG_TAG, "A: destroying");
         super.onDestroy();
     }
-
-
-
-
 }
