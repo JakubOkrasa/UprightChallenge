@@ -48,7 +48,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     private AlarmManager mAlarmManager;
     private PendingIntent alarmPendingIntent;
     private SharedPreferences.Editor prefsEditor;
-//    private final int KEY_PREF_INTERVAL = R.string.key_pref_interval;
     private final String LOG_TAG = SettingsFragment.class.getSimpleName();
 
     @Override
@@ -59,8 +58,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             preferences = getActivity().getSharedPreferences(sharedPrefsFile, Context.MODE_PRIVATE);
         }
 
-        SwitchPreferenceCompat notificationSwitch = findPreference("key_pref_switch_notifications");
-        final ListPreference intervalListPref = findPreference("key_pref_interval"); //todo not sure if it can be final
+        SwitchPreferenceCompat notificationSwitch = findPreference("pref_key_switch_notifications");
+        ListPreference intervalListPref = findPreference("pref_key_interval"); //todo not sure if it can be final
 //        ListPreference intervalListPref = findPreference(getResources().getString(R.string.interval_list_pref)); // this way (getResources()) doesn't work
 
         //set alarmPendingIntent to deliver repeating notifications
@@ -73,6 +72,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object notificationsOnObject) {
                     boolean notificationsOn = (Boolean) notificationsOnObject;
+                    ListPreference intervalListPref = findPreference("pref_key_interval");
                     if(notificationsOn) {
                         if(preferences!=null) {
                             setAlarmPendingIntent();
@@ -113,8 +113,9 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         }
 
             //disable interval preference in UI if notifications are turned off
-            ListPreference notifIntervalListPref = findPreference("key_pref_interval");
-            notifIntervalListPref.setEnabled(preferences.getBoolean("key_pref_switch_notifications", true));
+//            ListPreference notifIntervalListPref = findPreference("pref_key_interval");
+//        if (intervalListPref != null)
+          intervalListPref.setEnabled(preferences.getBoolean("pref_key_switch_notifications", false)); //todo fix crash
     }
 
     private void createNotificationChannel() {
@@ -135,7 +136,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     private void setAlarmPendingIntent() {
         Intent alarmIntent = new Intent(getContext(), AlarmReceiver.class);
         alarmPendingIntent = PendingIntent.getBroadcast(getContext(), NOTIFICATION_ID, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT); //todo check if cancelling always onCreate doesn't cancel needed intents
-        long repeatInterval = preferences.getLong("key_pref_interval", 1800000); //1800000ms = 30min
+        long repeatInterval = preferences.getLong("pref_key_interval", 1800000); //1800000ms = 30min
 //        if (Build.FINGERPRINT.startsWith("google/sdk_gphone_x86/generic") || Build.FINGERPRINT.startsWith("samsung")) { repeatInterval = 30000; }//short interval only for debug
         long triggerTime = SystemClock.elapsedRealtime() + repeatInterval;
         Log.d(LOG_TAG, "repeat interval: " + repeatInterval);
