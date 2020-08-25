@@ -47,10 +47,18 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     private SharedPreferences.Editor prefsEditor;
     private RepeatingNotifCreator repeatingNotifCreator;
     private final String LOG_TAG = SettingsFragment.class.getSimpleName();
+    private boolean serviceStarted = false;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         repeatingNotifCreator = new RepeatingNotifCreator(requireContext());
+
+        if(!serviceStarted) {
+            Intent startServiceIntent = new Intent(getContext(), RepeatingNotifCreator.class);
+            getContext().startService(startServiceIntent);
+            serviceStarted = true;
+        }
+
         setPreferencesFromResource(R.xml.preferences, rootKey);
 
         if(getActivity().getSharedPreferences(sharedPrefsFile, Context.MODE_PRIVATE)!=null) {
