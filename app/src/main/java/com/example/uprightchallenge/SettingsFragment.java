@@ -32,7 +32,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-        repeatingNotifService = new RepeatingNotifService(requireContext());
 
         if(!serviceStarted) {
             Intent startServiceIntent = new Intent(getContext(), RepeatingNotifService.class);
