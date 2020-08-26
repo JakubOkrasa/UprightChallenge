@@ -24,6 +24,11 @@ public class RepeatingNotifService extends Service {
         preferences = getBaseContext().getSharedPreferences(sharedPrefsFile, Context.MODE_PRIVATE); //todo can be context instead of getActivity() ?
     }
 
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        return START_STICKY;
+    }
+
     private void createNotificationChannel() {
         mNotifyManager = (NotificationManager) getBaseContext().getSystemService(Context.NOTIFICATION_SERVICE);
         long[] vibPattern = {0, 200, 200, 200, 200, 200}; //{delay1, vibDuration1, delay2, vibDuration2...}
