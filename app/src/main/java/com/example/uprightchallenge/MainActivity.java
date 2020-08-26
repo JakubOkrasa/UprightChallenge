@@ -1,7 +1,7 @@
 package com.example.uprightchallenge;
 
+import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,6 +11,8 @@ import android.view.View;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import static com.example.uprightchallenge.SettingsFragment.sharedPrefsFile;
 // todo #later show number of daily count in notification
 
 // todo #note when I added if(savedInstanceState != null) {..} and onRestore lines, AND in the app click BACK button to check the right count number, nothing happens
@@ -18,10 +20,7 @@ import androidx.appcompat.app.AppCompatActivity;
 // todo decide about minimum sdk
 public class MainActivity extends AppCompatActivity {
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
-    private GoodPostureReceiver mGoodPostureReceiver = new GoodPostureReceiver(this);
-    private BadPostureReceiver mBadPostureReceiver = new BadPostureReceiver(this);
-    static final String GOOD_POSTURE_ACTION = BuildConfig.APPLICATION_ID + ".GOOD_POSTURE_ACTION";
-    static final String BAD_POSTURE_ACTION = BuildConfig.APPLICATION_ID + ".BAD_POSTURE_ACTION";
+
     TextView mGoodPostureTextView;
     TextView mBadPostureTextView;
     private static final String PREF_KEY_GOOD_POSTURE_COUNT = "good_posture_count";
@@ -40,8 +39,7 @@ public class MainActivity extends AppCompatActivity {
         androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        registerReceiver(mGoodPostureReceiver, new IntentFilter(GOOD_POSTURE_ACTION));
-        registerReceiver(mBadPostureReceiver, new IntentFilter(BAD_POSTURE_ACTION));
+
         //todo dlaczego nie ma rejestracji mAlarmManager?
 
         Log.d(LOG_TAG, "A: created");
@@ -51,6 +49,20 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        SharedPreferences preferences = getSharedPreferences(sharedPrefsFile, Context.MODE_PRIVATE);
+        TextView txtGoodPosture = findViewById(R.id.txt_good_posture_count);
+        TextView txtBadPosture = findViewById(R.id.txt_bad_posture_count);
+        if (txtGoodPosture != null) {
+            txtGoodPosture.setText(preferences.getInt(PREF_KEY_GOOD_POSTURE_COUNT, 0));
+        }
+        if (txtBadPosture != null) {
+            txtBadPosture.setText(preferences.getInt(PREF_KEY_BAD_POSTURE_COUNT, 0));
+        }
     }
 
     @Override
@@ -84,10 +96,9 @@ public class MainActivity extends AppCompatActivity {
         String sharedPrefsFile = BuildConfig.APPLICATION_ID;
         SharedPreferences preferences = getSharedPreferences(sharedPrefsFile, MODE_PRIVATE);
         boolean notificationsOn = preferences.getBoolean("pref_key_switch_notifications", false); //defValue must be the same in preferences.xml
-        if(!notificationsOn) {
+        if (!notificationsOn) {
             notifOffInfo.setVisibility(View.VISIBLE);
-        }
-        else {
+        } else {
             notifOffInfo.setVisibility(View.GONE);
         }
         mGoodPostureTextView.setText(String.format("%d", preferences.getInt(PREF_KEY_GOOD_POSTURE_COUNT, 0)));
@@ -105,8 +116,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        unregisterReceiver(mGoodPostureReceiver);
-        unregisterReceiver(mBadPostureReceiver);
         Log.d(LOG_TAG, "A: destroying");
         super.onDestroy();
     }

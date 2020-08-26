@@ -33,7 +33,7 @@ import java.util.TimeZone;
 public class SettingsFragment extends PreferenceFragmentCompat {
 
     private SharedPreferences preferences;
-    private String sharedPrefsFile = BuildConfig.APPLICATION_ID;
+    public static final String sharedPrefsFile = BuildConfig.APPLICATION_ID;
     private SharedPreferences.Editor prefsEditor;
     private RepeatingNotifService repeatingNotifService;
     private final String LOG_TAG = SettingsFragment.class.getSimpleName();
