@@ -13,6 +13,8 @@ import androidx.preference.SwitchPreferenceCompat;
 
 import android.util.Log;
 
+import java.util.Objects;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -28,16 +30,12 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     private SharedPreferences.Editor prefsEditor;
     private RepeatingNotifService repeatingNotifService;
     private final String LOG_TAG = SettingsFragment.class.getSimpleName();
-    private boolean serviceStarted = false;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
 
-        if(!serviceStarted) {
-            Intent startServiceIntent = new Intent(getContext(), RepeatingNotifService.class);
-            getContext().startService(startServiceIntent);
-            serviceStarted = true;
-        }
+        Intent startServiceIntent = new Intent(getContext(), RepeatingNotifService.class);
+        requireContext().startService(startServiceIntent);
 
         setPreferencesFromResource(R.xml.preferences, rootKey);
 
