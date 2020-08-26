@@ -1,5 +1,7 @@
 package com.example.uprightchallenge;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,9 +13,14 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreferenceCompat;
 
+import android.os.SystemClock;
 import android.util.Log;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Objects;
+import java.util.TimeZone;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -30,6 +37,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     private SharedPreferences.Editor prefsEditor;
     private RepeatingNotifService repeatingNotifService;
     private final String LOG_TAG = SettingsFragment.class.getSimpleName();
+    public static final int NOTIFICATION_ID = 0;
+
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -58,7 +67,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     ListPreference intervalListPref = findPreference("pref_key_interval");
                     if(notificationsOn) {
                         if(preferences!=null) {
-                            repeatingNotifService.setAlarmPendingIntent();
+                            setAlarmPendingIntent();
                         }
                         else {  //todo this should be avoided with setting defauld prefs ealier ( this 'if .. else' is only for debug)
                             Log.e(LOG_TAG, "AlarmPendingIntent not set (prefs were null)");
@@ -66,7 +75,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     }
                     else {
                         repeatingNotifService.cancelNotifications();
-                        repeatingNotifService.cancelAlarmPendingIntent(); // cancel repeating intent messages for AlarmReceiver
+                        cancelAlarmPendingIntent(); // cancel repeating intent messages for AlarmReceiver
                     }
                     // save changes to SharedPreferences
                     prefsEditor = preferences.edit();
@@ -86,7 +95,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     String interval =(String) newValue;
                     prefsEditor = preferences.edit();
                     prefsEditor.putLong(preference.getKey(), Long.parseLong(interval)).apply();
-                    repeatingNotifService.setAlarmPendingIntent();
+                    setAlarmPendingIntent();
                     return true;
                 }
             });
@@ -101,5 +110,34 @@ public class SettingsFragment extends PreferenceFragmentCompat {
           intervalListPref.setEnabled(preferences.getBoolean("pref_key_switch_notifications", false)); //todo fix crash
     }
 
+    private void setAlarmPendingIntent() {
+        Intent alarmIntent = new Intent(getContext(), AlarmReceiver.class);
+        PendingIntent alarmPendingIntent = PendingIntent.getBroadcast(getContext(), NOTIFICATION_ID, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT); //todo check if cancelling always onCreate doesn't cancel needed intents
+        AlarmManager mAlarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
+        long repeatInterval = preferences.getLong("pref_key_interval", 1800000); //1800000ms = 30min
+//        if (Build.FINGERPRINT.startsWith("google/sdk_gphone_x86/generic") || Build.FINGERPRINT.startsWith("samsung")) { repeatInterval = 30000; }//short interval only for debug
+        long triggerTime = SystemClock.elapsedRealtime() + repeatInterval;
+        Log.d(LOG_TAG, "repeat interval: " + repeatInterval);
+        if (mAlarmManager != null) {
+            mAlarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerTime, repeatInterval, alarmPendingIntent);
+            Log.d(LOG_TAG, "notif. set at: " + milisToTime(triggerTime));
+        }
+    }
 
+    private void cancelAlarmPendingIntent() {
+        Intent alarmIntent = new Intent(getContext(), AlarmReceiver.class);
+        PendingIntent alarmPendingIntent = PendingIntent.getBroadcast(getContext(), NOTIFICATION_ID, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+        AlarmManager mAlarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
+        if (mAlarmManager!=null) {
+            mAlarmManager.cancel(alarmPendingIntent);
+        }
+    }
+
+    //only for debug
+    private String milisToTime(long milis) {
+        Date date = new Date(milis);
+        DateFormat formatter = new SimpleDateFormat("HH:mm:ss.SSS");
+        formatter.setTimeZone(TimeZone.getTimeZone("GMT+02:00")); // timezone is wrong
+        return formatter.format(date);
+    }
 }
