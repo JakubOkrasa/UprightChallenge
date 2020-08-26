@@ -23,10 +23,6 @@
         </activity>
 
         <receiver
-            android:name=".CorrectPostureReceiver"
-            android:enabled="true"
-            android:exported="false" />
-        <receiver
             android:name=".AlarmReceiver"
             android:enabled="true"
             android:exported="false" />
