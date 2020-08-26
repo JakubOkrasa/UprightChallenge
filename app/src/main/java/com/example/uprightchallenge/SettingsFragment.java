@@ -1,13 +1,10 @@
 package com.example.uprightchallenge;
 
 import android.app.AlarmManager;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -18,18 +15,12 @@ import androidx.preference.SwitchPreferenceCompat;
 
 import android.os.SystemClock;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Objects;
 import java.util.TimeZone;
-
-import static android.content.Context.ALARM_SERVICE;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -40,18 +31,21 @@ import static android.content.Context.ALARM_SERVICE;
     After turning on notif, (default is 30 minutes interval) notifications appear very often, maybe even less than 30 seconds.
  */
 public class SettingsFragment extends PreferenceFragmentCompat {
-    private static final int NOTIFICATION_ID = 0;
-    private static final String PRIMARY_CHANNEL_ID = "primary_notification_channel";
-    private NotificationManager mNotifyManager;
-    private String sharedPrefsFile = BuildConfig.APPLICATION_ID;
+
     private SharedPreferences preferences;
-    private AlarmManager mAlarmManager;
-    private PendingIntent alarmPendingIntent;
+    private String sharedPrefsFile = BuildConfig.APPLICATION_ID;
     private SharedPreferences.Editor prefsEditor;
+    private RepeatingNotifService repeatingNotifService;
     private final String LOG_TAG = SettingsFragment.class.getSimpleName();
+    public static final int NOTIFICATION_ID = 0;
+
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+
+        Intent startServiceIntent = new Intent(getContext(), RepeatingNotifService.class);
+        requireContext().startService(startServiceIntent);
+
         setPreferencesFromResource(R.xml.preferences, rootKey);
 
         if(getActivity().getSharedPreferences(sharedPrefsFile, Context.MODE_PRIVATE)!=null) {
@@ -63,10 +57,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 //        ListPreference intervalListPref = findPreference(getResources().getString(R.string.interval_list_pref)); // this way (getResources()) doesn't work
 
         //set alarmPendingIntent to deliver repeating notifications
-        mAlarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
 //        alarmPendingIntent = PendingIntent.getBroadcast(getContext(), NOTIFICATION_ID, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        createNotificationChannel();
         if(notificationSwitch!=null) {
             notificationSwitch.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
@@ -82,7 +74,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                         }
                     }
                     else {
-                        mNotifyManager.cancelAll(); // cancel existing notifications
+                        repeatingNotifService.cancelNotifications();
                         cancelAlarmPendingIntent(); // cancel repeating intent messages for AlarmReceiver
                     }
                     // save changes to SharedPreferences
@@ -118,24 +110,10 @@ public class SettingsFragment extends PreferenceFragmentCompat {
           intervalListPref.setEnabled(preferences.getBoolean("pref_key_switch_notifications", false)); //todo fix crash
     }
 
-    private void createNotificationChannel() {
-        mNotifyManager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
-        long[] vibPattern = {0, 200, 200, 200, 200, 200}; //{delay1, vibDuration1, delay2, vibDuration2...}
-        if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            NotificationChannel notificationChannel = new NotificationChannel(
-                    PRIMARY_CHANNEL_ID,
-                    "Check posture notification",
-                    NotificationManager.IMPORTANCE_HIGH);
-            notificationChannel.setDescription("notification check posture");
-            notificationChannel.enableVibration(true);
-            notificationChannel.setVibrationPattern(vibPattern);
-            mNotifyManager.createNotificationChannel(notificationChannel);
-        }
-    }
-
     private void setAlarmPendingIntent() {
         Intent alarmIntent = new Intent(getContext(), AlarmReceiver.class);
-        alarmPendingIntent = PendingIntent.getBroadcast(getContext(), NOTIFICATION_ID, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT); //todo check if cancelling always onCreate doesn't cancel needed intents
+        PendingIntent alarmPendingIntent = PendingIntent.getBroadcast(getContext(), NOTIFICATION_ID, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT); //todo check if cancelling always onCreate doesn't cancel needed intents
+        AlarmManager mAlarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
         long repeatInterval = preferences.getLong("pref_key_interval", 1800000); //1800000ms = 30min
 //        if (Build.FINGERPRINT.startsWith("google/sdk_gphone_x86/generic") || Build.FINGERPRINT.startsWith("samsung")) { repeatInterval = 30000; }//short interval only for debug
         long triggerTime = SystemClock.elapsedRealtime() + repeatInterval;
@@ -147,6 +125,9 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     }
 
     private void cancelAlarmPendingIntent() {
+        Intent alarmIntent = new Intent(getContext(), AlarmReceiver.class);
+        PendingIntent alarmPendingIntent = PendingIntent.getBroadcast(getContext(), NOTIFICATION_ID, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+        AlarmManager mAlarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
         if (mAlarmManager!=null) {
             mAlarmManager.cancel(alarmPendingIntent);
         }
