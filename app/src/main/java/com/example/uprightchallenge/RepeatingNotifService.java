@@ -19,18 +19,18 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
-public class RepeatingNotifCreator extends Service {
+public class RepeatingNotifService extends Service {
     private static final int NOTIFICATION_ID = 0;
     private static final String PRIMARY_CHANNEL_ID = "primary_notification_channel";
     private NotificationManager mNotifyManager;
     private AlarmManager mAlarmManager;
     private PendingIntent alarmPendingIntent;
-    private final String LOG_TAG = RepeatingNotifCreator.class.getSimpleName();
+    private final String LOG_TAG = RepeatingNotifService.class.getSimpleName();
     private SharedPreferences preferences;
     private String sharedPrefsFile = BuildConfig.APPLICATION_ID;
     private Context context;
 
-    public RepeatingNotifCreator(Context context) {
+    public RepeatingNotifService(Context context) {
         this.context = context;
         createNotificationChannel();
         mAlarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);

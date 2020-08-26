@@ -1,13 +1,8 @@
 package com.example.uprightchallenge;
 
-import android.app.AlarmManager;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -16,21 +11,7 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreferenceCompat;
 
-import android.os.SystemClock;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Objects;
-import java.util.TimeZone;
-
-import static android.content.Context.ALARM_SERVICE;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -45,16 +26,16 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     private SharedPreferences preferences;
     private String sharedPrefsFile = BuildConfig.APPLICATION_ID;
     private SharedPreferences.Editor prefsEditor;
-    private RepeatingNotifCreator repeatingNotifCreator;
+    private RepeatingNotifService repeatingNotifService;
     private final String LOG_TAG = SettingsFragment.class.getSimpleName();
     private boolean serviceStarted = false;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-        repeatingNotifCreator = new RepeatingNotifCreator(requireContext());
+        repeatingNotifService = new RepeatingNotifService(requireContext());
 
         if(!serviceStarted) {
-            Intent startServiceIntent = new Intent(getContext(), RepeatingNotifCreator.class);
+            Intent startServiceIntent = new Intent(getContext(), RepeatingNotifService.class);
             getContext().startService(startServiceIntent);
             serviceStarted = true;
         }
@@ -80,15 +61,15 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     ListPreference intervalListPref = findPreference("pref_key_interval");
                     if(notificationsOn) {
                         if(preferences!=null) {
-                            repeatingNotifCreator.setAlarmPendingIntent();
+                            repeatingNotifService.setAlarmPendingIntent();
                         }
                         else {  //todo this should be avoided with setting defauld prefs ealier ( this 'if .. else' is only for debug)
                             Log.e(LOG_TAG, "AlarmPendingIntent not set (prefs were null)");
                         }
                     }
                     else {
-                        repeatingNotifCreator.cancelNotifications();
-                        repeatingNotifCreator.cancelAlarmPendingIntent(); // cancel repeating intent messages for AlarmReceiver
+                        repeatingNotifService.cancelNotifications();
+                        repeatingNotifService.cancelAlarmPendingIntent(); // cancel repeating intent messages for AlarmReceiver
                     }
                     // save changes to SharedPreferences
                     prefsEditor = preferences.edit();
@@ -108,7 +89,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     String interval =(String) newValue;
                     prefsEditor = preferences.edit();
                     prefsEditor.putLong(preference.getKey(), Long.parseLong(interval)).apply();
-                    repeatingNotifCreator.setAlarmPendingIntent();
+                    repeatingNotifService.setAlarmPendingIntent();
                     return true;
                 }
             });

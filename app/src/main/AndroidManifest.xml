@@ -32,7 +32,7 @@
             android:exported="false" />
 
         <service
-            android:name=".RepeatingNotifCreator"
+            android:name=".RepeatingNotifService"
             android:enabled="true"
             android:exported="false" />
 
