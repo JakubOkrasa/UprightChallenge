@@ -36,10 +36,10 @@ public class AlarmReceiver extends BroadcastReceiver {
         );
 
         // after you click action button on notification, the intent will be sent
-        Intent postureYesIntent = new Intent(MainActivity.GOOD_POSTURE_ACTION);
+        Intent postureYesIntent = new Intent(RepeatingNotifService.GOOD_POSTURE_ACTION);
         PendingIntent yesPendingIntent = PendingIntent.getBroadcast(context, NOTIFICATION_ID, postureYesIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Intent postureNoIntent = new Intent(MainActivity.BAD_POSTURE_ACTION);
+        Intent postureNoIntent = new Intent(RepeatingNotifService.BAD_POSTURE_ACTION);
         PendingIntent noPendingIntent = PendingIntent.getBroadcast(context, NOTIFICATION_ID, postureNoIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, PRIMARY_CHANNEL_ID)
