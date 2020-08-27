@@ -18,6 +18,7 @@ import static com.example.uprightchallenge.SettingsFragment.sharedPrefsFile;
 // todo #note when I added if(savedInstanceState != null) {..} and onRestore lines, AND in the app click BACK button to check the right count number, nothing happens
 // todo change package name
 // todo decide about minimum sdk
+// todo #important #refactor: compare with code from tuition
 public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
 
@@ -26,29 +27,22 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     private static final String PREF_KEY_GOOD_POSTURE_COUNT = "good_posture_count";
     private static final String PREF_KEY_BAD_POSTURE_COUNT = "bad_posture_count";
 
-    //@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //ToggleButton mNotifToggle = findViewById(R.id.notify_toggle);
         mGoodPostureTextView = findViewById(R.id.txt_good_posture_count);
         mBadPostureTextView = findViewById(R.id.txt_bad_posture_count);
 
         androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-
-        //todo dlaczego nie ma rejestracji mAlarmManager?
-
         Log.d(LOG_TAG, "A: created");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-
     }
 
     @Override
@@ -67,9 +61,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+        // Handle action bar item clicks here.
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement

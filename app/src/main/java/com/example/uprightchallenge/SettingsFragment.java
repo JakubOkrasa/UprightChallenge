@@ -26,17 +26,12 @@ import java.util.TimeZone;
 /**
  * A simple {@link Fragment} subclass.
  */
-
-/*
-//todo #note :
-    After turning on notif, (default is 30 minutes interval) notifications appear very often, maybe even less than 30 seconds.
- */
+//todo #note :    After turning on notif, (default is 30 minutes interval) notifications appear very often, maybe even less than 30 seconds.
 public class SettingsFragment extends PreferenceFragmentCompat {
 
     private SharedPreferences preferences;
     public static final String sharedPrefsFile = BuildConfig.APPLICATION_ID;
     private SharedPreferences.Editor prefsEditor;
-    private RepeatingNotifService repeatingNotifService;
     private final String LOG_TAG = SettingsFragment.class.getSimpleName();
     public static final int NOTIFICATION_ID = 0;
 
@@ -54,11 +49,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         }
 
         SwitchPreferenceCompat notificationSwitch = findPreference("pref_key_switch_notifications");
-        ListPreference intervalListPref = findPreference("pref_key_interval"); //todo not sure if it can be final
+        ListPreference intervalListPref = findPreference("pref_key_interval"); //todo ListPreference is created twice: here and inner class. Maybe it is possible to create one
 //        ListPreference intervalListPref = findPreference(getResources().getString(R.string.interval_list_pref)); // this way (getResources()) doesn't work
-
-        //set alarmPendingIntent to deliver repeating notifications
-//        alarmPendingIntent = PendingIntent.getBroadcast(getContext(), NOTIFICATION_ID, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         if(notificationSwitch!=null) {
             notificationSwitch.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
@@ -69,9 +61,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     if(notificationsOn) {
                         if(preferences!=null) {
                             setAlarmPendingIntent();
-                        }
-                        else {  //todo this should be avoided with setting defauld prefs ealier ( this 'if .. else' is only for debug)
-                            Log.e(LOG_TAG, "AlarmPendingIntent not set (prefs were null)");
                         }
                     }
                     else {
@@ -101,16 +90,12 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 }
             });
         }
-        else{
-            Log.e(LOG_TAG, "preference interval is null");
-        }
-
           intervalListPref.setEnabled(preferences.getBoolean("pref_key_switch_notifications", false));
     }
 
     private void setAlarmPendingIntent() {
         Intent alarmIntent = new Intent(getContext(), AlarmReceiver.class);
-        PendingIntent alarmPendingIntent = PendingIntent.getBroadcast(getContext(), NOTIFICATION_ID, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT); //todo check if cancelling always onCreate doesn't cancel needed intents
+        PendingIntent alarmPendingIntent = PendingIntent.getBroadcast(getContext(), NOTIFICATION_ID, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
         AlarmManager mAlarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
         long repeatInterval = preferences.getLong("pref_key_interval", 1800000); //1800000ms = 30min
         long triggerTime = SystemClock.elapsedRealtime() + repeatInterval;
