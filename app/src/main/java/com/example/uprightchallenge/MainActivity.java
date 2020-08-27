@@ -18,7 +18,7 @@ import static com.example.uprightchallenge.SettingsFragment.sharedPrefsFile;
 // todo #note when I added if(savedInstanceState != null) {..} and onRestore lines, AND in the app click BACK button to check the right count number, nothing happens
 // todo change package name
 // todo decide about minimum sdk
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
 
     TextView mGoodPostureTextView;
@@ -55,14 +55,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         SharedPreferences preferences = getSharedPreferences(sharedPrefsFile, Context.MODE_PRIVATE);
-        TextView txtGoodPosture = findViewById(R.id.txt_good_posture_count);
-        TextView txtBadPosture = findViewById(R.id.txt_bad_posture_count);
-        if (txtGoodPosture != null) {
-            txtGoodPosture.setText(preferences.getInt(PREF_KEY_GOOD_POSTURE_COUNT, 0));
-        }
-        if (txtBadPosture != null) {
-            txtBadPosture.setText(preferences.getInt(PREF_KEY_BAD_POSTURE_COUNT, 0));
-        }
+        preferences.registerOnSharedPreferenceChangeListener(this);
     }
 
     @Override
@@ -118,5 +111,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         Log.d(LOG_TAG, "A: destroying");
         super.onDestroy();
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        SharedPreferences preferences = getSharedPreferences(sharedPrefsFile, Context.MODE_PRIVATE);
+        mGoodPostureTextView.setText(String.format("%d", preferences.getInt(PREF_KEY_GOOD_POSTURE_COUNT, 0)));
+        mBadPostureTextView.setText(String.format("%d", preferences.getInt(PREF_KEY_BAD_POSTURE_COUNT, 0)));
     }
 }
