@@ -1,9 +1,12 @@
-package com.example.uprightchallenge;
+package com.example.uprightchallenge.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
 
 import android.os.Bundle;
+
+import com.example.uprightchallenge.R;
+import com.example.uprightchallenge.ui.SettingsFragment;
 
 public class SettingsActivity extends AppCompatActivity {
 

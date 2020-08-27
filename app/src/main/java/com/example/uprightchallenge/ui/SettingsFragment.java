@@ -1,4 +1,4 @@
-package com.example.uprightchallenge;
+package com.example.uprightchallenge.ui;
 
 import android.app.AlarmManager;
 import android.app.NotificationManager;
@@ -17,10 +17,14 @@ import androidx.preference.SwitchPreferenceCompat;
 import android.os.SystemClock;
 import android.util.Log;
 
+import com.example.uprightchallenge.AlarmReceiver;
+import com.example.uprightchallenge.BuildConfig;
+import com.example.uprightchallenge.R;
+import com.example.uprightchallenge.RepeatingNotifService;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Objects;
 import java.util.TimeZone;
 
 /**

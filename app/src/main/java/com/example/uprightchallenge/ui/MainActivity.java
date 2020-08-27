@@ -1,4 +1,4 @@
-package com.example.uprightchallenge;
+package com.example.uprightchallenge.ui;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,7 +12,10 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import static com.example.uprightchallenge.SettingsFragment.sharedPrefsFile;
+import com.example.uprightchallenge.BuildConfig;
+import com.example.uprightchallenge.R;
+
+import static com.example.uprightchallenge.ui.SettingsFragment.sharedPrefsFile;
 // todo #later show number of daily count in notification
 
 // todo #note when I added if(savedInstanceState != null) {..} and onRestore lines, AND in the app click BACK button to check the right count number, nothing happens

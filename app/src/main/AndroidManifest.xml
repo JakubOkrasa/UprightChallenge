@@ -14,12 +14,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".SettingsActivity"
+            android:name=".ui.SettingsActivity"
             android:label="Settings"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".ui.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.uprightchallenge.MainActivity"/>
+                android:value="com.example.uprightchallenge.ui.MainActivity"/>
         </activity>
 
         <receiver
@@ -33,7 +33,7 @@
             android:exported="false" />
 
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.MainActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:launchMode="singleInstance">
             <intent-filter>

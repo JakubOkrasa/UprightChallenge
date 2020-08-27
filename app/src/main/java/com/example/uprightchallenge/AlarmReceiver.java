@@ -9,6 +9,8 @@ import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 
+import com.example.uprightchallenge.ui.MainActivity;
+
 //receive periodically notifications pending intents
 public class AlarmReceiver extends BroadcastReceiver {
 
