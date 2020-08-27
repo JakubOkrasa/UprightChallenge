@@ -94,8 +94,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         } else {
             notifOffInfo.setVisibility(View.GONE);
         }
-        mGoodPostureTextView.setText(String.format("%d", preferences.getInt(PREF_KEY_GOOD_POSTURE_COUNT, 0)));
-        mBadPostureTextView.setText(String.format("%d", preferences.getInt(PREF_KEY_BAD_POSTURE_COUNT, 0)));
+        setCountersPrefs();
 
         Log.d(LOG_TAG, "A: started");
     }
@@ -115,6 +114,10 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        setCountersPrefs();
+    }
+
+    private void setCountersPrefs() {
         SharedPreferences preferences = getSharedPreferences(sharedPrefsFile, Context.MODE_PRIVATE);
         mGoodPostureTextView.setText(String.format("%d", preferences.getInt(PREF_KEY_GOOD_POSTURE_COUNT, 0)));
         mBadPostureTextView.setText(String.format("%d", preferences.getInt(PREF_KEY_BAD_POSTURE_COUNT, 0)));
