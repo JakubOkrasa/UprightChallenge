@@ -59,10 +59,6 @@ public class RepeatingNotifService extends Service {
         }
     }
 
-    void cancelNotifications() {
-        mNotifyManager.cancelAll(); // cancel existing notifications
-    }
-
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
