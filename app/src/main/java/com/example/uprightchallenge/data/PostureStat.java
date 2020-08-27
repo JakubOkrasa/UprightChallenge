@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey;
 import java.sql.Timestamp;
 
 @Entity
-public class PostureStats {
+public class PostureStat {
 
     @PrimaryKey(autoGenerate = true)
     @NonNull
@@ -20,7 +20,7 @@ public class PostureStats {
 
     private int negativeCount;
 
-    public PostureStats(Timestamp statTime, int positiveCount, int negativeCount) {
+    public PostureStat(Timestamp statTime, int positiveCount, int negativeCount) {
         this.statTime = statTime;
         this.positiveCount = positiveCount;
         this.negativeCount = negativeCount;
