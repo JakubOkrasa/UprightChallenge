@@ -1,8 +1,11 @@
 package com.example.uprightchallenge.data;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
+
+import java.util.List;
 
 
 @Dao
@@ -11,7 +14,7 @@ public interface PostureStatDao {
     void insert(PostureStat postureStat);
 
     @Query("SELECT * from PostureStat ORDER BY statId ASC")
-    void getAllStats();
+    LiveData<List<PostureStat>> getAllStats();
 
     @Query("DELETE FROM PostureStat")
     void deleteAll();
