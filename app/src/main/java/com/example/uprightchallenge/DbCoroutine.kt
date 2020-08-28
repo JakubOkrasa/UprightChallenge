@@ -7,7 +7,7 @@ import kotlinx.coroutines.launch
 abstract class DbCoroutine<Params, Progress, Result> {
     abstract fun doInBackground(): Result
 
-    fun execute(vararg params: Params?) {
+    fun execute() {
         GlobalScope.launch(Dispatchers.Default) {
             doInBackground()
         }
