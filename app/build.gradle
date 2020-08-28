@@ -53,7 +53,8 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
     // Lifecycle components
-    implementation "android.arch.lifecycle:extensions:$archLifecycle_version"
-    annotationProcessor "android.arch.lifecycle:compiler:$archLifecycle_version:2.2.0"
+    implementation "androidx.lifecycle:lifecycle-extensions:$archLifecycle_version"
+    annotationProcessor "androidx.lifecycle:lifecycle-compiler:$archLifecycle_version"
+
 
 }
