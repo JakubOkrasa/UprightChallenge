@@ -14,7 +14,7 @@ public interface PostureStatDao {
     void insert(PostureStat postureStat);
 
     @Query("SELECT * from PostureStat ORDER BY statId ASC")
-    LiveData<List<PostureStat>> getAllStats();
+    List<PostureStat> getAllStats();
 
     @Query("DELETE FROM PostureStat")
     void deleteAll();

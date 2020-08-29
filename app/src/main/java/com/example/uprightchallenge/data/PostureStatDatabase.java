@@ -1,14 +1,17 @@
 package com.example.uprightchallenge.data;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-import com.example.uprightchallenge.DbCoroutine;
+import com.example.uprightchallenge.DbInitCoroutine;
 
+@Database(entities = {PostureStat.class}, version = 1, exportSchema = false)
 public abstract class PostureStatDatabase extends RoomDatabase {
     private static PostureStatDatabase INSTANCE;
 
@@ -21,6 +24,7 @@ public abstract class PostureStatDatabase extends RoomDatabase {
                             .fallbackToDestructiveMigration()
                             .addCallback(sRoomDatabaseCallback)
                             .build();
+                    Log.e("Database", "db built");
                 }
             }
         }
@@ -32,12 +36,14 @@ public abstract class PostureStatDatabase extends RoomDatabase {
     private static RoomDatabase.Callback sRoomDatabaseCallback = new RoomDatabase.Callback() {
         @Override
         public void onOpen(@NonNull SupportSQLiteDatabase db) {
+            Log.e("Database", "db opening");
             super.onOpen(db);
             new PopulateDbCoroutine(INSTANCE).execute();
+
         }
     };
 
-    private static class PopulateDbCoroutine extends DbCoroutine<Void, Void, Void> {
+    private static class PopulateDbCoroutine extends DbInitCoroutine<Void, Void, Void> {
         private final PostureStatDao mDao;
         int[] positiveCount = {10, 15, 8};
         int[] negativeCount = {3, 2, 1};
@@ -48,10 +54,12 @@ public abstract class PostureStatDatabase extends RoomDatabase {
 
         @Override
         public Void doInBackground() {
+            mDao.deleteAll();
             for (int i = 0; i < positiveCount.length; i++) {
-                PostureStat ps = new PostureStat(positiveCount[i], negativeCount[i]);
+                PostureStat ps = new PostureStat((long)i, positiveCount[i], negativeCount[i]);
                 mDao.insert(ps);
             }
+            Log.e("coroutine", "db populated");
             return null;
         }
 

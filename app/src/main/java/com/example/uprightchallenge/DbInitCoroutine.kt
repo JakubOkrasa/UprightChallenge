@@ -4,7 +4,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-abstract class DbCoroutine<Params, Progress, Result> {
+// TODO: 8/29/2020 change globalScope to coroutine scope
+abstract class DbInitCoroutine<Params, Progress, Result> {
     abstract fun doInBackground(): Result
 
     fun execute() {

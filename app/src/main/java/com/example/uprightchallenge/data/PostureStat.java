@@ -11,7 +11,7 @@ import java.sql.Timestamp;
 @Entity
 public class PostureStat {
 
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
     @NonNull
     private long statId;
 
@@ -21,7 +21,8 @@ public class PostureStat {
 
     private int negativeCount;
 
-    public PostureStat(int positiveCount, int negativeCount) {
+    public PostureStat(long statId, int positiveCount, int negativeCount) {
+        this.statId = statId;
 //        this.statTime = statTime;
         this.positiveCount = positiveCount;
         this.negativeCount = negativeCount;
@@ -37,5 +38,9 @@ public class PostureStat {
 
     public int getNegativeCount() {
         return negativeCount;
+    }
+
+    public long getStatId() {
+        return statId;
     }
 }
