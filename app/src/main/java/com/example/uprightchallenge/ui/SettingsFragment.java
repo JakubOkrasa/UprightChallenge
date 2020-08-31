@@ -136,6 +136,15 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         mAlarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, resetAlarmPendingIntent);
     }
 
+    private void cancelResetPendingIntent() {
+        Intent resetAlarmIntent = new Intent(getContext(), ResetAlarmReceiver.class);
+        PendingIntent resetAlarmPendingIntent = PendingIntent.getBroadcast(getContext(), RESET_ALARM_ID, resetAlarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager mAlarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
+        if (mAlarmManager!=null) {
+            mAlarmManager.cancel(resetAlarmPendingIntent);
+        }
+    }
+
     //only for debug
     private String milisToTime(long milis) {
         Date date = new Date(milis);
