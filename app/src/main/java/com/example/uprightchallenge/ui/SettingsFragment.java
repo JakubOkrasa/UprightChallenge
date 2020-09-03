@@ -21,9 +21,11 @@ import com.example.uprightchallenge.AlarmReceiver;
 import com.example.uprightchallenge.BuildConfig;
 import com.example.uprightchallenge.R;
 import com.example.uprightchallenge.RepeatingNotifService;
+import com.example.uprightchallenge.ResetAlarmReceiver;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -31,6 +33,7 @@ import java.util.TimeZone;
  * A simple {@link Fragment} subclass.
  */
 //todo #note :    After turning on notif, (default is 30 minutes interval) notifications appear very often, maybe even less than 30 seconds.
+//todo refactor names alarmPendingIntent and AlarmReceiver
 public class SettingsFragment extends PreferenceFragmentCompat {
 
     private SharedPreferences preferences;
@@ -38,6 +41,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     private SharedPreferences.Editor prefsEditor;
     private final String LOG_TAG = SettingsFragment.class.getSimpleName();
     public static final int NOTIFICATION_ID = 0;
+    public static final int RESET_ALARM_ID = 1;
 
 
     @Override
@@ -65,11 +69,13 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     if(notificationsOn) {
                         if(preferences!=null) {
                             setAlarmPendingIntent();
+                            setResetPendingIntent();
                         }
                     }
                     else {
                         ((NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE)).cancelAll();
                         cancelAlarmPendingIntent(); // cancel repeating intent messages for AlarmReceiver
+                        cancelResetPendingIntent();
                     }
                     // save changes to SharedPreferences
                     prefsEditor = preferences.edit();
@@ -98,9 +104,9 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     }
 
     private void setAlarmPendingIntent() {
+        AlarmManager mAlarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
         Intent alarmIntent = new Intent(getContext(), AlarmReceiver.class);
         PendingIntent alarmPendingIntent = PendingIntent.getBroadcast(getContext(), NOTIFICATION_ID, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-        AlarmManager mAlarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
         long repeatInterval = preferences.getLong("pref_key_interval", 1800000); //1800000ms = 30min
         long triggerTime = SystemClock.elapsedRealtime() + repeatInterval;
         Log.d(LOG_TAG, "repeat interval: " + repeatInterval);
@@ -119,11 +125,34 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         }
     }
 
+    // Set the alarm to start at approximately 1:00 a.m. The alarm will be used to reset counters every night and save results in database
+    private void setResetPendingIntent() {
+        AlarmManager mAlarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, 1); // set calendar hour to 1 a.m.
+        if (calendar.getTimeInMillis()<System.currentTimeMillis()) {
+            calendar.add(Calendar.DATE, 1);
+        }
+        Intent resetAlarmIntent = new Intent(getContext(), ResetAlarmReceiver.class);
+        PendingIntent resetAlarmPendingIntent = PendingIntent.getBroadcast(getContext(), RESET_ALARM_ID, resetAlarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        mAlarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, resetAlarmPendingIntent);
+    }
+
+    private void cancelResetPendingIntent() {
+        Intent resetAlarmIntent = new Intent(getContext(), ResetAlarmReceiver.class);
+        PendingIntent resetAlarmPendingIntent = PendingIntent.getBroadcast(getContext(), RESET_ALARM_ID, resetAlarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager mAlarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
+        if (mAlarmManager!=null) {
+            mAlarmManager.cancel(resetAlarmPendingIntent);
+        }
+    }
+
     //only for debug
     private String milisToTime(long milis) {
         Date date = new Date(milis);
         DateFormat formatter = new SimpleDateFormat("HH:mm:ss.SSS");
-        formatter.setTimeZone(TimeZone.getTimeZone("GMT+02:00")); // timezone is wrong
+        formatter.setTimeZone(TimeZone.getTimeZone("GMT+02:00"));
         return formatter.format(date);
     }
 }
