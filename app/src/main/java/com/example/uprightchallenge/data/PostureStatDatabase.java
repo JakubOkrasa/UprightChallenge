@@ -43,7 +43,7 @@ public abstract class PostureStatDatabase extends RoomDatabase {
         }
     };
 
-    private static class PopulateDbCoroutine extends DbInitCoroutine<Void, Void, Void> {
+    private static class PopulateDbCoroutine extends DbInitCoroutine {
         private final PostureStatDao mDao;
         int[] positiveCount = {10, 15, 8};
         int[] negativeCount = {3, 2, 1};
@@ -53,14 +53,13 @@ public abstract class PostureStatDatabase extends RoomDatabase {
         }
 
         @Override
-        public Void doInBackground() {
+        public void populateWithTestData() {
             mDao.deleteAll();
             for (int i = 0; i < positiveCount.length; i++) {
                 PostureStat ps = new PostureStat((long)i, positiveCount[i], negativeCount[i]);
                 mDao.insert(ps);
             }
             Log.e("coroutine", "db populated");
-            return null;
         }
 
 
