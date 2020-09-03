@@ -42,6 +42,18 @@
         android:layout_marginHorizontal="5dp"
         />
 
+    <Button
+        android:layout_width="90dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txt_bad_posture_count"
+        android:layout_marginTop="50dp"
+        android:text="test"
+        android:textSize="25sp"
+        android:onClick="testSth"
+        android:id="@+id/test_btn"/>
+
     <TextView
         android:id="@+id/notif_off_warning"
         android:layout_width="match_parent"

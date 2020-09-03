@@ -11,9 +11,12 @@ import android.view.View;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.uprightchallenge.BuildConfig;
 import com.example.uprightchallenge.R;
+import com.example.uprightchallenge.data.PostureStat;
 
 import static com.example.uprightchallenge.ui.SettingsFragment.sharedPrefsFile;
 // todo #later show number of daily count in notification
@@ -22,8 +25,10 @@ import static com.example.uprightchallenge.ui.SettingsFragment.sharedPrefsFile;
 // todo change package name
 // todo decide about minimum sdk
 // todo #important #refactor: compare with code from tuition
+// TODO: 9/3/2020 add ScrollView in content_main.xml
 public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
+    private PostureStatViewModel mPostureStatVM;
 
     TextView mGoodPostureTextView;
     TextView mBadPostureTextView;
@@ -40,6 +45,10 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
         androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        mPostureStatVM = new ViewModelProvider(this).get(PostureStatViewModel.class);
+        mPostureStatVM.insert(new PostureStat(999, 7, 5));
+
         Log.d(LOG_TAG, "A: created");
     }
 
@@ -79,6 +88,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
     @Override
     protected void onStart() {
+        mPostureStatVM.refreshAllStats();
         super.onStart();
         TextView notifOffInfo = findViewById(R.id.notif_off_warning);
         String sharedPrefsFile = BuildConfig.APPLICATION_ID;
@@ -116,5 +126,10 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         SharedPreferences preferences = getSharedPreferences(sharedPrefsFile, Context.MODE_PRIVATE);
         mGoodPostureTextView.setText(String.format("%d", preferences.getInt(PREF_KEY_GOOD_POSTURE_COUNT, 0)));
         mBadPostureTextView.setText(String.format("%d", preferences.getInt(PREF_KEY_BAD_POSTURE_COUNT, 0)));
+    }
+
+    // only for debug. This is on click test button event
+    public void testSth(View view) {
+        Log.d(LOG_TAG, mPostureStatVM.logAllStats(mPostureStatVM.getAllStats()));
     }
 }
