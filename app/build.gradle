@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 30
     buildToolsVersion "29.0.3"
 
     defaultConfig {
         applicationId "com.example.uprightchallenge"
-        minSdkVersion 19
-        targetSdkVersion 29
+        minSdkVersion 24
+        targetSdkVersion 30
         versionCode 1
         versionName "1.0"
 
@@ -55,6 +55,9 @@ dependencies {
     // Lifecycle components
     implementation "androidx.lifecycle:lifecycle-extensions:$archLifecycle_version"
     annotationProcessor "androidx.lifecycle:lifecycle-compiler:$archLifecycle_version"
+
+    //with this you can call suspend Kotlin functions from Java (this requires API level 24 or above)
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.0.1"
 
 
 }

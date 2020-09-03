@@ -7,27 +7,13 @@ import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.future.future
 import java.util.concurrent.CompletableFuture
 
-abstract class DbSelectCoroutine<Params, Progress, Result> {
-    abstract fun doInBackground(): Result
-
-    abstract fun onPostExecute(result: Result?)
-
-    fun execute(): Result {
-        GlobalScope.launch(Dispatchers.Default) { // TODO: 8/28/2020 check coroutineScope
-            val result = doInBackground()
-            withContext(Dispatchers.Main) {
-                onPostExecute(result)
-            }
-
-        }
-//        runBlocking {
-//            launch {//background thread
-//                val result = doInBackground()
-//                withContext(Dispatchers.Main) {
-//                    onPostExecute(result)
-//                }
-//            }
-//        }
-        /// ... // main thread
+abstract class DbSelectCoroutine {
+    private suspend fun getAllStats(dao: PostureStatDao): List<PostureStat> =
+        coroutineScope {
+            dao.allStats
     }
+
+    open fun execute(dao: PostureStatDao): CompletableFuture<List<PostureStat>> =
+            GlobalScope.future { getAllStats(dao) }
+
 }

@@ -1,14 +1,15 @@
 package com.example.uprightchallenge.data;
 
 import android.app.Application;
-import android.util.Log;
 
 import com.example.uprightchallenge.DbInsertCoroutine;
 import com.example.uprightchallenge.DbSelectCoroutine;
 
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 public class PostureStatRepository {
     private PostureStatDao mDao;
@@ -17,67 +18,46 @@ public class PostureStatRepository {
     public PostureStatRepository(Application application) {
         PostureStatDatabase db = PostureStatDatabase.getDatabase(application);
         this.mDao = db.getPostureStatDao();
-//        this.mAllStats = mDao.getAllStats();
+        this.mAllStats = getAllStats();
     }
 
-//    public List<PostureStat> getAllStats() {return mAllStats; }
-
-    public void insert(PostureStat stat) { new insertCoroutine(mDao).execute(stat); }
-
-    public void logAllStats() { new logAllStatsCoroutine(mDao).execute();}
-
-    public List<PostureStat> getAllStats() {return  new getAllStatsCoroutine(mDao).execute(); }
-
-    private static class insertCoroutine extends DbInsertCoroutine<PostureStat, Void, Void> {
-        private PostureStatDao coroutineDao;
-        insertCoroutine(PostureStatDao dao) {
-            coroutineDao = dao;
+    public List<PostureStat> getAllStats() {
+        try {
+            return  new getAllStatsCoroutine().execute(mDao).get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
-
-        @Override
-        public Void doInBackground(PostureStat postureStat) { //todo not sure. In tutorial here was (Word... words)
-                                                                //todo but I don't no how to do respective method in kotlin coroutine
-                                                                //todo maybe it was required by AsyncTask
-            coroutineDao.insert(postureStat);
-            return null;
-        }
-
+        return null;
     }
 
-    private static class logAllStatsCoroutine extends DbSelectCoroutine<Void, Void, List<PostureStat>> {
-        private PostureStatDao coroutineDao;
-        public logAllStatsCoroutine(PostureStatDao coroutineDao) {
-            this.coroutineDao = coroutineDao;
-        }
+    public void insert(PostureStat stat) { new insertCoroutine().insertStat(mDao, stat); }
 
-        @Override
-        public List<PostureStat> doInBackground() {
-            return coroutineDao.getAllStats();
+    //only for debug
+    public String statsToString(List<PostureStat> stats) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("\nPosture stats:\n\tid\t\t+\t\t-\n");
+        for (int i = 0; i < stats.size(); i++) {
+            PostureStat ps = stats.get(i);
+            sb.append(String.format("\t%d\t\t%d\t\t%d\n", ps.getStatId(), ps.getPositiveCount(), ps.getNegativeCount()));
         }
+        return sb.toString();
+    }
 
+    private static class insertCoroutine extends DbInsertCoroutine {
         @Override
-        public void onPostExecute(@Nullable List<PostureStat> postureStats) {
-            for (int i = 0; i < postureStats.size(); i++) {
-                PostureStat ps = postureStats.get(i);
-                Log.e(PostureStatRepository.class.getSimpleName(), String.format("entry: id: %d +: %d -: %d", ps.getStatId(), ps.getPositiveCount(), ps.getNegativeCount()));
-            }
+        public void insertStat(@NotNull PostureStatDao dao, @NotNull PostureStat stat) {
+            super.insertStat(dao, stat);
         }
     }
 
-    private static class getAllStatsCoroutine extends DbSelectCoroutine<Void, Void, List<PostureStat>> {
-        private PostureStatDao coroutineDao;
-        public getAllStatsCoroutine(PostureStatDao coroutineDao) {
-            this.coroutineDao = coroutineDao;
-        }
 
+    private static class getAllStatsCoroutine extends DbSelectCoroutine {
+        @NotNull
         @Override
-        public List<PostureStat> doInBackground() {
-            return coroutineDao.getAllStats();
-        }
-
-        @Override
-        public void onPostExecute(@Nullable List<PostureStat> postureStats) {
-            //do nothing
+        public CompletableFuture<List<PostureStat>> execute(@NotNull PostureStatDao dao) {
+            return super.execute(dao);
         }
     }
 }
