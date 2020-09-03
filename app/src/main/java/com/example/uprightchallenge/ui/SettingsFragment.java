@@ -20,7 +20,7 @@ import android.util.Log;
 import com.example.uprightchallenge.receiver.AlarmReceiver;
 import com.example.uprightchallenge.BuildConfig;
 import com.example.uprightchallenge.R;
-import com.example.uprightchallenge.RepeatingNotifService;
+import com.example.uprightchallenge.service.RepeatingNotifService;
 import com.example.uprightchallenge.receiver.ResetAlarmReceiver;
 
 import java.text.DateFormat;

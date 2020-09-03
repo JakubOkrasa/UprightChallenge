@@ -10,7 +10,7 @@ import android.util.Log;
 import androidx.core.app.NotificationCompat;
 
 import com.example.uprightchallenge.R;
-import com.example.uprightchallenge.RepeatingNotifService;
+import com.example.uprightchallenge.service.RepeatingNotifService;
 import com.example.uprightchallenge.ui.MainActivity;
 
 //receive periodically notifications pending intents

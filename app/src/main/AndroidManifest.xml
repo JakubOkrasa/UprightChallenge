@@ -31,7 +31,7 @@
             android:enabled="true"
             android:exported="false"/>
         <service
-            android:name=".RepeatingNotifService"
+            android:name=".service.RepeatingNotifService"
             android:enabled="true"
             android:exported="false" />
 
