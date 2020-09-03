@@ -1,4 +1,4 @@
-package com.example.uprightchallenge;
+package com.example.uprightchallenge.receiver;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -9,6 +9,8 @@ import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 
+import com.example.uprightchallenge.R;
+import com.example.uprightchallenge.service.RepeatingNotifService;
 import com.example.uprightchallenge.ui.MainActivity;
 
 //receive periodically notifications pending intents

@@ -1,9 +1,8 @@
-package com.example.uprightchallenge
+package com.example.uprightchallenge.data.coroutine
 
 import com.example.uprightchallenge.data.PostureStat
 import com.example.uprightchallenge.data.PostureStatDao
 import kotlinx.coroutines.*
-import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.future.future
 import java.util.concurrent.CompletableFuture
 

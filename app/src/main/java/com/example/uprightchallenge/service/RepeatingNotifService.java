@@ -1,4 +1,4 @@
-package com.example.uprightchallenge;
+package com.example.uprightchallenge.service;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -13,6 +13,8 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import com.example.uprightchallenge.BuildConfig;
+
 public class RepeatingNotifService extends Service {
     private static final String PRIMARY_CHANNEL_ID = "primary_notification_channel";
     private NotificationManager mNotifyManager;
@@ -21,8 +23,8 @@ public class RepeatingNotifService extends Service {
     private String sharedPrefsFile = BuildConfig.APPLICATION_ID;
     private static final String PREF_KEY_GOOD_POSTURE_COUNT = "good_posture_count";
     private static final String PREF_KEY_BAD_POSTURE_COUNT = "bad_posture_count";
-    static final String GOOD_POSTURE_ACTION = BuildConfig.APPLICATION_ID + ".GOOD_POSTURE_ACTION";
-    static final String BAD_POSTURE_ACTION = BuildConfig.APPLICATION_ID + ".BAD_POSTURE_ACTION";
+    public static final String GOOD_POSTURE_ACTION = BuildConfig.APPLICATION_ID + ".GOOD_POSTURE_ACTION";
+    public static final String BAD_POSTURE_ACTION = BuildConfig.APPLICATION_ID + ".BAD_POSTURE_ACTION";
 
     @Override
     public void onCreate() {
