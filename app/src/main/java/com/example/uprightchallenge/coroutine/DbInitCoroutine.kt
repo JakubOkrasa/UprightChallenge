@@ -1,4 +1,4 @@
-package com.example.uprightchallenge
+package com.example.uprightchallenge.coroutine
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO

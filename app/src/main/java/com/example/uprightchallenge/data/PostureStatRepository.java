@@ -2,8 +2,8 @@ package com.example.uprightchallenge.data;
 
 import android.app.Application;
 
-import com.example.uprightchallenge.DbInsertCoroutine;
-import com.example.uprightchallenge.DbSelectCoroutine;
+import com.example.uprightchallenge.coroutine.DbInsertCoroutine;
+import com.example.uprightchallenge.coroutine.DbSelectCoroutine;
 
 import org.jetbrains.annotations.NotNull;
 

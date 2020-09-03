@@ -9,7 +9,7 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-import com.example.uprightchallenge.DbInitCoroutine;
+import com.example.uprightchallenge.coroutine.DbInitCoroutine;
 
 @Database(entities = {PostureStat.class}, version = 1, exportSchema = false)
 public abstract class PostureStatDatabase extends RoomDatabase {
