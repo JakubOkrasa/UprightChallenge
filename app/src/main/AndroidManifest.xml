@@ -23,11 +23,11 @@
         </activity>
 
         <receiver
-            android:name=".AlarmReceiver"
+            android:name=".receiver.AlarmReceiver"
             android:enabled="true"
             android:exported="false" />
 
-        <receiver android:name=".ResetAlarmReceiver"
+        <receiver android:name=".receiver.ResetAlarmReceiver"
             android:enabled="true"
             android:exported="false"/>
         <service

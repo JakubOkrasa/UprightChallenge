@@ -17,11 +17,11 @@ import androidx.preference.SwitchPreferenceCompat;
 import android.os.SystemClock;
 import android.util.Log;
 
-import com.example.uprightchallenge.AlarmReceiver;
+import com.example.uprightchallenge.receiver.AlarmReceiver;
 import com.example.uprightchallenge.BuildConfig;
 import com.example.uprightchallenge.R;
 import com.example.uprightchallenge.RepeatingNotifService;
-import com.example.uprightchallenge.ResetAlarmReceiver;
+import com.example.uprightchallenge.receiver.ResetAlarmReceiver;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
