@@ -17,7 +17,7 @@ public class PostureStatViewModel extends AndroidViewModel {
     public PostureStatViewModel(@NonNull Application application) {
         super(application);
         this.mRepository = new PostureStatRepository(application);
-//        mAllStats = mRepository.getAllStats(); todo commented bo powodowało błędy prawdopodopnie
+        mAllStats = mRepository.getAllStats();
         mRepository.insert(new PostureStat(77, 4, 5));
         mRepository.logAllStats();
     }
