@@ -21,11 +21,11 @@ import com.example.uprightchallenge.data.PostureStat;
 import static com.example.uprightchallenge.ui.SettingsFragment.sharedPrefsFile;
 // todo #later show number of daily count in notification
 
-// todo #note when I added if(savedInstanceState != null) {..} and onRestore lines, AND in the app click BACK button to check the right count number, nothing happens
 // todo change package name
 // todo decide about minimum sdk
 // todo #important #refactor: compare with code from tuition
 // TODO: 9/3/2020 add ScrollView in content_main.xml
+// TODO: 9/3/2020 add more options in repeat interval preference
 public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
     private PostureStatViewModel mPostureStatVM;
