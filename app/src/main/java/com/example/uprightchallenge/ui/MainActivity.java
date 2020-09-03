@@ -87,6 +87,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
     @Override
     protected void onStart() {
+        mPostureStatVM.refreshAllStats();
         super.onStart();
         TextView notifOffInfo = findViewById(R.id.notif_off_warning);
         String sharedPrefsFile = BuildConfig.APPLICATION_ID;
