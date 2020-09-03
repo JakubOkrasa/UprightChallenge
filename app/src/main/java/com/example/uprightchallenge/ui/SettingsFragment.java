@@ -101,6 +101,19 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             });
         }
           intervalListPref.setEnabled(preferences.getBoolean("pref_key_switch_notifications", false));
+
+
+        Preference populateWithSampleDataBtnPref = findPreference("pref_key_populate");
+        if(populateWithSampleDataBtnPref!=null) {
+            populateWithSampleDataBtnPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+
+                    return true;
+                }
+            });
+        }
+
     }
 
     private void setAlarmPendingIntent() {
