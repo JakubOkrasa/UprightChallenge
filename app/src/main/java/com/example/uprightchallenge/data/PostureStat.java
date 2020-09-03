@@ -7,15 +7,14 @@ import androidx.room.PrimaryKey;
 
 import java.sql.Timestamp;
 
-// TODO: 8/28/2020 refactor name PostureStat, stat means quickly
+// TODO: 9/3/2020 add stat timestamp field
 @Entity
 public class PostureStat {
 
-    @PrimaryKey
+    @PrimaryKey (autoGenerate = true)
     @NonNull
     private long statId;
 
-//    private Timestamp statTime;
 
     private int positiveCount;
 
@@ -23,14 +22,11 @@ public class PostureStat {
 
     public PostureStat(long statId, int positiveCount, int negativeCount) {
         this.statId = statId;
-//        this.statTime = statTime;
         this.positiveCount = positiveCount;
         this.negativeCount = negativeCount;
     }
 
-//    public Timestamp getStatTime() {
-//        return statTime;
-//    }
+    public long getStatId() { return statId; }
 
     public int getPositiveCount() {
         return positiveCount;
@@ -38,9 +34,5 @@ public class PostureStat {
 
     public int getNegativeCount() {
         return negativeCount;
-    }
-
-    public long getStatId() {
-        return statId;
     }
 }

@@ -47,7 +47,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         setSupportActionBar(toolbar);
 
         mPostureStatVM = new ViewModelProvider(this).get(PostureStatViewModel.class);
-        mPostureStatVM.insert(new PostureStat(999, 7, 5));
 
         Log.d(LOG_TAG, "A: created");
     }

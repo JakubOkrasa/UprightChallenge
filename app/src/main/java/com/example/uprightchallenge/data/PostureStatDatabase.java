@@ -56,7 +56,7 @@ public abstract class PostureStatDatabase extends RoomDatabase {
         public void populateWithTestData() {
             mDao.deleteAll();
             for (int i = 0; i < positiveCount.length; i++) {
-                PostureStat ps = new PostureStat((long)i, positiveCount[i], negativeCount[i]);
+                PostureStat ps = new PostureStat((long)0, positiveCount[i], negativeCount[i]);
                 mDao.insert(ps);
             }
             Log.e("coroutine", "db populated");
