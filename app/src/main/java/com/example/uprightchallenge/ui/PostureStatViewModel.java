@@ -19,7 +19,6 @@ public class PostureStatViewModel extends AndroidViewModel {
         this.mRepository = new PostureStatRepository(application);
         mAllStats = mRepository.getAllStats();
         mRepository.insert(new PostureStat(77, 4, 5));
-        mRepository.logAllStats();
     }
 
     public void refreshAllStats() { mAllStats = mRepository.getAllStats(); }
@@ -27,4 +26,6 @@ public class PostureStatViewModel extends AndroidViewModel {
     public List<PostureStat> getAllStats() {return mAllStats;}
 
     public void insert(PostureStat postureStat) { mRepository.insert(postureStat);}
+
+    public String logAllStats(List<PostureStat> stats) { return mRepository.statsToString(stats);}
 }

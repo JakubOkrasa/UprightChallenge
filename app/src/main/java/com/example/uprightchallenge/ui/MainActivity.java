@@ -126,4 +126,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         mGoodPostureTextView.setText(String.format("%d", preferences.getInt(PREF_KEY_GOOD_POSTURE_COUNT, 0)));
         mBadPostureTextView.setText(String.format("%d", preferences.getInt(PREF_KEY_BAD_POSTURE_COUNT, 0)));
     }
+
+    // only for debug. This is on click test button event
+    public void testSth(View view) {
+        Log.d(LOG_TAG, mPostureStatVM.logAllStats(mPostureStatVM.getAllStats()));
+    }
 }
