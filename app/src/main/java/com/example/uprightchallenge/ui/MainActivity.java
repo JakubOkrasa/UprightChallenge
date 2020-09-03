@@ -25,6 +25,7 @@ import static com.example.uprightchallenge.ui.SettingsFragment.sharedPrefsFile;
 // todo change package name
 // todo decide about minimum sdk
 // todo #important #refactor: compare with code from tuition
+// TODO: 9/3/2020 add ScrollView in content_main.xml
 public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
     private PostureStatViewModel mPostureStatVM;
