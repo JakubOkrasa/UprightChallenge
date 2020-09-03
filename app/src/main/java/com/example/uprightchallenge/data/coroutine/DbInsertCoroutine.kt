@@ -1,4 +1,4 @@
-package com.example.uprightchallenge.coroutine
+package com.example.uprightchallenge.data.coroutine
 
 import com.example.uprightchallenge.data.PostureStat
 import com.example.uprightchallenge.data.PostureStatDao

@@ -1,9 +1,8 @@
-package com.example.uprightchallenge.coroutine
+package com.example.uprightchallenge.data.coroutine
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 abstract class DbInitCoroutine {
     abstract fun populateWithTestData()
