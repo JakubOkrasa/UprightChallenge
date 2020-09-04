@@ -143,41 +143,33 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     }
 
     private void showStatsChart() {
-        List<BarEntry> posBars = getPosBars();
-        if (posBars.size()>0) {
+        List<BarEntry> percentBars = getPercentBarEntries();
+        if (percentBars.size()>0) {
             BarChart chart = findViewById(R.id.stats_chart);
-            BarDataSet set = new BarDataSet(posBars, "positive");
-            set.setColor(ContextCompat.getColor(this, R.color.blue));
-            set.setValueFormatter(new PercentFormatter());
-            set.setValueTextSize(14f);
+            BarDataSet percentDataSet = new BarDataSet(percentBars, "% of correct postures in consecutive days");
+            percentDataSet.setColor(ContextCompat.getColor(this, R.color.green));
+            percentDataSet.setValueFormatter(new PercentFormatter());
+            percentDataSet.setValueTextSize(14f);
 
             chart.animateY(800);
             chart.getAxisLeft().setEnabled(false);
             chart.getAxisRight().setEnabled(false);
             chart.getXAxis().setEnabled(false);
             chart.getDescription().setEnabled(false);
+            chart.getLegend().setTextSize(12f);
 
-            BarData data = new BarData(set);
-            data.setBarWidth(0.7f);
-            chart.setData(data);
+            BarData percentData = new BarData(percentDataSet);
+            percentData.setBarWidth(0.7f);
+            chart.setData(percentData);
         }
 
-    }
-
-    private ArrayList<BarEntry> getPosBars() {
-        ArrayList<BarEntry> posBars = new ArrayList<>();
-        List<PostureStat> stats = mPostureStatVM.getAllStats();
-        for (int i = 0; i < stats.size(); i++) {
-            posBars.add(new BarEntry(i, stats.get(i).getPositiveCount()));
-        }
-        return posBars;
     }
 
     private List<BarEntry> getPercentBarEntries() {
         List<BarEntry> entries = new ArrayList<>();
         List<PostureStat> stats = mPostureStatVM.getAllStats();
-        for (int i = 1; i <= stats.size() ; i++) {
-            entries.add(new BarEntry(i, getPercentageOfCorrectPostures(stats.get(i))));
+        for (int i = 1; i <= stats.size(); i++) { //count from 1 to show proper numbers of days
+            entries.add(new BarEntry(i, getPercentageOfCorrectPostures(stats.get(i-1))));
         }
         return entries;
     }
