@@ -12,12 +12,13 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 public class PostureStatRepository {
+    private PostureStatDatabase database;
     private PostureStatDao mDao;
     private List<PostureStat> mAllStats;
 
     public PostureStatRepository(Application application) {
-        PostureStatDatabase db = PostureStatDatabase.getDatabase(application);
-        this.mDao = db.getPostureStatDao();
+        database = PostureStatDatabase.getDatabase(application);
+        this.mDao = database.getPostureStatDao();
         this.mAllStats = getAllStats();
     }
 

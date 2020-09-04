@@ -17,6 +17,7 @@ import androidx.preference.SwitchPreferenceCompat;
 import android.os.SystemClock;
 import android.util.Log;
 
+import com.example.uprightchallenge.data.PostureStatDatabase;
 import com.example.uprightchallenge.receiver.AlarmReceiver;
 import com.example.uprightchallenge.BuildConfig;
 import com.example.uprightchallenge.R;
@@ -102,13 +103,13 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         }
           intervalListPref.setEnabled(preferences.getBoolean("pref_key_switch_notifications", false));
 
-
+        //only for tests
         Preference populateWithSampleDataBtnPref = findPreference("pref_key_populate");
         if(populateWithSampleDataBtnPref!=null) {
             populateWithSampleDataBtnPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-
+                    PostureStatDatabase.getDatabase(getContext()).populateDbWithSampleData(); //todo not sure if this is a proper context
                     return true;
                 }
             });
