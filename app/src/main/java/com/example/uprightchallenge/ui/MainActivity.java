@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -21,6 +22,8 @@ import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.formatter.PercentFormatter;
+import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -144,10 +147,18 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         if (posBars.size()>0) {
             BarChart chart = findViewById(R.id.stats_chart);
             BarDataSet set = new BarDataSet(posBars, "positive");
-            chart.animateY(1500);
+            set.setColor(ContextCompat.getColor(this, R.color.blue));
+            set.setValueFormatter(new PercentFormatter());
+            set.setValueTextSize(14f);
+
+            chart.animateY(800);
+            chart.getAxisLeft().setEnabled(false);
+            chart.getAxisRight().setEnabled(false);
+            chart.getXAxis().setEnabled(false);
+            chart.getDescription().setEnabled(false);
+
             BarData data = new BarData(set);
-            data.setBarWidth(1f);
-            set.setColor(R.color.colorPrimary);
+            data.setBarWidth(0.7f);
             chart.setData(data);
         }
 
