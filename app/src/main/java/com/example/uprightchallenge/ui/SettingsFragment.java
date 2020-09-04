@@ -44,7 +44,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     public static final int NOTIFICATION_ID = 0;
     public static final int RESET_ALARM_ID = 1;
 
-
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
 
@@ -60,6 +59,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         SwitchPreferenceCompat notificationSwitch = findPreference("pref_key_switch_notifications");
         ListPreference intervalListPref = findPreference("pref_key_interval"); //todo ListPreference is created twice: here and inner class. Maybe it is possible to create one
 //        ListPreference intervalListPref = findPreference(getResources().getString(R.string.interval_list_pref)); // this way (getResources()) doesn't work
+
+
 
         if(notificationSwitch!=null) {
             notificationSwitch.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
@@ -109,7 +110,10 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             populateWithSampleDataBtnPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    PostureStatDatabase.getDatabase(getContext()).populateDbWithSampleData(); //todo not sure if this is a proper context
+                    //Although it's not a good practice to call Database layer method from UI,
+                    //it was done only for app testing/debugging purposes and will be removed in the official
+                    // version of the app TODO remove in official version
+                    PostureStatDatabase.getDatabase(getContext()).populateDbWithSampleData();
                     return true;
                 }
             });
