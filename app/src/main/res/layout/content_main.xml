@@ -58,6 +58,15 @@
         android:onClick="testSth"
         android:id="@+id/test_btn"/>
 
+    <com.github.mikephil.charting.charts.BarChart
+        android:id="@+id/stats_chart"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/txt_bad_posture_count"
+        android:padding="7dp"
+        android:layout_marginTop="50dp"
+        />
+
     <TextView
         android:id="@+id/notif_off_warning"
         android:layout_width="match_parent"
