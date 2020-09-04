@@ -24,7 +24,6 @@ public abstract class PostureStatDatabase extends RoomDatabase {
                             .fallbackToDestructiveMigration()
                             .addCallback(sRoomDatabaseCallback)
                             .build();
-                    Log.e("Database", "db built");
                 }
             }
         }
@@ -33,33 +32,36 @@ public abstract class PostureStatDatabase extends RoomDatabase {
 
     public abstract PostureStatDao getPostureStatDao();
 
+    public void populateDbWithSampleData() {
+        new PopulateDbCoroutine(INSTANCE).execute();
+    }
+
     private static RoomDatabase.Callback sRoomDatabaseCallback = new RoomDatabase.Callback() {
         @Override
         public void onOpen(@NonNull SupportSQLiteDatabase db) {
-            Log.e("Database", "db opening");
             super.onOpen(db);
-            new PopulateDbCoroutine(INSTANCE).execute();
 
         }
     };
 
     private static class PopulateDbCoroutine extends DbInitCoroutine {
         private final PostureStatDao mDao;
-        int[] positiveCount = {10, 15, 8};
-        int[] negativeCount = {3, 2, 1};
+        int[] positiveCount = {0, 1, 1, 2, 4, 5, 6};
+        int[] negativeCount = {5, 5, 4, 3, 5, 4, 2};
+        public static final String LOG_TAG = PopulateDbCoroutine.class.getSimpleName();
 
         public PopulateDbCoroutine(PostureStatDatabase db) {
             this.mDao = db.getPostureStatDao();
         }
 
         @Override
-        public void populateWithTestData() {
+        public void populateWithSampleData() {
             mDao.deleteAll();
             for (int i = 0; i < positiveCount.length; i++) {
                 PostureStat ps = new PostureStat((long)0, positiveCount[i], negativeCount[i]);
                 mDao.insert(ps);
             }
-            Log.e("coroutine", "db populated");
+            Log.e(LOG_TAG, "DB populated with sample data.");
         }
 
 

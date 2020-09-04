@@ -5,11 +5,11 @@ import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 
 abstract class DbInitCoroutine {
-    abstract fun populateWithTestData()
+    abstract fun populateWithSampleData()
 
     fun execute() {
         CoroutineScope(IO).launch {
-            populateWithTestData()
+            populateWithSampleData()
         }
     }
 }

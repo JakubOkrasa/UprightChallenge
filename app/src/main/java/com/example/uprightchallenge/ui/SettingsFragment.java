@@ -17,6 +17,7 @@ import androidx.preference.SwitchPreferenceCompat;
 import android.os.SystemClock;
 import android.util.Log;
 
+import com.example.uprightchallenge.data.PostureStatDatabase;
 import com.example.uprightchallenge.receiver.AlarmReceiver;
 import com.example.uprightchallenge.BuildConfig;
 import com.example.uprightchallenge.R;
@@ -43,7 +44,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     public static final int NOTIFICATION_ID = 0;
     public static final int RESET_ALARM_ID = 1;
 
-
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
 
@@ -59,6 +59,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         SwitchPreferenceCompat notificationSwitch = findPreference("pref_key_switch_notifications");
         ListPreference intervalListPref = findPreference("pref_key_interval"); //todo ListPreference is created twice: here and inner class. Maybe it is possible to create one
 //        ListPreference intervalListPref = findPreference(getResources().getString(R.string.interval_list_pref)); // this way (getResources()) doesn't work
+
+
 
         if(notificationSwitch!=null) {
             notificationSwitch.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
@@ -101,6 +103,22 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             });
         }
           intervalListPref.setEnabled(preferences.getBoolean("pref_key_switch_notifications", false));
+
+        //only for tests
+        Preference populateWithSampleDataBtnPref = findPreference("pref_key_populate");
+        if(populateWithSampleDataBtnPref!=null) {
+            populateWithSampleDataBtnPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    //Although it's not a good practice to call Database layer method from UI,
+                    //it was done only for app testing/debugging purposes and will be removed in the official
+                    // version of the app TODO remove in official version
+                    PostureStatDatabase.getDatabase(getContext()).populateDbWithSampleData();
+                    return true;
+                }
+            });
+        }
+
     }
 
     private void setAlarmPendingIntent() {
