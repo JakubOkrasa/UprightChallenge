@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
-import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.uprightchallenge.BuildConfig;
@@ -23,12 +22,10 @@ import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.formatter.PercentFormatter;
-import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 import static com.example.uprightchallenge.ui.SettingsFragment.sharedPrefsFile;
 // todo #later show number of daily count in notification
 
@@ -146,7 +143,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         List<BarEntry> percentBars = getPercentBarEntries();
         if (percentBars.size()>0) {
             BarChart chart = findViewById(R.id.stats_chart);
-            BarDataSet percentDataSet = new BarDataSet(percentBars, "% of correct postures in consecutive days");
+            BarDataSet percentDataSet = new BarDataSet(percentBars, "Percent of correct postures in consecutive days");
             percentDataSet.setColor(ContextCompat.getColor(this, R.color.green));
             percentDataSet.setValueFormatter(new PercentFormatter());
             percentDataSet.setValueTextSize(14f);
@@ -175,9 +172,9 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     }
 
     private float getPercentageOfCorrectPostures(PostureStat stat) {
-        int correctPostureCount = stat.getPositiveCount();
-        int badPostureCount = stat.getNegativeCount();
+        int correctPostureCount = stat.getCorrectPostureCount();
+        int badPostureCount = stat.getBadPostureCount();
         if(correctPostureCount==0 && badPostureCount == 0) { return 0; }
-        else { return 100*(float)correctPostureCount/((float)badPostureCount+(float)correctPostureCount); }
+        else { return 100 * (float)correctPostureCount / ((float)badPostureCount + (float)correctPostureCount); }
     }
 }
