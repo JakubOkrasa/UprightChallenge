@@ -172,4 +172,20 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         }
         return posBars;
     }
+
+    private List<BarEntry> getPercentBarEntries() {
+        List<BarEntry> entries = new ArrayList<>();
+        List<PostureStat> stats = mPostureStatVM.getAllStats();
+        for (int i = 1; i <= stats.size() ; i++) {
+            entries.add(new BarEntry(i, getPercentageOfCorrectPostures(stats.get(i))));
+        }
+        return entries;
+    }
+
+    private float getPercentageOfCorrectPostures(PostureStat stat) {
+        int correctPostureCount = stat.getPositiveCount();
+        int badPostureCount = stat.getNegativeCount();
+        if(correctPostureCount==0 && badPostureCount == 0) { return 0; }
+        else { return 100*(float)correctPostureCount/((float)badPostureCount+(float)correctPostureCount); }
+    }
 }

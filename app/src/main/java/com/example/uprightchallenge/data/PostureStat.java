@@ -8,6 +8,8 @@ import androidx.room.PrimaryKey;
 import java.sql.Timestamp;
 
 // TODO: 9/3/2020 add stat timestamp field
+// TODO: 9/4/2020 refactor names positive/negative >> correctPosture/badPosture
+// TODO: 9/4/2020 explain in comment what is PostureStat
 @Entity
 public class PostureStat {
 
