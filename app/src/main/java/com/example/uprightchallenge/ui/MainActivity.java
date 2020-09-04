@@ -161,9 +161,4 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         }
         return posBars;
     }
-
-    // only for debug. This is on click test button event
-    public void testSth(View view) {
-        Log.d(LOG_TAG, mPostureStatVM.logAllStats(mPostureStatVM.getAllStats()));
-    }
 }
