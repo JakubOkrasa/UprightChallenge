@@ -17,7 +17,15 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.uprightchallenge.BuildConfig;
 import com.example.uprightchallenge.R;
 import com.example.uprightchallenge.data.PostureStat;
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 import static com.example.uprightchallenge.ui.SettingsFragment.sharedPrefsFile;
 // todo #later show number of daily count in notification
 
@@ -50,6 +58,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
         Log.d(LOG_TAG, "A: created");
     }
+
+
 
     @Override
     protected void onPause() {
@@ -100,6 +110,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         }
         setCountersPrefs();
 
+        showStatsChart();
+
         Log.d(LOG_TAG, "A: started");
     }
 
@@ -125,6 +137,29 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         SharedPreferences preferences = getSharedPreferences(sharedPrefsFile, Context.MODE_PRIVATE);
         mGoodPostureTextView.setText(String.format("%d", preferences.getInt(PREF_KEY_GOOD_POSTURE_COUNT, 0)));
         mBadPostureTextView.setText(String.format("%d", preferences.getInt(PREF_KEY_BAD_POSTURE_COUNT, 0)));
+    }
+
+    private void showStatsChart() {
+        List<BarEntry> posBars = getPosBars();
+        if (posBars.size()>0) {
+            BarChart chart = findViewById(R.id.stats_chart);
+            BarDataSet set = new BarDataSet(posBars, "positive");
+            chart.animateY(1500);
+            BarData data = new BarData(set);
+            data.setBarWidth(1f);
+            set.setColor(R.color.colorPrimary);
+            chart.setData(data);
+        }
+
+    }
+
+    private ArrayList<BarEntry> getPosBars() {
+        ArrayList<BarEntry> posBars = new ArrayList<>();
+        List<PostureStat> stats = mPostureStatVM.getAllStats();
+        for (int i = 0; i < stats.size(); i++) {
+            posBars.add(new BarEntry(i, stats.get(i).getPositiveCount()));
+        }
+        return posBars;
     }
 
     // only for debug. This is on click test button event
