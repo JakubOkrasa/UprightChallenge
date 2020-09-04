@@ -23,6 +23,8 @@ import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.formatter.PercentFormatter;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -143,23 +145,31 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         List<BarEntry> percentBars = getPercentBarEntries();
         if (percentBars.size()>0) {
             BarChart chart = findViewById(R.id.stats_chart);
-            BarDataSet percentDataSet = new BarDataSet(percentBars, "Percent of correct postures in consecutive days");
-            percentDataSet.setColor(ContextCompat.getColor(this, R.color.green));
-            percentDataSet.setValueFormatter(new PercentFormatter());
-            percentDataSet.setValueTextSize(14f);
-
-            chart.animateY(800);
-            chart.getAxisLeft().setEnabled(false);
-            chart.getAxisRight().setEnabled(false);
-            chart.getXAxis().setEnabled(false);
-            chart.getDescription().setEnabled(false);
-            chart.getLegend().setTextSize(12f);
-
-            BarData percentData = new BarData(percentDataSet);
+            chart = adjustChartStyle(chart);
+            BarData percentData = new BarData(getPercentDataSet(percentBars));
             percentData.setBarWidth(0.7f);
             chart.setData(percentData);
         }
 
+    }
+
+    @NotNull
+    private BarDataSet getPercentDataSet(List<BarEntry> percentBars) {
+        BarDataSet percentDataSet = new BarDataSet(percentBars, "Percent of correct postures in consecutive days");
+        percentDataSet.setColor(ContextCompat.getColor(this, R.color.green));
+        percentDataSet.setValueFormatter(new PercentFormatter());
+        percentDataSet.setValueTextSize(14f);
+        return percentDataSet;
+    }
+
+    private BarChart adjustChartStyle(BarChart chart) {
+        chart.animateY(800);
+        chart.getAxisLeft().setEnabled(false);
+        chart.getAxisRight().setEnabled(false);
+        chart.getXAxis().setEnabled(false);
+        chart.getDescription().setEnabled(false);
+        chart.getLegend().setTextSize(12f);
+        return chart;
     }
 
     private List<BarEntry> getPercentBarEntries() {
