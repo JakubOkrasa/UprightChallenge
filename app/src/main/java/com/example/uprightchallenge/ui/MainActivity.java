@@ -143,12 +143,15 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
     private void showStatsChart() {
         List<BarEntry> percentBars = getPercentBarEntries();
+        List<BarEntry> usageBars = getUsageBarEntries();
         if (percentBars.size()>0) {
             BarChart chart = findViewById(R.id.stats_chart);
             chart = adjustChartStyle(chart);
-            BarData percentData = new BarData(getPercentDataSet(percentBars));
-            percentData.setBarWidth(0.7f);
-            chart.setData(percentData);
+            BarData barData = new BarData(getPercentDataSet(percentBars), getUsageDataSet(usageBars));
+            barData.setBarWidth(0.45f);
+            chart.setData(barData);
+            chart.setVisibleXRangeMaximum(5);
+            chart.groupBars(1f, 0.06f, 0.02f);
         }
 
     }
@@ -162,13 +165,24 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         return percentDataSet;
     }
 
+    @NotNull
+    private BarDataSet getUsageDataSet(List<BarEntry> usageBars) {
+        BarDataSet usageDataSet = new BarDataSet(usageBars, "How often you use the app (sum of 'yes' and 'no' taps)");
+        usageDataSet.setColor(ContextCompat.getColor(this, R.color.light_blue));
+        usageDataSet.setValueFormatter(new IntegerValueFormatter());
+        usageDataSet.setValueTextSize(14f);
+        return usageDataSet;
+    }
+
     private BarChart adjustChartStyle(BarChart chart) {
         chart.animateY(800);
         chart.getAxisLeft().setEnabled(false);
         chart.getAxisRight().setEnabled(false);
         chart.getXAxis().setEnabled(false);
-        chart.getDescription().setEnabled(false);
+        chart.getDescription().setText("Hint: You can scroll the chart horizontally.");
+        chart.getDescription().setTextSize(9f);
         chart.getLegend().setTextSize(12f);
+        chart.getLegend().setWordWrapEnabled(true);
         return chart;
     }
 
@@ -181,10 +195,23 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         return entries;
     }
 
+    private List<BarEntry> getUsageBarEntries() {
+        List<BarEntry> entries = new ArrayList<>();
+        List<PostureStat> stats = mPostureStatVM.getAllStats();
+        for (int i = 1; i <= stats.size(); i++) { //count from 1 to show proper numbers of days
+            entries.add(new BarEntry(i, getSumOfCorrectAndBadPostures(stats.get(i-1))));
+        }
+        return entries;
+    }
+
     private float getPercentageOfCorrectPostures(PostureStat stat) {
         int correctPostureCount = stat.getCorrectPostureCount();
         int badPostureCount = stat.getBadPostureCount();
         if(correctPostureCount==0 && badPostureCount == 0) { return 0; }
         else { return 100 * (float)correctPostureCount / ((float)badPostureCount + (float)correctPostureCount); }
+    }
+
+    private float getSumOfCorrectAndBadPostures(PostureStat stat) {
+        return stat.getBadPostureCount() + stat.getCorrectPostureCount();
     }
 }
