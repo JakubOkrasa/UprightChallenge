@@ -143,15 +143,15 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
     private void showStatsChart() {
         List<BarEntry> percentBars = getPercentBarEntries();
-        List<BarEntry> usageBars = getUsageBarEntries();
         if (percentBars.size()>0) {
+            List<BarEntry> usageBars = getUsageBarEntries();
             BarChart chart = findViewById(R.id.stats_chart);
             chart = adjustChartStyle(chart);
             BarData barData = new BarData(getPercentDataSet(percentBars), getUsageDataSet(usageBars));
             barData.setBarWidth(0.45f);
             chart.setData(barData);
             chart.setVisibleXRangeMaximum(5);
-            chart.groupBars(1f, 0.06f, 0.02f);
+            chart.groupBars(0f, 0.06f, 0.02f);
         }
 
     }
@@ -179,18 +179,19 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         chart.getAxisLeft().setEnabled(false);
         chart.getAxisRight().setEnabled(false);
         chart.getXAxis().setEnabled(false);
-        chart.getDescription().setText("Hint: You can scroll the chart horizontally.");
-        chart.getDescription().setTextSize(9f);
         chart.getLegend().setTextSize(12f);
         chart.getLegend().setWordWrapEnabled(true);
+        chart.setFitBars(true);
+        chart.setExtraBottomOffset(4f);
+        chart.getDescription().setEnabled(false);
         return chart;
     }
 
     private List<BarEntry> getPercentBarEntries() {
         List<BarEntry> entries = new ArrayList<>();
         List<PostureStat> stats = mPostureStatVM.getAllStats();
-        for (int i = 1; i <= stats.size(); i++) { //count from 1 to show proper numbers of days
-            entries.add(new BarEntry(i, getPercentageOfCorrectPostures(stats.get(i-1))));
+        for (int i = 0; i < stats.size(); i++) {
+            entries.add(new BarEntry(i, getPercentageOfCorrectPostures(stats.get(i))));
         }
         return entries;
     }
@@ -198,8 +199,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     private List<BarEntry> getUsageBarEntries() {
         List<BarEntry> entries = new ArrayList<>();
         List<PostureStat> stats = mPostureStatVM.getAllStats();
-        for (int i = 1; i <= stats.size(); i++) { //count from 1 to show proper numbers of days
-            entries.add(new BarEntry(i, getSumOfCorrectAndBadPostures(stats.get(i-1))));
+        for (int i = 0; i < stats.size(); i++) {
+            entries.add(new BarEntry(i, getSumOfCorrectAndBadPostures(stats.get(i))));
         }
         return entries;
     }

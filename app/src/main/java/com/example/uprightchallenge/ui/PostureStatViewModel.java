@@ -16,7 +16,7 @@ public class PostureStatViewModel extends AndroidViewModel {
 
     public PostureStatViewModel(@NonNull Application application) {
         super(application);
-        this.mRepository = new PostureStatRepository(application);
+        this.mRepository = PostureStatRepository.getRepository(application);
         mAllStats = mRepository.getAllStats();
     }
 

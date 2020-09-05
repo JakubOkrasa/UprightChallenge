@@ -46,8 +46,8 @@ public abstract class PostureStatDatabase extends RoomDatabase {
 
     private static class PopulateDbCoroutine extends DbInitCoroutine {
         private final PostureStatDao mDao;
-        int[] positiveCount = {0, 1, 1, 2, 4, 5, 6};
-        int[] negativeCount = {5, 5, 4, 3, 5, 4, 2};
+        int[] positiveCount = {1, 2, 1, 2, 4, 5, 6, 6, 7, 5, 8, 6, 7, 10};
+        int[] negativeCount = {5, 5, 4, 3, 5, 4, 2, 3, 2, 4, 3, 3, 2, 1};
         public static final String LOG_TAG = PopulateDbCoroutine.class.getSimpleName();
 
         public PopulateDbCoroutine(PostureStatDatabase db) {

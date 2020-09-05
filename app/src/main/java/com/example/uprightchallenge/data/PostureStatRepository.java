@@ -1,6 +1,9 @@
 package com.example.uprightchallenge.data;
 
 import android.app.Application;
+import android.content.Context;
+
+import androidx.room.Room;
 
 import com.example.uprightchallenge.data.coroutine.DbInsertCoroutine;
 import com.example.uprightchallenge.data.coroutine.DbSelectCoroutine;
@@ -15,11 +18,26 @@ public class PostureStatRepository {
     private PostureStatDatabase database;
     private PostureStatDao mDao;
     private List<PostureStat> mAllStats;
+    private static PostureStatRepository INSTANCE;
 
-    public PostureStatRepository(Application application) {
+
+    private PostureStatRepository(Application application) {
         database = PostureStatDatabase.getDatabase(application);
         this.mDao = database.getPostureStatDao();
         this.mAllStats = getAllStats();
+    }
+
+    public static PostureStatRepository getRepository(final Context context) {
+        if(INSTANCE == null) {
+            synchronized (PostureStatDatabase.class) {
+                if(INSTANCE==null) {
+                    //it might not work because ApplicationContext is not always the same what Application
+                    //if this method will be called at first by PostureViewModel, everything should work fine
+                    INSTANCE = new PostureStatRepository((Application)context.getApplicationContext());
+                }
+            }
+        }
+        return INSTANCE;
     }
 
     public List<PostureStat> getAllStats() {

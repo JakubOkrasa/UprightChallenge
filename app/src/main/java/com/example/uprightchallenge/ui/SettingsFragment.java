@@ -60,8 +60,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         ListPreference intervalListPref = findPreference("pref_key_interval"); //todo ListPreference is created twice: here and inner class. Maybe it is possible to create one
 //        ListPreference intervalListPref = findPreference(getResources().getString(R.string.interval_list_pref)); // this way (getResources()) doesn't work
 
-
-
         if(notificationSwitch!=null) {
             notificationSwitch.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
@@ -148,10 +146,9 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         AlarmManager mAlarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, 1); // set calendar hour to 1 a.m.
-        if (calendar.getTimeInMillis()<System.currentTimeMillis()) {
-            calendar.add(Calendar.DATE, 1);
-        }
+        calendar.set(Calendar.HOUR_OF_DAY, 0); // set calendar hour to 0 a.m.
+        calendar.add(Calendar.DATE, 1);
+//        calendar.set(Calendar.MINUTE, 29); //for debug only
         Intent resetAlarmIntent = new Intent(getContext(), ResetAlarmReceiver.class);
         PendingIntent resetAlarmPendingIntent = PendingIntent.getBroadcast(getContext(), RESET_ALARM_ID, resetAlarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         mAlarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, resetAlarmPendingIntent);
