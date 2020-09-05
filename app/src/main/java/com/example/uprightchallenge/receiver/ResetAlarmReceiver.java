@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 
 import com.example.uprightchallenge.BuildConfig;
+import com.example.uprightchallenge.data.PostureStat;
 import com.example.uprightchallenge.data.PostureStatRepository;
 
 public class ResetAlarmReceiver extends BroadcastReceiver {
@@ -19,7 +20,11 @@ public class ResetAlarmReceiver extends BroadcastReceiver {
         SharedPreferences preferences = context.getSharedPreferences(sharedPrefsFile, Context.MODE_PRIVATE);
         SharedPreferences.Editor prefsEditor = preferences.edit();
 
-        
+        mRepository=PostureStatRepository.getRepository(context);
+        mRepository.insert(new PostureStat(
+                0,
+                preferences.getInt(PREF_KEY_GOOD_POSTURE_COUNT, 0),
+                preferences.getInt(PREF_KEY_BAD_POSTURE_COUNT, 0)));
 
         // reset posture counters
         prefsEditor.putInt(PREF_KEY_BAD_POSTURE_COUNT, 0);
