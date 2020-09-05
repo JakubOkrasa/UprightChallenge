@@ -41,7 +41,7 @@ public class PostureStatRepository {
         sb.append("\nPosture stats:\n\tid\t\t+\t\t-\n");
         for (int i = 0; i < stats.size(); i++) {
             PostureStat ps = stats.get(i);
-            sb.append(String.format("\t%d\t\t%d\t\t%d\n", ps.getStatId(), ps.getPositiveCount(), ps.getNegativeCount()));
+            sb.append(String.format("\t%d\t\t%d\t\t%d\n", ps.getStatId(), ps.getCorrectPostureCount(), ps.getBadPostureCount()));
         }
         return sb.toString();
     }

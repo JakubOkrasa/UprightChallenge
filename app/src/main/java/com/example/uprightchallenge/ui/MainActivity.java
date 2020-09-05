@@ -11,12 +11,22 @@ import android.view.View;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModel;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.uprightchallenge.BuildConfig;
 import com.example.uprightchallenge.R;
 import com.example.uprightchallenge.data.PostureStat;
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.formatter.PercentFormatter;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.example.uprightchallenge.ui.SettingsFragment.sharedPrefsFile;
 // todo #later show number of daily count in notification
@@ -50,6 +60,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
         Log.d(LOG_TAG, "A: created");
     }
+
+
 
     @Override
     protected void onPause() {
@@ -100,6 +112,8 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         }
         setCountersPrefs();
 
+        showStatsChart();
+
         Log.d(LOG_TAG, "A: started");
     }
 
@@ -127,8 +141,77 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         mBadPostureTextView.setText(String.format("%d", preferences.getInt(PREF_KEY_BAD_POSTURE_COUNT, 0)));
     }
 
-    // only for debug. This is on click test button event
-    public void testSth(View view) {
-        Log.d(LOG_TAG, mPostureStatVM.logAllStats(mPostureStatVM.getAllStats()));
+    private void showStatsChart() {
+        List<BarEntry> percentBars = getPercentBarEntries();
+        List<BarEntry> usageBars = getUsageBarEntries();
+        if (percentBars.size()>0) {
+            BarChart chart = findViewById(R.id.stats_chart);
+            chart = adjustChartStyle(chart);
+            BarData barData = new BarData(getPercentDataSet(percentBars), getUsageDataSet(usageBars));
+            barData.setBarWidth(0.45f);
+            chart.setData(barData);
+            chart.setVisibleXRangeMaximum(5);
+            chart.groupBars(1f, 0.06f, 0.02f);
+        }
+
+    }
+
+    @NotNull
+    private BarDataSet getPercentDataSet(List<BarEntry> percentBars) {
+        BarDataSet percentDataSet = new BarDataSet(percentBars, "Percent of correct postures in consecutive days");
+        percentDataSet.setColor(ContextCompat.getColor(this, R.color.green));
+        percentDataSet.setValueFormatter(new PercentFormatter());
+        percentDataSet.setValueTextSize(14f);
+        return percentDataSet;
+    }
+
+    @NotNull
+    private BarDataSet getUsageDataSet(List<BarEntry> usageBars) {
+        BarDataSet usageDataSet = new BarDataSet(usageBars, "How often you use the app (sum of 'yes' and 'no' taps)");
+        usageDataSet.setColor(ContextCompat.getColor(this, R.color.light_blue));
+        usageDataSet.setValueFormatter(new IntegerValueFormatter());
+        usageDataSet.setValueTextSize(14f);
+        return usageDataSet;
+    }
+
+    private BarChart adjustChartStyle(BarChart chart) {
+        chart.animateY(800);
+        chart.getAxisLeft().setEnabled(false);
+        chart.getAxisRight().setEnabled(false);
+        chart.getXAxis().setEnabled(false);
+        chart.getDescription().setText("Hint: You can scroll the chart horizontally.");
+        chart.getDescription().setTextSize(9f);
+        chart.getLegend().setTextSize(12f);
+        chart.getLegend().setWordWrapEnabled(true);
+        return chart;
+    }
+
+    private List<BarEntry> getPercentBarEntries() {
+        List<BarEntry> entries = new ArrayList<>();
+        List<PostureStat> stats = mPostureStatVM.getAllStats();
+        for (int i = 1; i <= stats.size(); i++) { //count from 1 to show proper numbers of days
+            entries.add(new BarEntry(i, getPercentageOfCorrectPostures(stats.get(i-1))));
+        }
+        return entries;
+    }
+
+    private List<BarEntry> getUsageBarEntries() {
+        List<BarEntry> entries = new ArrayList<>();
+        List<PostureStat> stats = mPostureStatVM.getAllStats();
+        for (int i = 1; i <= stats.size(); i++) { //count from 1 to show proper numbers of days
+            entries.add(new BarEntry(i, getSumOfCorrectAndBadPostures(stats.get(i-1))));
+        }
+        return entries;
+    }
+
+    private float getPercentageOfCorrectPostures(PostureStat stat) {
+        int correctPostureCount = stat.getCorrectPostureCount();
+        int badPostureCount = stat.getBadPostureCount();
+        if(correctPostureCount==0 && badPostureCount == 0) { return 0; }
+        else { return 100 * (float)correctPostureCount / ((float)badPostureCount + (float)correctPostureCount); }
+    }
+
+    private float getSumOfCorrectAndBadPostures(PostureStat stat) {
+        return stat.getBadPostureCount() + stat.getCorrectPostureCount();
     }
 }
