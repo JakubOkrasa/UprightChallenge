@@ -172,8 +172,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             BarData barData = new BarData(getPercentDataSet(percentBars), getUsageDataSet(usageBars));
             barData.setBarWidth(0.45f);
             chart.setData(barData);
-            chart.setVisibleXRangeMaximum(5);
-            chart.groupBars(0f, 0.06f, 0.02f);
+            setClosingChartProperties(chart, barData);
         }
 
     }
@@ -225,6 +224,16 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             entries.add(new BarEntry(i, getSumOfCorrectAndBadPostures(stats.get(i))));
         }
         return entries;
+    }
+
+    //these properties have to be set after calling setData(BarData) method
+    private void setClosingChartProperties(BarChart chart, BarData barData) {
+        chart.getXAxis().setAxisMaximum(barData.getXMax() + 1f);
+        chart.getXAxis().setAxisMinimum(-0.5f);
+        chart.setVisibleXRangeMaximum(5);
+        chart.groupBars(0f, 0.06f, 0.02f);
+        // (0.02 + 0.45) * 2 + 0.06 = 1.00 -> interval per "group"
+        // 0.45 - bar width
     }
 
     private float getPercentageOfCorrectPostures(PostureStat stat) {
