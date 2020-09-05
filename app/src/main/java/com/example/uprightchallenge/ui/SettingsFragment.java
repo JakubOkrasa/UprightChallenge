@@ -60,8 +60,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         ListPreference intervalListPref = findPreference("pref_key_interval"); //todo ListPreference is created twice: here and inner class. Maybe it is possible to create one
 //        ListPreference intervalListPref = findPreference(getResources().getString(R.string.interval_list_pref)); // this way (getResources()) doesn't work
 
-
-
         if(notificationSwitch!=null) {
             notificationSwitch.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
