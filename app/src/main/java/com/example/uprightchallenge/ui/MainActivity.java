@@ -18,6 +18,7 @@ import com.example.uprightchallenge.BuildConfig;
 import com.example.uprightchallenge.R;
 import com.example.uprightchallenge.data.PostureStat;
 import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
@@ -25,8 +26,10 @@ import com.github.mikephil.charting.formatter.PercentFormatter;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import static com.example.uprightchallenge.ui.SettingsFragment.sharedPrefsFile;
 // todo #later show number of daily count in notification
@@ -40,8 +43,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
     private PostureStatViewModel mPostureStatVM;
 
-    TextView mGoodPostureTextView;
-    TextView mBadPostureTextView;
+    TextView mPercentStatTextView;
     private static final String PREF_KEY_GOOD_POSTURE_COUNT = "good_posture_count";
     private static final String PREF_KEY_BAD_POSTURE_COUNT = "bad_posture_count";
 
@@ -50,8 +52,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mGoodPostureTextView = findViewById(R.id.txt_good_posture_count);
-        mBadPostureTextView = findViewById(R.id.txt_bad_posture_count);
+        mPercentStatTextView = findViewById(R.id.txt_percent_stat);
 
         androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -110,12 +111,14 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         } else {
             notifOffInfo.setVisibility(View.GONE);
         }
-        setCountersPrefs();
-
+        mPercentStatTextView.setText(getPercentStat());
+        
         showStatsChart();
 
         Log.d(LOG_TAG, "A: started");
     }
+
+    
 
     @Override
     protected void onStop() {
@@ -132,13 +135,32 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        setCountersPrefs();
+        if(key.equals(PREF_KEY_BAD_POSTURE_COUNT) || key.equals(PREF_KEY_GOOD_POSTURE_COUNT)) {
+            mPercentStatTextView.setText(getPercentStat());
+        }
     }
 
-    private void setCountersPrefs() {
+    private String getPercentStat() {
         SharedPreferences preferences = getSharedPreferences(sharedPrefsFile, Context.MODE_PRIVATE);
-        mGoodPostureTextView.setText(String.format("%d", preferences.getInt(PREF_KEY_GOOD_POSTURE_COUNT, 0)));
-        mBadPostureTextView.setText(String.format("%d", preferences.getInt(PREF_KEY_BAD_POSTURE_COUNT, 0)));
+        int correctPostureCount = preferences.getInt(PREF_KEY_GOOD_POSTURE_COUNT, 0);
+        int badPostureCount = preferences.getInt(PREF_KEY_BAD_POSTURE_COUNT, 0);
+        if(correctPostureCount==0 && badPostureCount == 0) { return "--"; }
+        else {
+            float result = (float)correctPostureCount / (float)(correctPostureCount + badPostureCount);
+            setPercentStatColor(result);
+            NumberFormat percentageFormat = NumberFormat.getPercentInstance(Locale.US);
+            return percentageFormat.format(result);
+        }
+    }
+
+    private void setPercentStatColor(float result) {
+        int color;
+        if(result>0 && result < 0.4) { color = R.color.red; }
+        else if(result>=0.4 && result < 0.6) { color = R.color.orange; }
+        else if(result>=0.6 && result < 0.8) { color = R.color.green; }
+        else if(result>=0.8 && result <= 1) { color = R.color.MediumSeaGreen; }
+        else { color = R.color.colorPrimaryDark; }
+        mPercentStatTextView.setTextColor(ContextCompat.getColor(this, color));
     }
 
     private void showStatsChart() {
@@ -150,8 +172,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             BarData barData = new BarData(getPercentDataSet(percentBars), getUsageDataSet(usageBars));
             barData.setBarWidth(0.45f);
             chart.setData(barData);
-            chart.setVisibleXRangeMaximum(5);
-            chart.groupBars(0f, 0.06f, 0.02f);
+            setClosingChartProperties(chart, barData);
         }
 
     }
@@ -203,6 +224,16 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             entries.add(new BarEntry(i, getSumOfCorrectAndBadPostures(stats.get(i))));
         }
         return entries;
+    }
+
+    //these properties have to be set after calling setData(BarData) method
+    private void setClosingChartProperties(BarChart chart, BarData barData) {
+        chart.getXAxis().setAxisMaximum(barData.getXMax() + 1f);
+        chart.getXAxis().setAxisMinimum(-0.5f);
+        chart.setVisibleXRangeMaximum(5);
+        chart.groupBars(0f, 0.06f, 0.02f);
+        // (0.02 + 0.45) * 2 + 0.06 = 1.00 -> interval per "group"
+        // 0.45 - bar width
     }
 
     private float getPercentageOfCorrectPostures(PostureStat stat) {
