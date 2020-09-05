@@ -20,6 +20,8 @@
     <string name="interval_list_pref">Repeat interval</string>
 
     <string name="pref_key_interval">pref_key_interval</string>
+    <string name="label_today">Percent of correct postures today:</string>
+    <string name="label_progress">Your progress:</string>
 
 
 </resources>

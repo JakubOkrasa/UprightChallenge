@@ -18,6 +18,7 @@ import com.example.uprightchallenge.BuildConfig;
 import com.example.uprightchallenge.R;
 import com.example.uprightchallenge.data.PostureStat;
 import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
