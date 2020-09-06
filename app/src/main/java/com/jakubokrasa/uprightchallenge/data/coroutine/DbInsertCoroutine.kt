@@ -6,8 +6,7 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 
 abstract class DbInsertCoroutine {
-
-    open fun insertStat(dao: PostureStatDao, stat: PostureStat) {
+    open fun execute(dao: PostureStatDao, stat: PostureStat) {
         CoroutineScope(IO).launch  {
             dao.insert(stat)
         }

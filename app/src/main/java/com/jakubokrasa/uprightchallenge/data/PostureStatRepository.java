@@ -49,7 +49,7 @@ public class PostureStatRepository {
         return null;
     }
 
-    public void insert(PostureStat stat) { new insertCoroutine().insertStat(mDao, stat); }
+    public void insert(PostureStat stat) { new insertCoroutine().execute(mDao, stat); }
 
     //only for debug
     public String statsToString(List<PostureStat> stats) {
@@ -64,8 +64,8 @@ public class PostureStatRepository {
 
     private static class insertCoroutine extends DbInsertCoroutine {
         @Override
-        public void insertStat(@NotNull PostureStatDao dao, @NotNull PostureStat stat) {
-            super.insertStat(dao, stat);
+        public void execute(@NotNull PostureStatDao dao, @NotNull PostureStat stat) {
+            super.execute(dao, stat);
         }
     }
 
