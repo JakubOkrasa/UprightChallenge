@@ -5,23 +5,22 @@
     <string name="prefs_notifications_cat">Notifications</string>
     <string name="prefs_notif_switch_summary">turn on or turn off reminders to correct your posture</string>
     <string-array name="intervals_array_labels">
-        <item>30 seconds</item>
+        <item>30 seconds (for tests)</item>
         <item>15 minutes</item>
         <item>30 minutes</item>
         <item>1 hour</item>
+        <item>2 hours</item>
     </string-array>
     <string-array name="intervals_array_values">
         <item>30000</item>
         <item>900000</item>
         <item>1800000</item>
         <item>3600000</item>
+        <item>7200000</item>
     </string-array>
     <string name="notif_off_warning">Warning: Notifications that remind you to correct your posture are turned off. In order to turn on, go to the settings.</string>
     <string name="interval_list_pref">Repeat interval</string>
-
     <string name="pref_key_interval">pref_key_interval</string>
     <string name="label_today">Percent of correct postures today:</string>
     <string name="label_progress">Your progress:</string>
-
-
 </resources>
