@@ -127,7 +127,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         Log.d(LOG_TAG, "repeat interval: " + repeatInterval);
         if (mAlarmManager != null) {
             mAlarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerTime, repeatInterval, alarmPendingIntent);
-            Log.d(LOG_TAG, "notif. set at: " + milisToTime(triggerTime));
         }
     }
 
@@ -151,13 +150,5 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         Intent resetAlarmIntent = new Intent(getContext(), ResetAlarmReceiver.class);
         PendingIntent resetAlarmPendingIntent = PendingIntent.getBroadcast(getContext(), RESET_ALARM_ID, resetAlarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         mAlarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, resetAlarmPendingIntent);
-    }
-
-    //only for debug
-    private String milisToTime(long milis) {
-        Date date = new Date(milis);
-        DateFormat formatter = new SimpleDateFormat("HH:mm:ss.SSS");
-        formatter.setTimeZone(TimeZone.getTimeZone("GMT+02:00"));
-        return formatter.format(date);
     }
 }
