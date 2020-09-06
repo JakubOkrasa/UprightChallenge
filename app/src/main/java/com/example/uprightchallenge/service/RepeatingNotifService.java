@@ -15,6 +15,8 @@ import androidx.annotation.Nullable;
 
 import com.example.uprightchallenge.BuildConfig;
 
+import static com.example.uprightchallenge.ui.SettingsFragment.NOTIFICATION_ID;
+
 public class RepeatingNotifService extends Service {
     private static final String PRIMARY_CHANNEL_ID = "primary_notification_channel";
     private NotificationManager mNotifyManager;
@@ -73,6 +75,7 @@ public class RepeatingNotifService extends Service {
             final String sharedPrefFile = BuildConfig.APPLICATION_ID;
             SharedPreferences preferences =  context.getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
             SharedPreferences.Editor prefEditor = preferences.edit();
+            mNotifyManager.cancel(NOTIFICATION_ID);
             if (intent.getAction().equals(GOOD_POSTURE_ACTION)) {
                 Log.d(LOG_TAG, "yes option clicked");
                 int count = preferences.getInt(PREF_KEY_GOOD_POSTURE_COUNT, 0);
