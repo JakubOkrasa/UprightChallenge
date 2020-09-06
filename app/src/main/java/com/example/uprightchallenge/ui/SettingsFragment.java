@@ -29,8 +29,6 @@ import java.util.Calendar;
 /**
  * A simple {@link Fragment} subclass.
  */
-//todo #note :    After turning on notif, (default is 30 minutes interval) notifications appear very often, maybe even less than 30 seconds.
-//todo refactor names alarmPendingIntent and AlarmReceiver
 public class SettingsFragment extends PreferenceFragmentCompat {
 
     private SharedPreferences preferences;

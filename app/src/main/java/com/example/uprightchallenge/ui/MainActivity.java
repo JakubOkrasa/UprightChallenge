@@ -32,13 +32,8 @@ import java.util.List;
 import java.util.Locale;
 
 import static com.example.uprightchallenge.ui.SettingsFragment.sharedPrefsFile;
-// todo #later show number of daily count in notification
-
+// todo #later show daily progress in notifications
 // todo change package name
-// todo decide about minimum sdk
-// todo #important #refactor: compare with code from tuition
-// TODO: 9/3/2020 add ScrollView in content_main.xml
-// TODO: 9/3/2020 add more options in repeat interval preference
 public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
     private PostureStatViewModel mPostureStatVM;

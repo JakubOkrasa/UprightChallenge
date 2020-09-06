@@ -4,8 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-// TODO: 9/3/2020 add stat timestamp field
-
 /*
 The name of the class PostureStat stands for posture statistics. Throughout the code there are variables
 which names include "postureStat" or just "stat". Although this word means something else in English, the

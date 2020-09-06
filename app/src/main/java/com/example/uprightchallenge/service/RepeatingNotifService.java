@@ -32,7 +32,7 @@ public class RepeatingNotifService extends Service {
     public void onCreate() {
         super.onCreate();
         createNotificationChannel();
-        preferences = getBaseContext().getSharedPreferences(sharedPrefsFile, Context.MODE_PRIVATE); //todo can be context instead of getActivity() ?
+        preferences = getBaseContext().getSharedPreferences(sharedPrefsFile, Context.MODE_PRIVATE);
         registerReceiver(postureBroadcastReceiver, new IntentFilter(GOOD_POSTURE_ACTION));
         registerReceiver(postureBroadcastReceiver, new IntentFilter(BAD_POSTURE_ACTION));
     }
