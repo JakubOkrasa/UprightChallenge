@@ -14,14 +14,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.jakubokrasa.uprightchallenge.BuildConfig;
-import com.jakubokrasa.uprightchallenge.R;
-import com.jakubokrasa.uprightchallenge.data.PostureStat;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.formatter.PercentFormatter;
+import com.jakubokrasa.uprightchallenge.BuildConfig;
+import com.jakubokrasa.uprightchallenge.R;
+import com.jakubokrasa.uprightchallenge.data.PostureStat;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if(key.equals(PREF_KEY_BAD_POSTURE_COUNT) || key.equals(PREF_KEY_GOOD_POSTURE_COUNT)) {
+        if (key.equals(PREF_KEY_BAD_POSTURE_COUNT) || key.equals(PREF_KEY_GOOD_POSTURE_COUNT)) {
             mPercentStatTextView.setText(getPercentStat());
         }
     }
@@ -151,7 +151,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
     private void showStatsChart() {
         List<BarEntry> percentBars = getPercentBarEntries();
-        if (percentBars.size()>0) {
+        if (percentBars.size() > 0) {
             List<BarEntry> usageBars = getUsageBarEntries();
             BarChart chart = findViewById(R.id.stats_chart);
             chart = adjustChartStyle(chart);
