@@ -14,12 +14,12 @@ import com.example.uprightchallenge.service.RepeatingNotifService;
 import com.example.uprightchallenge.ui.MainActivity;
 
 //receive periodically notifications pending intents
-public class AlarmReceiver extends BroadcastReceiver {
+public class NotifAlarmReceiver extends BroadcastReceiver {
 
     private NotificationManager mNotificationManager;
     private static final int NOTIFICATION_ID = 0;
     private static final String PRIMARY_CHANNEL_ID = "primary_notification_channel";
-    private static final String LOG_TAG = AlarmReceiver.class.getSimpleName();
+    private static final String LOG_TAG = NotifAlarmReceiver.class.getSimpleName();
 
 
     @Override

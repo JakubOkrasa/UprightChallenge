@@ -23,7 +23,7 @@
         </activity>
 
         <receiver
-            android:name=".receiver.AlarmReceiver"
+            android:name=".receiver.NotifAlarmReceiver"
             android:enabled="true"
             android:exported="false" />
 

@@ -18,17 +18,13 @@ import android.os.SystemClock;
 import android.util.Log;
 
 import com.example.uprightchallenge.data.PostureStatDatabase;
-import com.example.uprightchallenge.receiver.AlarmReceiver;
+import com.example.uprightchallenge.receiver.NotifAlarmReceiver;
 import com.example.uprightchallenge.BuildConfig;
 import com.example.uprightchallenge.R;
 import com.example.uprightchallenge.service.RepeatingNotifService;
 import com.example.uprightchallenge.receiver.ResetAlarmReceiver;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.TimeZone;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -120,7 +116,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
     private void setAlarmPendingIntent() {
         AlarmManager mAlarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
-        Intent alarmIntent = new Intent(getContext(), AlarmReceiver.class);
+        Intent alarmIntent = new Intent(getContext(), NotifAlarmReceiver.class);
         PendingIntent alarmPendingIntent = PendingIntent.getBroadcast(getContext(), NOTIFICATION_ID, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
         long repeatInterval = preferences.getLong("pref_key_interval", AlarmManager.INTERVAL_HALF_HOUR);
         long triggerTime = SystemClock.elapsedRealtime() + repeatInterval;
@@ -131,7 +127,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     }
 
     private void cancelAlarmPendingIntent() {
-        Intent alarmIntent = new Intent(getContext(), AlarmReceiver.class);
+        Intent alarmIntent = new Intent(getContext(), NotifAlarmReceiver.class);
         PendingIntent alarmPendingIntent = PendingIntent.getBroadcast(getContext(), NOTIFICATION_ID, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
         AlarmManager mAlarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
         if (mAlarmManager!=null) {
