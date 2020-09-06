@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
         mPostureStatVM = new ViewModelProvider(this).get(PostureStatViewModel.class);
 
-        Log.d(LOG_TAG, "A: created");
+        Log.d(LOG_TAG, "A: onCreate");
     }
 
     @Override
@@ -104,18 +104,18 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         mPercentStatTextView.setText(getPercentStat());
         showStatsChart();
 
-        Log.d(LOG_TAG, "A: started");
+        Log.d(LOG_TAG, "A: onStart");
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        Log.d(LOG_TAG, "A: stopped");
+        Log.d(LOG_TAG, "A: onStop");
     }
 
     @Override
     protected void onDestroy() {
-        Log.d(LOG_TAG, "A: destroying");
+        Log.d(LOG_TAG, "A: onDestroy");
         super.onDestroy();
     }
 
