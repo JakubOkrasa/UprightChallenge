@@ -75,7 +75,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     else {
                         ((NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE)).cancelAll();
                         cancelAlarmPendingIntent(); // cancel repeating intent messages for AlarmReceiver
-                        cancelResetPendingIntent();
                     }
                     // save changes to SharedPreferences
                     prefsEditor = preferences.edit();
@@ -152,15 +151,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         Intent resetAlarmIntent = new Intent(getContext(), ResetAlarmReceiver.class);
         PendingIntent resetAlarmPendingIntent = PendingIntent.getBroadcast(getContext(), RESET_ALARM_ID, resetAlarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         mAlarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, resetAlarmPendingIntent);
-    }
-
-    private void cancelResetPendingIntent() {
-        Intent resetAlarmIntent = new Intent(getContext(), ResetAlarmReceiver.class);
-        PendingIntent resetAlarmPendingIntent = PendingIntent.getBroadcast(getContext(), RESET_ALARM_ID, resetAlarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        AlarmManager mAlarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
-        if (mAlarmManager!=null) {
-            mAlarmManager.cancel(resetAlarmPendingIntent);
-        }
     }
 
     //only for debug
