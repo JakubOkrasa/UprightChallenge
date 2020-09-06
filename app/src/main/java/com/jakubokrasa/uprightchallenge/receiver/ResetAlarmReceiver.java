@@ -1,4 +1,4 @@
-package com.example.uprightchallenge.receiver;
+package com.jakubokrasa.uprightchallenge.receiver;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -6,9 +6,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
 
-import com.example.uprightchallenge.BuildConfig;
-import com.example.uprightchallenge.data.PostureStat;
-import com.example.uprightchallenge.data.PostureStatRepository;
+import com.jakubokrasa.uprightchallenge.BuildConfig;
+import com.jakubokrasa.uprightchallenge.data.PostureStat;
+import com.jakubokrasa.uprightchallenge.data.PostureStatRepository;
 
 public class ResetAlarmReceiver extends BroadcastReceiver {
     private PostureStatRepository mRepository;

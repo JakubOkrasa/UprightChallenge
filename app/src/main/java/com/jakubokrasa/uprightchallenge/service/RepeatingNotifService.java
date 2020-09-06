@@ -1,4 +1,4 @@
-package com.example.uprightchallenge.service;
+package com.jakubokrasa.uprightchallenge.service;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -13,9 +13,9 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
-import com.example.uprightchallenge.BuildConfig;
+import com.jakubokrasa.uprightchallenge.BuildConfig;
 
-import static com.example.uprightchallenge.ui.SettingsFragment.NOTIFICATION_ID;
+import static com.jakubokrasa.uprightchallenge.ui.SettingsFragment.NOTIFICATION_ID;
 
 public class RepeatingNotifService extends Service {
     private static final String PRIMARY_CHANNEL_ID = "primary_notification_channel";

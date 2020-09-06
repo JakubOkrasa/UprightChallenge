@@ -1,4 +1,4 @@
-package com.example.uprightchallenge.data;
+package com.jakubokrasa.uprightchallenge.data;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;

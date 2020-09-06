@@ -1,12 +1,10 @@
-package com.example.uprightchallenge.data;
+package com.jakubokrasa.uprightchallenge.data;
 
 import android.app.Application;
 import android.content.Context;
 
-import androidx.room.Room;
-
-import com.example.uprightchallenge.data.coroutine.DbInsertCoroutine;
-import com.example.uprightchallenge.data.coroutine.DbSelectCoroutine;
+import com.jakubokrasa.uprightchallenge.data.coroutine.DbInsertCoroutine;
+import com.jakubokrasa.uprightchallenge.data.coroutine.DbSelectCoroutine;
 
 import org.jetbrains.annotations.NotNull;
 

@@ -1,4 +1,4 @@
-package com.example.uprightchallenge.data.coroutine
+package com.jakubokrasa.uprightchallenge.data.coroutine
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO

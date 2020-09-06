@@ -1,4 +1,4 @@
-package com.example.uprightchallenge.ui;
+package com.jakubokrasa.uprightchallenge.ui;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,11 +14,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.uprightchallenge.BuildConfig;
-import com.example.uprightchallenge.R;
-import com.example.uprightchallenge.data.PostureStat;
+import com.jakubokrasa.uprightchallenge.BuildConfig;
+import com.jakubokrasa.uprightchallenge.R;
+import com.jakubokrasa.uprightchallenge.data.PostureStat;
 import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
@@ -31,7 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import static com.example.uprightchallenge.ui.SettingsFragment.sharedPrefsFile;
+import static com.jakubokrasa.uprightchallenge.ui.SettingsFragment.sharedPrefsFile;
 // todo #later show daily progress in notifications
 // todo change package name
 public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {

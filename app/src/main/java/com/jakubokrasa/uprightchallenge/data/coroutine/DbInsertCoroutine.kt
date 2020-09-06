@@ -1,7 +1,7 @@
-package com.example.uprightchallenge.data.coroutine
+package com.jakubokrasa.uprightchallenge.data.coroutine
 
-import com.example.uprightchallenge.data.PostureStat
-import com.example.uprightchallenge.data.PostureStatDao
+import com.jakubokrasa.uprightchallenge.data.PostureStat
+import com.jakubokrasa.uprightchallenge.data.PostureStatDao
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 

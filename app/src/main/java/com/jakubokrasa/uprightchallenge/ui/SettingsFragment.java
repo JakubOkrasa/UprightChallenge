@@ -1,4 +1,4 @@
-package com.example.uprightchallenge.ui;
+package com.jakubokrasa.uprightchallenge.ui;
 
 import android.app.AlarmManager;
 import android.app.NotificationManager;
@@ -17,12 +17,12 @@ import androidx.preference.SwitchPreferenceCompat;
 import android.os.SystemClock;
 import android.util.Log;
 
-import com.example.uprightchallenge.data.PostureStatDatabase;
-import com.example.uprightchallenge.receiver.NotifAlarmReceiver;
-import com.example.uprightchallenge.BuildConfig;
-import com.example.uprightchallenge.R;
-import com.example.uprightchallenge.service.RepeatingNotifService;
-import com.example.uprightchallenge.receiver.ResetAlarmReceiver;
+import com.jakubokrasa.uprightchallenge.data.PostureStatDatabase;
+import com.jakubokrasa.uprightchallenge.receiver.NotifAlarmReceiver;
+import com.jakubokrasa.uprightchallenge.BuildConfig;
+import com.jakubokrasa.uprightchallenge.R;
+import com.jakubokrasa.uprightchallenge.service.RepeatingNotifService;
+import com.jakubokrasa.uprightchallenge.receiver.ResetAlarmReceiver;
 
 import java.util.Calendar;
 

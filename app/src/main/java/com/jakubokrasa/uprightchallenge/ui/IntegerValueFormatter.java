@@ -1,4 +1,4 @@
-package com.example.uprightchallenge.ui;
+package com.jakubokrasa.uprightchallenge.ui;
 
 import com.github.mikephil.charting.formatter.ValueFormatter;
 
