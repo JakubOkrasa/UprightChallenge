@@ -165,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
     @NotNull
     private BarDataSet getPercentDataSet(List<BarEntry> percentBars) {
-        BarDataSet percentDataSet = new BarDataSet(percentBars, "Percent of correct postures in consecutive days");
+        BarDataSet percentDataSet = new BarDataSet(percentBars, getResources().getString(R.string.chart_percentStat_label));
         percentDataSet.setColor(ContextCompat.getColor(this, R.color.green));
         percentDataSet.setValueFormatter(new PercentFormatter());
         percentDataSet.setValueTextSize(14f);
@@ -174,7 +174,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
     @NotNull
     private BarDataSet getUsageDataSet(List<BarEntry> usageBars) {
-        BarDataSet usageDataSet = new BarDataSet(usageBars, "How often you use the app (sum of 'yes' and 'no' taps)");
+        BarDataSet usageDataSet = new BarDataSet(usageBars, getResources().getString(R.string.chart_usageStat_label));
         usageDataSet.setColor(ContextCompat.getColor(this, R.color.light_blue));
         usageDataSet.setValueFormatter(new IntegerValueFormatter());
         usageDataSet.setValueTextSize(14f);
