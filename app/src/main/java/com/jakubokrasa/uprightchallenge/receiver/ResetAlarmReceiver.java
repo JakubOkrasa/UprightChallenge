@@ -33,7 +33,6 @@ public class ResetAlarmReceiver extends BroadcastReceiver {
         prefsEditor.putInt(PREF_KEY_BAD_POSTURE_COUNT, 0);
         prefsEditor.putInt(PREF_KEY_GOOD_POSTURE_COUNT, 0);
         prefsEditor.apply();
-
-        Log.e(LOG_TAG, "new PostureStat saved");
+        Log.d(LOG_TAG, "new PostureStat saved");
     }
 }

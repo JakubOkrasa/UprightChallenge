@@ -61,7 +61,7 @@ public abstract class PostureStatDatabase extends RoomDatabase {
                 PostureStat ps = new PostureStat((long)0, positiveCount[i], negativeCount[i]);
                 mDao.insert(ps);
             }
-            Log.e(LOG_TAG, "DB populated with sample data.");
+            Log.d(LOG_TAG, "DB populated with sample data.");
         }
 
 
