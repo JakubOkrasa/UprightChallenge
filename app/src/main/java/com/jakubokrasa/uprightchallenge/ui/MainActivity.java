@@ -154,7 +154,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         if (percentBars.size() > 0) {
             List<BarEntry> usageBars = getUsageBarEntries();
             BarChart chart = findViewById(R.id.stats_chart);
-            chart = adjustChartStyle(chart);
+            adjustChartStyle(chart);
             BarData barData = new BarData(getPercentDataSet(percentBars), getUsageDataSet(usageBars));
             barData.setBarWidth(0.45f);
             chart.setData(barData);
@@ -181,7 +181,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         return usageDataSet;
     }
 
-    private BarChart adjustChartStyle(BarChart chart) {
+    private void adjustChartStyle(BarChart chart) {
         chart.animateY(800);
         chart.getAxisLeft().setEnabled(false);
         chart.getAxisRight().setEnabled(false);
@@ -191,7 +191,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         chart.setFitBars(true);
         chart.setExtraBottomOffset(4f);
         chart.getDescription().setEnabled(false);
-        return chart;
     }
 
     private List<BarEntry> getPercentBarEntries() {
