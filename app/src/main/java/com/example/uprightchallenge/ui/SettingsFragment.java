@@ -122,7 +122,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         AlarmManager mAlarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
         Intent alarmIntent = new Intent(getContext(), AlarmReceiver.class);
         PendingIntent alarmPendingIntent = PendingIntent.getBroadcast(getContext(), NOTIFICATION_ID, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-        long repeatInterval = preferences.getLong("pref_key_interval", 1800000); //1800000ms = 30min
+        long repeatInterval = preferences.getLong("pref_key_interval", AlarmManager.INTERVAL_HALF_HOUR);
         long triggerTime = SystemClock.elapsedRealtime() + repeatInterval;
         Log.d(LOG_TAG, "repeat interval: " + repeatInterval);
         if (mAlarmManager != null) {
