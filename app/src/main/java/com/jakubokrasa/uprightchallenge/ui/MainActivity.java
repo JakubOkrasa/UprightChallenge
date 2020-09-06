@@ -45,9 +45,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         mPercentStatTextView = findViewById(R.id.txt_percent_stat);
-
         androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -55,8 +53,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
         Log.d(LOG_TAG, "A: created");
     }
-
-
 
     @Override
     protected void onPause() {
@@ -106,20 +102,16 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             notifOffInfo.setVisibility(View.GONE);
         }
         mPercentStatTextView.setText(getPercentStat());
-        
         showStatsChart();
 
         Log.d(LOG_TAG, "A: started");
     }
-
-    
 
     @Override
     protected void onStop() {
         super.onStop();
         Log.d(LOG_TAG, "A: stopped");
     }
-
 
     @Override
     protected void onDestroy() {

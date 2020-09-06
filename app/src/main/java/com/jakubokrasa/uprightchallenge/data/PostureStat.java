@@ -16,10 +16,7 @@ public class PostureStat {
     @PrimaryKey (autoGenerate = true)
     @NonNull
     private long statId;
-
-
     private int correctPostureCount;
-
     private int badPostureCount;
 
     public PostureStat(long statId, int correctPostureCount, int badPostureCount) {

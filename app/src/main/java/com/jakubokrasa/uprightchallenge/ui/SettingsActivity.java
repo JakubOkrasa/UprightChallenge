@@ -8,7 +8,6 @@ import android.os.Bundle;
 import com.jakubokrasa.uprightchallenge.R;
 
 public class SettingsActivity extends AppCompatActivity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
