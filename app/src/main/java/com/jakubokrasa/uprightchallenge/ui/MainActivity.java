@@ -31,8 +31,8 @@ import java.util.List;
 import java.util.Locale;
 
 import static com.jakubokrasa.uprightchallenge.ui.SettingsFragment.sharedPrefsFile;
+
 // todo #later show daily progress in notifications
-// todo change package name
 public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
     private PostureStatViewModel mPostureStatVM;

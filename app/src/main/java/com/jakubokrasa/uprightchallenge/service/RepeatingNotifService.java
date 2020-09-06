@@ -21,8 +21,6 @@ public class RepeatingNotifService extends Service {
     private static final String PRIMARY_CHANNEL_ID = "primary_notification_channel";
     private NotificationManager mNotifyManager;
     private final String LOG_TAG = RepeatingNotifService.class.getSimpleName();
-    private SharedPreferences preferences;
-    private String sharedPrefsFile = BuildConfig.APPLICATION_ID;
     private static final String PREF_KEY_GOOD_POSTURE_COUNT = "good_posture_count";
     private static final String PREF_KEY_BAD_POSTURE_COUNT = "bad_posture_count";
     public static final String GOOD_POSTURE_ACTION = BuildConfig.APPLICATION_ID + ".GOOD_POSTURE_ACTION";
@@ -32,7 +30,6 @@ public class RepeatingNotifService extends Service {
     public void onCreate() {
         super.onCreate();
         createNotificationChannel();
-        preferences = getBaseContext().getSharedPreferences(sharedPrefsFile, Context.MODE_PRIVATE);
         registerReceiver(postureBroadcastReceiver, new IntentFilter(GOOD_POSTURE_ACTION));
         registerReceiver(postureBroadcastReceiver, new IntentFilter(BAD_POSTURE_ACTION));
     }
