@@ -75,7 +75,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     else {
                         ((NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE)).cancelAll();
                         cancelAlarmPendingIntent(); // cancel repeating intent messages for AlarmReceiver
-                        cancelResetPendingIntent();
                     }
                     // save changes to SharedPreferences
                     prefsEditor = preferences.edit();
@@ -123,12 +122,11 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         AlarmManager mAlarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
         Intent alarmIntent = new Intent(getContext(), AlarmReceiver.class);
         PendingIntent alarmPendingIntent = PendingIntent.getBroadcast(getContext(), NOTIFICATION_ID, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-        long repeatInterval = preferences.getLong("pref_key_interval", 1800000); //1800000ms = 30min
+        long repeatInterval = preferences.getLong("pref_key_interval", AlarmManager.INTERVAL_HALF_HOUR);
         long triggerTime = SystemClock.elapsedRealtime() + repeatInterval;
         Log.d(LOG_TAG, "repeat interval: " + repeatInterval);
         if (mAlarmManager != null) {
             mAlarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerTime, repeatInterval, alarmPendingIntent);
-            Log.d(LOG_TAG, "notif. set at: " + milisToTime(triggerTime));
         }
     }
 
@@ -147,27 +145,11 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.set(Calendar.HOUR_OF_DAY, 0); // set calendar hour to 0 a.m.
+        calendar.set(Calendar.MINUTE, 0);
         calendar.add(Calendar.DATE, 1);
 //        calendar.set(Calendar.MINUTE, 29); //for debug only
         Intent resetAlarmIntent = new Intent(getContext(), ResetAlarmReceiver.class);
         PendingIntent resetAlarmPendingIntent = PendingIntent.getBroadcast(getContext(), RESET_ALARM_ID, resetAlarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         mAlarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, resetAlarmPendingIntent);
-    }
-
-    private void cancelResetPendingIntent() {
-        Intent resetAlarmIntent = new Intent(getContext(), ResetAlarmReceiver.class);
-        PendingIntent resetAlarmPendingIntent = PendingIntent.getBroadcast(getContext(), RESET_ALARM_ID, resetAlarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        AlarmManager mAlarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
-        if (mAlarmManager!=null) {
-            mAlarmManager.cancel(resetAlarmPendingIntent);
-        }
-    }
-
-    //only for debug
-    private String milisToTime(long milis) {
-        Date date = new Date(milis);
-        DateFormat formatter = new SimpleDateFormat("HH:mm:ss.SSS");
-        formatter.setTimeZone(TimeZone.getTimeZone("GMT+02:00"));
-        return formatter.format(date);
     }
 }
