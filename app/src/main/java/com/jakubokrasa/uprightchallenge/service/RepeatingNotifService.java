@@ -1,4 +1,4 @@
-package com.example.uprightchallenge.service;
+package com.jakubokrasa.uprightchallenge.service;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -13,16 +13,14 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
-import com.example.uprightchallenge.BuildConfig;
+import com.jakubokrasa.uprightchallenge.BuildConfig;
 
-import static com.example.uprightchallenge.ui.SettingsFragment.NOTIFICATION_ID;
+import static com.jakubokrasa.uprightchallenge.ui.SettingsFragment.NOTIFICATION_ID;
 
 public class RepeatingNotifService extends Service {
     private static final String PRIMARY_CHANNEL_ID = "primary_notification_channel";
     private NotificationManager mNotifyManager;
     private final String LOG_TAG = RepeatingNotifService.class.getSimpleName();
-    private SharedPreferences preferences;
-    private String sharedPrefsFile = BuildConfig.APPLICATION_ID;
     private static final String PREF_KEY_GOOD_POSTURE_COUNT = "good_posture_count";
     private static final String PREF_KEY_BAD_POSTURE_COUNT = "bad_posture_count";
     public static final String GOOD_POSTURE_ACTION = BuildConfig.APPLICATION_ID + ".GOOD_POSTURE_ACTION";
@@ -32,7 +30,6 @@ public class RepeatingNotifService extends Service {
     public void onCreate() {
         super.onCreate();
         createNotificationChannel();
-        preferences = getBaseContext().getSharedPreferences(sharedPrefsFile, Context.MODE_PRIVATE); //todo can be context instead of getActivity() ?
         registerReceiver(postureBroadcastReceiver, new IntentFilter(GOOD_POSTURE_ACTION));
         registerReceiver(postureBroadcastReceiver, new IntentFilter(BAD_POSTURE_ACTION));
     }

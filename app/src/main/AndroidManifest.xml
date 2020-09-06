@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.uprightchallenge">
+    package="com.jakubokrasa.uprightchallenge">
 
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -14,29 +14,29 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ui.SettingsActivity"
+            android:name="com.jakubokrasa.uprightchallenge.ui.SettingsActivity"
             android:label="Settings"
-            android:parentActivityName=".ui.MainActivity">
+            android:parentActivityName="com.jakubokrasa.uprightchallenge.ui.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.uprightchallenge.ui.MainActivity"/>
+                android:value="com.jakubokrasa.uprightchallenge.ui.MainActivity"/>
         </activity>
 
         <receiver
-            android:name=".receiver.AlarmReceiver"
+            android:name="com.jakubokrasa.uprightchallenge.receiver.NotifAlarmReceiver"
             android:enabled="true"
             android:exported="false" />
 
-        <receiver android:name=".receiver.ResetAlarmReceiver"
+        <receiver android:name="com.jakubokrasa.uprightchallenge.receiver.ResetAlarmReceiver"
             android:enabled="true"
             android:exported="false"/>
         <service
-            android:name=".service.RepeatingNotifService"
+            android:name="com.jakubokrasa.uprightchallenge.service.RepeatingNotifService"
             android:enabled="true"
             android:exported="false" />
 
         <activity
-            android:name=".ui.MainActivity"
+            android:name="com.jakubokrasa.uprightchallenge.ui.MainActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:launchMode="singleInstance">
             <intent-filter>

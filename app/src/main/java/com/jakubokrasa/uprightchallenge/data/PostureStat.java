@@ -1,21 +1,22 @@
-package com.example.uprightchallenge.data;
+package com.jakubokrasa.uprightchallenge.data;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-// TODO: 9/3/2020 add stat timestamp field
-// TODO: 9/4/2020 explain in comment what is PostureStat
+/*
+The name of the class PostureStat stands for posture statistics. Throughout the code there are variables
+which names include "postureStat" or just "stat". Although this word means something else in English, the
+word was used in the app's code to represent user's result from a single day.
+ */
+
 @Entity
 public class PostureStat {
 
     @PrimaryKey (autoGenerate = true)
     @NonNull
     private long statId;
-
-
     private int correctPostureCount;
-
     private int badPostureCount;
 
     public PostureStat(long statId, int correctPostureCount, int badPostureCount) {

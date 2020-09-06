@@ -1,4 +1,4 @@
-package com.example.uprightchallenge;
+package com.jakubokrasa.uprightchallenge;
 
 import org.junit.Test;
 

@@ -1,4 +1,4 @@
-package com.example.uprightchallenge.ui;
+package com.jakubokrasa.uprightchallenge.ui;
 
 import android.app.AlarmManager;
 import android.app.NotificationManager;
@@ -17,24 +17,18 @@ import androidx.preference.SwitchPreferenceCompat;
 import android.os.SystemClock;
 import android.util.Log;
 
-import com.example.uprightchallenge.data.PostureStatDatabase;
-import com.example.uprightchallenge.receiver.AlarmReceiver;
-import com.example.uprightchallenge.BuildConfig;
-import com.example.uprightchallenge.R;
-import com.example.uprightchallenge.service.RepeatingNotifService;
-import com.example.uprightchallenge.receiver.ResetAlarmReceiver;
+import com.jakubokrasa.uprightchallenge.data.PostureStatDatabase;
+import com.jakubokrasa.uprightchallenge.receiver.NotifAlarmReceiver;
+import com.jakubokrasa.uprightchallenge.BuildConfig;
+import com.jakubokrasa.uprightchallenge.R;
+import com.jakubokrasa.uprightchallenge.service.RepeatingNotifService;
+import com.jakubokrasa.uprightchallenge.receiver.ResetAlarmReceiver;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.TimeZone;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-//todo #note :    After turning on notif, (default is 30 minutes interval) notifications appear very often, maybe even less than 30 seconds.
-//todo refactor names alarmPendingIntent and AlarmReceiver
 public class SettingsFragment extends PreferenceFragmentCompat {
 
     private SharedPreferences preferences;
@@ -58,7 +52,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
         SwitchPreferenceCompat notificationSwitch = findPreference("pref_key_switch_notifications");
         ListPreference intervalListPref = findPreference("pref_key_interval"); //todo ListPreference is created twice: here and inner class. Maybe it is possible to create one
-//        ListPreference intervalListPref = findPreference(getResources().getString(R.string.interval_list_pref)); // this way (getResources()) doesn't work
 
         if(notificationSwitch!=null) {
             notificationSwitch.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
@@ -120,7 +113,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
     private void setAlarmPendingIntent() {
         AlarmManager mAlarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
-        Intent alarmIntent = new Intent(getContext(), AlarmReceiver.class);
+        Intent alarmIntent = new Intent(getContext(), NotifAlarmReceiver.class);
         PendingIntent alarmPendingIntent = PendingIntent.getBroadcast(getContext(), NOTIFICATION_ID, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
         long repeatInterval = preferences.getLong("pref_key_interval", AlarmManager.INTERVAL_HALF_HOUR);
         long triggerTime = SystemClock.elapsedRealtime() + repeatInterval;
@@ -131,7 +124,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     }
 
     private void cancelAlarmPendingIntent() {
-        Intent alarmIntent = new Intent(getContext(), AlarmReceiver.class);
+        Intent alarmIntent = new Intent(getContext(), NotifAlarmReceiver.class);
         PendingIntent alarmPendingIntent = PendingIntent.getBroadcast(getContext(), NOTIFICATION_ID, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
         AlarmManager mAlarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
         if (mAlarmManager!=null) {

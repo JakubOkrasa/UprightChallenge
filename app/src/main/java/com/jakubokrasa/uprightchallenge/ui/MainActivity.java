@@ -1,4 +1,4 @@
-package com.example.uprightchallenge.ui;
+package com.jakubokrasa.uprightchallenge.ui;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,15 +14,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.uprightchallenge.BuildConfig;
-import com.example.uprightchallenge.R;
-import com.example.uprightchallenge.data.PostureStat;
 import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.formatter.PercentFormatter;
+import com.jakubokrasa.uprightchallenge.BuildConfig;
+import com.jakubokrasa.uprightchallenge.R;
+import com.jakubokrasa.uprightchallenge.data.PostureStat;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -31,14 +30,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import static com.example.uprightchallenge.ui.SettingsFragment.sharedPrefsFile;
-// todo #later show number of daily count in notification
+import static com.jakubokrasa.uprightchallenge.ui.SettingsFragment.sharedPrefsFile;
 
-// todo change package name
-// todo decide about minimum sdk
-// todo #important #refactor: compare with code from tuition
-// TODO: 9/3/2020 add ScrollView in content_main.xml
-// TODO: 9/3/2020 add more options in repeat interval preference
+// todo #later show daily progress in notifications
 public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
     private PostureStatViewModel mPostureStatVM;
@@ -51,18 +45,14 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         mPercentStatTextView = findViewById(R.id.txt_percent_stat);
-
         androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         mPostureStatVM = new ViewModelProvider(this).get(PostureStatViewModel.class);
 
-        Log.d(LOG_TAG, "A: created");
+        Log.d(LOG_TAG, "A: onCreate");
     }
-
-
 
     @Override
     protected void onPause() {
@@ -112,30 +102,26 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
             notifOffInfo.setVisibility(View.GONE);
         }
         mPercentStatTextView.setText(getPercentStat());
-        
         showStatsChart();
 
-        Log.d(LOG_TAG, "A: started");
+        Log.d(LOG_TAG, "A: onStart");
     }
-
-    
 
     @Override
     protected void onStop() {
         super.onStop();
-        Log.d(LOG_TAG, "A: stopped");
+        Log.d(LOG_TAG, "A: onStop");
     }
-
 
     @Override
     protected void onDestroy() {
-        Log.d(LOG_TAG, "A: destroying");
+        Log.d(LOG_TAG, "A: onDestroy");
         super.onDestroy();
     }
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if(key.equals(PREF_KEY_BAD_POSTURE_COUNT) || key.equals(PREF_KEY_GOOD_POSTURE_COUNT)) {
+        if (key.equals(PREF_KEY_BAD_POSTURE_COUNT) || key.equals(PREF_KEY_GOOD_POSTURE_COUNT)) {
             mPercentStatTextView.setText(getPercentStat());
         }
     }
@@ -165,10 +151,10 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
     private void showStatsChart() {
         List<BarEntry> percentBars = getPercentBarEntries();
-        if (percentBars.size()>0) {
+        if (percentBars.size() > 0) {
             List<BarEntry> usageBars = getUsageBarEntries();
             BarChart chart = findViewById(R.id.stats_chart);
-            chart = adjustChartStyle(chart);
+            adjustChartStyle(chart);
             BarData barData = new BarData(getPercentDataSet(percentBars), getUsageDataSet(usageBars));
             barData.setBarWidth(0.45f);
             chart.setData(barData);
@@ -179,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
     @NotNull
     private BarDataSet getPercentDataSet(List<BarEntry> percentBars) {
-        BarDataSet percentDataSet = new BarDataSet(percentBars, "Percent of correct postures in consecutive days");
+        BarDataSet percentDataSet = new BarDataSet(percentBars, getResources().getString(R.string.chart_percentStat_label));
         percentDataSet.setColor(ContextCompat.getColor(this, R.color.green));
         percentDataSet.setValueFormatter(new PercentFormatter());
         percentDataSet.setValueTextSize(14f);
@@ -188,14 +174,14 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
     @NotNull
     private BarDataSet getUsageDataSet(List<BarEntry> usageBars) {
-        BarDataSet usageDataSet = new BarDataSet(usageBars, "How often you use the app (sum of 'yes' and 'no' taps)");
+        BarDataSet usageDataSet = new BarDataSet(usageBars, getResources().getString(R.string.chart_usageStat_label));
         usageDataSet.setColor(ContextCompat.getColor(this, R.color.light_blue));
         usageDataSet.setValueFormatter(new IntegerValueFormatter());
         usageDataSet.setValueTextSize(14f);
         return usageDataSet;
     }
 
-    private BarChart adjustChartStyle(BarChart chart) {
+    private void adjustChartStyle(BarChart chart) {
         chart.animateY(800);
         chart.getAxisLeft().setEnabled(false);
         chart.getAxisRight().setEnabled(false);
@@ -205,7 +191,6 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         chart.setFitBars(true);
         chart.setExtraBottomOffset(4f);
         chart.getDescription().setEnabled(false);
-        return chart;
     }
 
     private List<BarEntry> getPercentBarEntries() {

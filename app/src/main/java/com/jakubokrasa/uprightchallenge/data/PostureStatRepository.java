@@ -1,12 +1,10 @@
-package com.example.uprightchallenge.data;
+package com.jakubokrasa.uprightchallenge.data;
 
 import android.app.Application;
 import android.content.Context;
 
-import androidx.room.Room;
-
-import com.example.uprightchallenge.data.coroutine.DbInsertCoroutine;
-import com.example.uprightchallenge.data.coroutine.DbSelectCoroutine;
+import com.jakubokrasa.uprightchallenge.data.coroutine.DbInsertCoroutine;
+import com.jakubokrasa.uprightchallenge.data.coroutine.DbSelectCoroutine;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -51,7 +49,7 @@ public class PostureStatRepository {
         return null;
     }
 
-    public void insert(PostureStat stat) { new insertCoroutine().insertStat(mDao, stat); }
+    public void insert(PostureStat stat) { new insertCoroutine().execute(mDao, stat); }
 
     //only for debug
     public String statsToString(List<PostureStat> stats) {
@@ -66,8 +64,8 @@ public class PostureStatRepository {
 
     private static class insertCoroutine extends DbInsertCoroutine {
         @Override
-        public void insertStat(@NotNull PostureStatDao dao, @NotNull PostureStat stat) {
-            super.insertStat(dao, stat);
+        public void execute(@NotNull PostureStatDao dao, @NotNull PostureStat stat) {
+            super.execute(dao, stat);
         }
     }
 

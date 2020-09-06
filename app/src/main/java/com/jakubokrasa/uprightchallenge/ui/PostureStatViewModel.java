@@ -1,12 +1,12 @@
-package com.example.uprightchallenge.ui;
+package com.jakubokrasa.uprightchallenge.ui;
 
 import android.app.Application;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 
-import com.example.uprightchallenge.data.PostureStat;
-import com.example.uprightchallenge.data.PostureStatRepository;
+import com.jakubokrasa.uprightchallenge.data.PostureStat;
+import com.jakubokrasa.uprightchallenge.data.PostureStatRepository;
 
 import java.util.List;
 
