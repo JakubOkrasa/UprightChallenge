@@ -145,6 +145,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.set(Calendar.HOUR_OF_DAY, 0); // set calendar hour to 0 a.m.
+        calendar.set(Calendar.MINUTE, 0);
         calendar.add(Calendar.DATE, 1);
 //        calendar.set(Calendar.MINUTE, 29); //for debug only
         Intent resetAlarmIntent = new Intent(getContext(), ResetAlarmReceiver.class);
