@@ -114,7 +114,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     private void setAlarmPendingIntent() {
         AlarmManager mAlarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
         Intent alarmIntent = new Intent(getContext(), NotifAlarmReceiver.class);
-        PendingIntent alarmPendingIntent = PendingIntent.getBroadcast(getContext(), NOTIFICATION_ID, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+        PendingIntent alarmPendingIntent = PendingIntent.getBroadcast(getContext(), NOTIFICATION_ID, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT); //todo rename to NotifAlarmPendingIntent, similarly alarmIntent
         long repeatInterval = preferences.getLong("pref_key_interval", AlarmManager.INTERVAL_HALF_HOUR);
         long triggerTime = SystemClock.elapsedRealtime() + repeatInterval;
         Log.d(LOG_TAG, "repeat interval: " + repeatInterval);
@@ -133,7 +133,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     }
 
     // Set the alarm to start at approximately 1:00 a.m. The alarm will be used to reset counters every night and save results in database
-    private void setResetPendingIntent() {
+    private void setResetPendingIntent() { // TODO: rename/extract this and similar methods in this class. There is not only pending intent set.
         AlarmManager mAlarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
