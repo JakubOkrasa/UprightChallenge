@@ -37,6 +37,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     private final String LOG_TAG = SettingsFragment.class.getSimpleName();
     public static final int NOTIFICATION_ID = 0;
     public static final int RESET_ALARM_ID = 1;
+    public static final int NIGHT_HOURS_ALARM_ID = 2;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -144,5 +145,21 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         Intent resetAlarmIntent = new Intent(getContext(), ResetAlarmReceiver.class);
         PendingIntent resetAlarmPendingIntent = PendingIntent.getBroadcast(getContext(), RESET_ALARM_ID, resetAlarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         mAlarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, resetAlarmPendingIntent);
+    }
+
+    private void setNightHoursAlarm(boolean nightHoursTurnedON) {
+        Intent nightHoursIntent = new Intent(getContext(), NightHoursReceiver.class);
+        PendingIntent nightHoursPendingIntent = PendingIntent.getBroadcast(getContext(), NIGHT_HOURS_ALARM_ID, nightHoursIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager mAlarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        if(nightHoursTurnedON) {
+            calendar.set(Calendar.HOUR, 21);
+            calendar.set(Calendar.MINUTE, 0);
+        } else {
+            calendar.set(Calendar.HOUR, 7);
+            calendar.set(Calendar.MINUTE, 30);
+        }
+        mAlarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, nightHoursPendingIntent);
     }
 }
