@@ -18,6 +18,7 @@ import android.os.SystemClock;
 import android.util.Log;
 
 import com.jakubokrasa.uprightchallenge.data.PostureStatDatabase;
+import com.jakubokrasa.uprightchallenge.receiver.NightHoursReceiver;
 import com.jakubokrasa.uprightchallenge.receiver.NotifAlarmReceiver;
 import com.jakubokrasa.uprightchallenge.BuildConfig;
 import com.jakubokrasa.uprightchallenge.R;
@@ -31,6 +32,8 @@ import java.util.Calendar;
  */
 public class SettingsFragment extends PreferenceFragmentCompat {
 
+    private static final String NIGHT_HOURS_ON_ACTION = BuildConfig.APPLICATION_ID + ".NIGHT_HOURS_ON_ACTION";
+    private static final String NIGHT_HOURS_OFF_ACTION = BuildConfig.APPLICATION_ID + ".NIGHT_HOURS_OFF_ACTION";
     private SharedPreferences preferences;
     public static final String sharedPrefsFile = BuildConfig.APPLICATION_ID;
     private SharedPreferences.Editor prefsEditor;
@@ -148,7 +151,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     }
 
     private void setNightHoursAlarm(boolean nightHoursTurnedON) {
-        Intent nightHoursIntent = new Intent(getContext(), NightHoursReceiver.class);
+        String action = nightHoursTurnedON ? NIGHT_HOURS_ON_ACTION : NIGHT_HOURS_OFF_ACTION;
+        Intent nightHoursIntent = new Intent(action);
         PendingIntent nightHoursPendingIntent = PendingIntent.getBroadcast(getContext(), NIGHT_HOURS_ALARM_ID, nightHoursIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager mAlarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
         Calendar calendar = Calendar.getInstance();
