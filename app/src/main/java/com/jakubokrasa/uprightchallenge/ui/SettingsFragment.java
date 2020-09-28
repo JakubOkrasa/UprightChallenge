@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -18,7 +19,6 @@ import android.os.SystemClock;
 import android.util.Log;
 
 import com.jakubokrasa.uprightchallenge.data.PostureStatDatabase;
-import com.jakubokrasa.uprightchallenge.receiver.NightHoursReceiver;
 import com.jakubokrasa.uprightchallenge.receiver.NotifAlarmReceiver;
 import com.jakubokrasa.uprightchallenge.BuildConfig;
 import com.jakubokrasa.uprightchallenge.R;
@@ -32,8 +32,8 @@ import java.util.Calendar;
  */
 public class SettingsFragment extends PreferenceFragmentCompat {
 
-    private static final String NIGHT_HOURS_ON_ACTION = BuildConfig.APPLICATION_ID + ".NIGHT_HOURS_ON_ACTION";
-    private static final String NIGHT_HOURS_OFF_ACTION = BuildConfig.APPLICATION_ID + ".NIGHT_HOURS_OFF_ACTION";
+    public static final String NIGHT_HOURS_ON_ACTION = BuildConfig.APPLICATION_ID + ".NIGHT_HOURS_ON_ACTION";
+    public static final String NIGHT_HOURS_OFF_ACTION = BuildConfig.APPLICATION_ID + ".NIGHT_HOURS_OFF_ACTION";
     private SharedPreferences preferences;
     public static final String sharedPrefsFile = BuildConfig.APPLICATION_ID;
     private SharedPreferences.Editor prefsEditor;
