@@ -61,15 +61,20 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             notificationSwitch.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object notificationsOnObject) {
+                    Log.d(LOG_TAG, "notif switch preference change");
                     boolean notificationsOn = (Boolean) notificationsOnObject;
                     ListPreference intervalListPref = findPreference("pref_key_interval");
                     if(notificationsOn) {
+                        Log.d(LOG_TAG, "notifications on");
                         if(preferences!=null) {
                             setAlarmPendingIntent();
                             setResetPendingIntent();
+                            setNightHoursAlarm(true); // set start night hours alarm (turn off notifications)
+                            setNightHoursAlarm(false); // set finish night hours alarm (turn on notifications)
                         }
                     }
                     else {
+                        Log.d(LOG_TAG, "notifications off");
                         ((NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE)).cancelAll();
                         cancelAlarmPendingIntent(); // cancel repeating intent messages for AlarmReceiver
                     }
