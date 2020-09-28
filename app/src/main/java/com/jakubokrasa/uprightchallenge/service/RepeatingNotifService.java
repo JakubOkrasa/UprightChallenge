@@ -12,10 +12,14 @@ import android.os.IBinder;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
+import androidx.preference.PreferenceManager;
 
 import com.jakubokrasa.uprightchallenge.BuildConfig;
 
+import static com.jakubokrasa.uprightchallenge.ui.SettingsFragment.NIGHT_HOURS_OFF_ACTION;
+import static com.jakubokrasa.uprightchallenge.ui.SettingsFragment.NIGHT_HOURS_ON_ACTION;
 import static com.jakubokrasa.uprightchallenge.ui.SettingsFragment.NOTIFICATION_ID;
+import static com.jakubokrasa.uprightchallenge.ui.SettingsFragment.sharedPrefsFile;
 
 public class RepeatingNotifService extends Service {
     private static final String PRIMARY_CHANNEL_ID = "primary_notification_channel";
@@ -32,6 +36,9 @@ public class RepeatingNotifService extends Service {
         createNotificationChannel();
         registerReceiver(postureBroadcastReceiver, new IntentFilter(GOOD_POSTURE_ACTION));
         registerReceiver(postureBroadcastReceiver, new IntentFilter(BAD_POSTURE_ACTION));
+
+        registerReceiver(nightHoursReceiver, new IntentFilter(NIGHT_HOURS_ON_ACTION));
+        registerReceiver(nightHoursReceiver, new IntentFilter(NIGHT_HOURS_OFF_ACTION));
     }
 
     @Override
@@ -42,6 +49,7 @@ public class RepeatingNotifService extends Service {
     @Override
     public void onDestroy() {
         unregisterReceiver(postureBroadcastReceiver);
+        unregisterReceiver(nightHoursReceiver);
         super.onDestroy();
     }
 

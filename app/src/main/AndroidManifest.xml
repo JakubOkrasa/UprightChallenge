@@ -30,6 +30,7 @@
         <receiver android:name="com.jakubokrasa.uprightchallenge.receiver.ResetAlarmReceiver"
             android:enabled="true"
             android:exported="false"/>
+
         <service
             android:name="com.jakubokrasa.uprightchallenge.service.RepeatingNotifService"
             android:enabled="true"
