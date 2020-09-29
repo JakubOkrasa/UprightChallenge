@@ -4,6 +4,7 @@ import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.IBinder;
 import android.util.Log;
@@ -21,6 +22,19 @@ public class NightHoursService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         return START_STICKY;
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        registerReceiver(nightHoursReceiver, new IntentFilter(NIGHT_HOURS_ON_ACTION));
+        registerReceiver(nightHoursReceiver, new IntentFilter(NIGHT_HOURS_OFF_ACTION));
+    }
+
+    @Override
+    public void onDestroy() {
+        unregisterReceiver(nightHoursReceiver);
+        super.onDestroy();
     }
 
     @Nullable

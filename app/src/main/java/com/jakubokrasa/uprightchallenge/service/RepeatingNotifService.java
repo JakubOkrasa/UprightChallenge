@@ -36,9 +36,6 @@ public class RepeatingNotifService extends Service {
         createNotificationChannel();
         registerReceiver(postureBroadcastReceiver, new IntentFilter(GOOD_POSTURE_ACTION));
         registerReceiver(postureBroadcastReceiver, new IntentFilter(BAD_POSTURE_ACTION));
-
-        registerReceiver(nightHoursReceiver, new IntentFilter(NIGHT_HOURS_ON_ACTION));
-        registerReceiver(nightHoursReceiver, new IntentFilter(NIGHT_HOURS_OFF_ACTION));
     }
 
     @Override
@@ -49,7 +46,6 @@ public class RepeatingNotifService extends Service {
     @Override
     public void onDestroy() {
         unregisterReceiver(postureBroadcastReceiver);
-        unregisterReceiver(nightHoursReceiver);
         super.onDestroy();
     }
 
