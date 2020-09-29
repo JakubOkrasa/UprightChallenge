@@ -51,6 +51,32 @@
                 android:padding="10dp"
                 android:layout_marginTop="20dp"/>
 
+            <Button
+                android:id="@+id/button_night_on"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="night mode on"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:onClick="nightON"/>
+
+            <Button
+                android:id="@+id/button_night_off"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="night mode off"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:onClick="nightOFF"/>
+            <Button
+                android:id="@+id/button_check"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="check notif switch"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:onClick="checkNotifSw"/>
+
             <com.github.mikephil.charting.charts.BarChart
                 android:id="@+id/stats_chart"
                 android:layout_width="match_parent"

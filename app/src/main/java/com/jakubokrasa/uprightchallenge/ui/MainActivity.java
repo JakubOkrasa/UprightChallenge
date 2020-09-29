@@ -234,4 +234,22 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     private float getSumOfCorrectAndBadPostures(PostureStat stat) {
         return stat.getBadPostureCount() + stat.getCorrectPostureCount();
     }
+
+    public void nightON(View view) {
+        sendBroadcast(new Intent(NIGHT_HOURS_ON_ACTION));
+    }
+
+    public void nightOFF(View view) {
+        sendBroadcast(new Intent(NIGHT_HOURS_OFF_ACTION));
+    }
+
+    public void checkNotifSw(View view) {
+        SharedPreferences preferences = getSharedPreferences(sharedPrefsFile, MODE_PRIVATE);
+        TextView tv = (TextView) view;
+        if (preferences.getBoolean("pref_key_switch_notifications", true)) {
+            tv.setText("notif are ON");
+        } else {
+            tv.setText("notif are OFF");
+        }
+    }
 }
