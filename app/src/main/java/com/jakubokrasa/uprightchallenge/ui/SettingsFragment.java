@@ -168,6 +168,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         } else {
             calendar.set(Calendar.HOUR, 7);
             calendar.set(Calendar.MINUTE, 30);
+//            calendar.add(Calendar.DATE, 1); //uncomment if not debug todo handle cases when DATE + 1 is unwanted
         }
         mAlarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, nightHoursPendingIntent);
     }
