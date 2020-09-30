@@ -52,6 +52,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         Intent startServiceIntent = new Intent(getContext(), RepeatingNotifService.class);
         requireContext().startService(startServiceIntent);
 
+        notifHelper = new RepeatingNotifHelper(requireContext());
+
         setPreferencesFromResource(R.xml.preferences, rootKey);
 
         if(getActivity().getSharedPreferences(sharedPrefsFile, Context.MODE_PRIVATE)!=null) {
@@ -71,7 +73,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     if(notificationsOn) {
                         Log.d(LOG_TAG, "notifications on");
                         if(preferences!=null) {
-                            turnOnNotifications();
+                            notifHelper.turnOnNotifications();
                         }
                     }
                     else {
@@ -97,7 +99,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     String interval =(String) newValue;
                     prefsEditor = preferences.edit();
                     prefsEditor.putLong(preference.getKey(), Long.parseLong(interval)).apply();
-                    setAlarmPendingIntent();
+                    notifHelper.setAlarmPendingIntent();
                     return true;
                 }
             });
