@@ -55,6 +55,7 @@ public class NightHoursService extends Service {
             if (intent.getAction().equals(NIGHT_HOURS_ON_ACTION)) {
                 Log.d(LOG_TAG, "NIGHT_RECEIVER: action on night hours received");
                 prefEditor.putBoolean("pref_key_switch_notifications", false);
+                notifHelper.turnOffNotifications();
             }
             else if(intent.getAction().equals(NIGHT_HOURS_OFF_ACTION)) {
                 Log.d(LOG_TAG, "NIGHT_RECEIVER: action off night hours received");
