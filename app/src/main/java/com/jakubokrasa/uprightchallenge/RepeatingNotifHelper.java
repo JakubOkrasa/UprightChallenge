@@ -36,8 +36,7 @@ public class RepeatingNotifHelper {
     public void turnOnNotifications() { //todo consider name change
         setAlarmPendingIntent();
         setResetPendingIntent();
-        setNightHoursAlarm(true); // set start night hours alarm (turn off notifications)
-        setNightHoursAlarm(false); // set finish night hours alarm (turn on notifications)
+        setNightHoursAlarm();
     }
 
     public void turnOffNotifications() { //todo consider name change
@@ -80,21 +79,25 @@ public class RepeatingNotifHelper {
         mAlarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, resetAlarmPendingIntent);
     }
 
-    private void setNightHoursAlarm(boolean nightHoursTurnedON) {
-        String action = nightHoursTurnedON ? NIGHT_HOURS_ON_ACTION : NIGHT_HOURS_OFF_ACTION;
-        Intent nightHoursIntent = new Intent(action);
-        PendingIntent nightHoursPendingIntent = PendingIntent.getBroadcast(context, NIGHT_HOURS_ALARM_ID, nightHoursIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+    private void setNightHoursAlarm() {
+        Intent nightHoursOnIntent = new Intent(NIGHT_HOURS_ON_ACTION);
+        Intent nightHoursOffIntent = new Intent(NIGHT_HOURS_OFF_ACTION);
+        PendingIntent nightHoursOnPendingIntent = PendingIntent.getBroadcast(context, NIGHT_HOURS_ALARM_ID, nightHoursOnIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent nightHoursOffPendingIntent = PendingIntent.getBroadcast(context, NIGHT_HOURS_ALARM_ID, nightHoursOffIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager mAlarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Calendar calendar = Calendar.getInstance();
+
+        //set turn off notifications time
         calendar.setTimeInMillis(System.currentTimeMillis());
-        if(nightHoursTurnedON) {
-            calendar.set(Calendar.HOUR, 21);
-            calendar.set(Calendar.MINUTE, 0);
-        } else {
-            calendar.set(Calendar.HOUR, 7);
-            calendar.set(Calendar.MINUTE, 30);
+        calendar.set(Calendar.HOUR, 21);
+        calendar.set(Calendar.MINUTE, 0);
+        mAlarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, nightHoursOnPendingIntent);
+
+        //set turn on notifications time
+        calendar.set(Calendar.HOUR, 7);
+        calendar.set(Calendar.MINUTE, 30);
 //            calendar.add(Calendar.DATE, 1); //uncomment if not debug todo handle cases when DATE + 1 is unwanted
-        }
-        mAlarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, nightHoursPendingIntent);
+        mAlarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, nightHoursOffPendingIntent);
+
     }
 }
