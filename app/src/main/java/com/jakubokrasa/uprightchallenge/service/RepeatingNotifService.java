@@ -1,7 +1,9 @@
 package com.jakubokrasa.uprightchallenge.service;
 
+import android.app.AlarmManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -9,16 +11,23 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.IBinder;
+import android.os.SystemClock;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.preference.PreferenceManager;
 
 import com.jakubokrasa.uprightchallenge.BuildConfig;
+import com.jakubokrasa.uprightchallenge.receiver.NotifAlarmReceiver;
+import com.jakubokrasa.uprightchallenge.receiver.ResetAlarmReceiver;
 
+import java.util.Calendar;
+
+import static com.jakubokrasa.uprightchallenge.ui.SettingsFragment.NIGHT_HOURS_ALARM_ID;
 import static com.jakubokrasa.uprightchallenge.ui.SettingsFragment.NIGHT_HOURS_OFF_ACTION;
 import static com.jakubokrasa.uprightchallenge.ui.SettingsFragment.NIGHT_HOURS_ON_ACTION;
 import static com.jakubokrasa.uprightchallenge.ui.SettingsFragment.NOTIFICATION_ID;
+import static com.jakubokrasa.uprightchallenge.ui.SettingsFragment.RESET_ALARM_ID;
 import static com.jakubokrasa.uprightchallenge.ui.SettingsFragment.sharedPrefsFile;
 
 public class RepeatingNotifService extends Service {
@@ -29,6 +38,8 @@ public class RepeatingNotifService extends Service {
     private static final String PREF_KEY_BAD_POSTURE_COUNT = "bad_posture_count";
     public static final String GOOD_POSTURE_ACTION = BuildConfig.APPLICATION_ID + ".GOOD_POSTURE_ACTION";
     public static final String BAD_POSTURE_ACTION = BuildConfig.APPLICATION_ID + ".BAD_POSTURE_ACTION";
+    private Context ctx;
+    private SharedPreferences preferences;
 
     @Override
     public void onCreate() {
@@ -73,6 +84,7 @@ public class RepeatingNotifService extends Service {
     BroadcastReceiver postureBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            ctx = context; //before first onReceive
             final String sharedPrefFile = BuildConfig.APPLICATION_ID;
             SharedPreferences preferences =  context.getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
             SharedPreferences.Editor prefEditor = preferences.edit();

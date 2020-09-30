@@ -18,7 +18,6 @@ import static com.jakubokrasa.uprightchallenge.ui.SettingsFragment.sharedPrefsFi
 public class NightHoursService extends Service {
     private final String LOG_TAG = NightHoursService.class.getSimpleName();
 
-
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         return START_STICKY;
