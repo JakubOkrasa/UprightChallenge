@@ -43,7 +43,12 @@ public class RepeatingNotifHelper {
         setNightHoursAlarm(false); // set finish night hours alarm (turn on notifications)
     }
 
-    private void setAlarmPendingIntent() {
+    public void turnOffNotifications() { //todo consider name change
+        ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE)).cancelAll();
+        cancelAlarmPendingIntent(); // cancel repeating intent messages for AlarmReceiver
+    }
+
+    public void setAlarmPendingIntent() {
         AlarmManager mAlarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent alarmIntent = new Intent(context, NotifAlarmReceiver.class);
         PendingIntent alarmPendingIntent = PendingIntent.getBroadcast(context, NOTIFICATION_ID, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT); //todo rename to NotifAlarmPendingIntent, similarly alarmIntent
@@ -55,7 +60,7 @@ public class RepeatingNotifHelper {
         }
     }
 
-    public void cancelAlarmPendingIntent() {
+    private void cancelAlarmPendingIntent() {
         Intent alarmIntent = new Intent(context, NotifAlarmReceiver.class);
         PendingIntent alarmPendingIntent = PendingIntent.getBroadcast(context, NOTIFICATION_ID, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT);
         AlarmManager mAlarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);

@@ -78,8 +78,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     }
                     else {
                         Log.d(LOG_TAG, "notifications off");
-                        ((NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE)).cancelAll();
-                        cancelAlarmPendingIntent(); // cancel repeating intent messages for AlarmReceiver
+                        notifHelper.turnOffNotifications();
                     }
                     // save changes to SharedPreferences
                     prefsEditor = preferences.edit();
