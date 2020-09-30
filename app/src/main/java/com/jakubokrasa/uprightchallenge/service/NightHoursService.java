@@ -59,7 +59,7 @@ public class NightHoursService extends Service {
             }
             else if(intent.getAction().equals(NIGHT_HOURS_OFF_ACTION)) {
                 Log.d(LOG_TAG, "NIGHT_RECEIVER: action off night hours received");
-                prefEditor.putBoolean("pref_key_switch_notifications", true); // TODO: 9/28/2020 check if pref changed manually
+                prefEditor.putBoolean("pref_key_switch_notifications", true);
                 notifHelper.turnOnNotifications();
             }
             prefEditor.apply();

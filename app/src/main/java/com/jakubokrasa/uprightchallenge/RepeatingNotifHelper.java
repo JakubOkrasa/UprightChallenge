@@ -33,9 +33,6 @@ public class RepeatingNotifHelper {
         this.preferences = context.getSharedPreferences(sharedPrefsFile, MODE_PRIVATE);
     }
 
-    //todo make listener in this class and call there turnOnNotifications (like in SettingsFragment)
-    //todo !!! Context as parameter because before the first onReceive method call context from onReceive will be null and you must use context from
-    // the Activity (it will occur if the method will be called during switching on notification by a user (not because of nightHoursReceiver Intent message) !!!
     public void turnOnNotifications() { //todo consider name change
         setAlarmPendingIntent();
         setResetPendingIntent();
@@ -48,7 +45,7 @@ public class RepeatingNotifHelper {
         cancelAlarmPendingIntent(); // cancel repeating intent messages for AlarmReceiver
     }
 
-    public void setAlarmPendingIntent() {
+    public void setAlarmPendingIntent() { //todo consider name change
         AlarmManager mAlarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent alarmIntent = new Intent(context, NotifAlarmReceiver.class);
         PendingIntent alarmPendingIntent = PendingIntent.getBroadcast(context, NOTIFICATION_ID, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT); //todo rename to NotifAlarmPendingIntent, similarly alarmIntent
@@ -69,7 +66,7 @@ public class RepeatingNotifHelper {
         }
     }
 
-    // Set the alarm to start at approximately 1:00 a.m. The alarm will be used to reset counters every night and save results in database
+    // Set the alarm to start approximately at midnight. The alarm will be used to reset counters every night and save results in database
     private void setResetPendingIntent() { // TODO: rename/extract this and similar methods in this class. There is not only pending intent set.
         AlarmManager mAlarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Calendar calendar = Calendar.getInstance();
