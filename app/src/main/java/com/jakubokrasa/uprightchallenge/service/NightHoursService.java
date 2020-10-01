@@ -13,7 +13,7 @@ import androidx.annotation.Nullable;
 
 import com.jakubokrasa.uprightchallenge.RepeatingNotifHelper;
 
-import static com.jakubokrasa.uprightchallenge.ui.SettingsFragment.NIGHT_HOURS_OFF_ACTION;
+import static com.jakubokrasa.uprightchallenge.ui.SettingsFragment.NIGHT_HOURS_OFF_ACTION; // TODO: 9/30/2020 it looks as if the implicit intent doesnt work 
 import static com.jakubokrasa.uprightchallenge.ui.SettingsFragment.NIGHT_HOURS_ON_ACTION;
 import static com.jakubokrasa.uprightchallenge.ui.SettingsFragment.sharedPrefsFile;
 
@@ -29,8 +29,10 @@ public class NightHoursService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        registerReceiver(nightHoursReceiver, new IntentFilter(NIGHT_HOURS_ON_ACTION));
-        registerReceiver(nightHoursReceiver, new IntentFilter(NIGHT_HOURS_OFF_ACTION));
+        IntentFilter nightHoursFilter = new IntentFilter();
+        nightHoursFilter.addAction(NIGHT_HOURS_ON_ACTION);
+        nightHoursFilter.addAction(NIGHT_HOURS_OFF_ACTION);
+        registerReceiver(nightHoursReceiver, nightHoursFilter);
     }
 
     @Override

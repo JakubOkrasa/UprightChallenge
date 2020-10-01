@@ -30,7 +30,7 @@ import static com.jakubokrasa.uprightchallenge.ui.SettingsFragment.NOTIFICATION_
 import static com.jakubokrasa.uprightchallenge.ui.SettingsFragment.RESET_ALARM_ID;
 import static com.jakubokrasa.uprightchallenge.ui.SettingsFragment.sharedPrefsFile;
 
-public class RepeatingNotifService extends Service {
+public class RepeatingNotifService extends Service { // TODO: 10/1/2020 rename to PostureNotifService
     private static final String PRIMARY_CHANNEL_ID = "primary_notification_channel";
     private NotificationManager mNotifyManager;
     private final String LOG_TAG = RepeatingNotifService.class.getSimpleName();
@@ -45,8 +45,10 @@ public class RepeatingNotifService extends Service {
     public void onCreate() {
         super.onCreate();
         createNotificationChannel();
-        registerReceiver(postureBroadcastReceiver, new IntentFilter(GOOD_POSTURE_ACTION));
-        registerReceiver(postureBroadcastReceiver, new IntentFilter(BAD_POSTURE_ACTION));
+        IntentFilter postureFilter = new IntentFilter();
+        postureFilter.addAction(GOOD_POSTURE_ACTION);
+        postureFilter.addAction(BAD_POSTURE_ACTION);
+        registerReceiver(postureBroadcastReceiver, postureFilter);
     }
 
     @Override
