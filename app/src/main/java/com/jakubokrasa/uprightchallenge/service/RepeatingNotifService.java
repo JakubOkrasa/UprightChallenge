@@ -38,8 +38,6 @@ public class RepeatingNotifService extends Service { // TODO: 10/1/2020 rename t
     private static final String PREF_KEY_BAD_POSTURE_COUNT = "bad_posture_count";
     public static final String GOOD_POSTURE_ACTION = BuildConfig.APPLICATION_ID + ".GOOD_POSTURE_ACTION";
     public static final String BAD_POSTURE_ACTION = BuildConfig.APPLICATION_ID + ".BAD_POSTURE_ACTION";
-    private Context ctx;
-    private SharedPreferences preferences;
 
     @Override
     public void onCreate() {
@@ -86,7 +84,6 @@ public class RepeatingNotifService extends Service { // TODO: 10/1/2020 rename t
     BroadcastReceiver postureBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            ctx = context; //before first onReceive
             final String sharedPrefFile = BuildConfig.APPLICATION_ID;
             SharedPreferences preferences =  context.getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
             SharedPreferences.Editor prefEditor = preferences.edit();
