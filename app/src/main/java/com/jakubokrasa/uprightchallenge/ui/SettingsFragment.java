@@ -1,11 +1,7 @@
 package com.jakubokrasa.uprightchallenge.ui;
 
-import android.app.AlarmManager;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -15,20 +11,13 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreferenceCompat;
 
-import android.os.SystemClock;
 import android.util.Log;
 
 import com.jakubokrasa.uprightchallenge.RepeatingNotifHelper;
 import com.jakubokrasa.uprightchallenge.data.PostureStatDatabase;
-import com.jakubokrasa.uprightchallenge.receiver.NotifAlarmReceiver;
 import com.jakubokrasa.uprightchallenge.BuildConfig;
 import com.jakubokrasa.uprightchallenge.R;
-import com.jakubokrasa.uprightchallenge.service.NightHoursService;
 import com.jakubokrasa.uprightchallenge.service.RepeatingNotifService;
-import com.jakubokrasa.uprightchallenge.receiver.ResetAlarmReceiver;
-
-import java.util.Calendar;
-import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.

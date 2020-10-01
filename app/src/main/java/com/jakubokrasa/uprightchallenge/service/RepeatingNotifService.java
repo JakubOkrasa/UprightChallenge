@@ -39,6 +39,7 @@ public class RepeatingNotifService extends Service { // TODO: 10/1/2020 rename t
     private static final String PREF_KEY_BAD_POSTURE_COUNT = "bad_posture_count";
     public static final String GOOD_POSTURE_ACTION = BuildConfig.APPLICATION_ID + ".GOOD_POSTURE_ACTION";
     public static final String BAD_POSTURE_ACTION = BuildConfig.APPLICATION_ID + ".BAD_POSTURE_ACTION";
+    private RepeatingNotifHelper notifHelper;
 
     @Override
     public void onCreate() {
@@ -49,7 +50,10 @@ public class RepeatingNotifService extends Service { // TODO: 10/1/2020 rename t
         postureFilter.addAction(BAD_POSTURE_ACTION);
         registerReceiver(postureBroadcastReceiver, postureFilter);
 
-
+        IntentFilter nightHoursFilter = new IntentFilter();
+        nightHoursFilter.addAction(NIGHT_HOURS_ON_ACTION);
+        nightHoursFilter.addAction(NIGHT_HOURS_OFF_ACTION);
+        registerReceiver(nightHoursReceiver, nightHoursFilter);
     }
 
     @Override
@@ -60,6 +64,7 @@ public class RepeatingNotifService extends Service { // TODO: 10/1/2020 rename t
     @Override
     public void onDestroy() {
         unregisterReceiver(postureBroadcastReceiver);
+        unregisterReceiver(nightHoursReceiver);
         super.onDestroy();
     }
 
@@ -102,6 +107,27 @@ public class RepeatingNotifService extends Service { // TODO: 10/1/2020 rename t
                 int count = preferences.getInt(PREF_KEY_BAD_POSTURE_COUNT, 0);
                 prefEditor.putInt(PREF_KEY_BAD_POSTURE_COUNT, ++count).apply();
             }
+        }
+    };
+
+    BroadcastReceiver nightHoursReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(notifHelper==null) { notifHelper = new RepeatingNotifHelper(context); }
+            SharedPreferences preferences = context.getSharedPreferences(sharedPrefsFile, Context.MODE_PRIVATE);
+            SharedPreferences.Editor prefEditor = preferences.edit();
+            Log.d(LOG_TAG, "NIGHT_RECEIVER: received");
+            if (intent.getAction().equals(NIGHT_HOURS_ON_ACTION)) {
+                Log.d(LOG_TAG, "NIGHT_RECEIVER: action on night hours received");
+                prefEditor.putBoolean("pref_key_switch_notifications", false);
+                notifHelper.turnOffNotifications();
+            }
+            else if(intent.getAction().equals(NIGHT_HOURS_OFF_ACTION)) {
+                Log.d(LOG_TAG, "NIGHT_RECEIVER: action off night hours received");
+                prefEditor.putBoolean("pref_key_switch_notifications", true);
+                notifHelper.turnOnNotifications();
+            }
+            prefEditor.apply();
         }
     };
 
