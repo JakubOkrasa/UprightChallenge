@@ -18,6 +18,7 @@ import androidx.annotation.Nullable;
 import androidx.preference.PreferenceManager;
 
 import com.jakubokrasa.uprightchallenge.BuildConfig;
+import com.jakubokrasa.uprightchallenge.RepeatingNotifHelper;
 import com.jakubokrasa.uprightchallenge.receiver.NotifAlarmReceiver;
 import com.jakubokrasa.uprightchallenge.receiver.ResetAlarmReceiver;
 
@@ -47,6 +48,8 @@ public class RepeatingNotifService extends Service { // TODO: 10/1/2020 rename t
         postureFilter.addAction(GOOD_POSTURE_ACTION);
         postureFilter.addAction(BAD_POSTURE_ACTION);
         registerReceiver(postureBroadcastReceiver, postureFilter);
+
+
     }
 
     @Override
@@ -101,6 +104,8 @@ public class RepeatingNotifService extends Service { // TODO: 10/1/2020 rename t
             }
         }
     };
+
+
 
 
 }

@@ -11,9 +11,10 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import com.jakubokrasa.uprightchallenge.BuildConfig;
 import com.jakubokrasa.uprightchallenge.RepeatingNotifHelper;
 
-import static com.jakubokrasa.uprightchallenge.ui.SettingsFragment.NIGHT_HOURS_OFF_ACTION; // TODO: 9/30/2020 it looks as if the implicit intent doesnt work 
+import static com.jakubokrasa.uprightchallenge.ui.SettingsFragment.NIGHT_HOURS_OFF_ACTION; // TODO: 10/1/2020 can it be imported from UI component (which sometimes is destroyed and does not exist
 import static com.jakubokrasa.uprightchallenge.ui.SettingsFragment.NIGHT_HOURS_ON_ACTION;
 import static com.jakubokrasa.uprightchallenge.ui.SettingsFragment.sharedPrefsFile;
 
