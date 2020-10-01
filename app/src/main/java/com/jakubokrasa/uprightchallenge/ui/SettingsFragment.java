@@ -36,6 +36,15 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     RepeatingNotifHelper notifHelper;
 
     @Override
+    public void onStart() {
+        super.onStart();
+        SwitchPreferenceCompat notificationSwitch = findPreference("pref_key_switch_notifications");
+        if(notificationSwitch!=null) {
+            notificationSwitch.setChecked(preferences.getBoolean("pref_key_switch_notifications", false));
+        }
+    }
+
+    @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
 
         Intent startServiceIntent = new Intent(getContext(), RepeatingNotifService.class);
