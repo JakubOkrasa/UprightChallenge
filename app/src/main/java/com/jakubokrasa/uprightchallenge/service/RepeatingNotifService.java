@@ -1,7 +1,9 @@
 package com.jakubokrasa.uprightchallenge.service;
 
+import android.app.AlarmManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -9,19 +11,27 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.IBinder;
+import android.os.SystemClock;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.preference.PreferenceManager;
 
 import com.jakubokrasa.uprightchallenge.BuildConfig;
+import com.jakubokrasa.uprightchallenge.RepeatingNotifHelper;
+import com.jakubokrasa.uprightchallenge.receiver.NotifAlarmReceiver;
+import com.jakubokrasa.uprightchallenge.receiver.ResetAlarmReceiver;
 
+import java.util.Calendar;
+
+import static com.jakubokrasa.uprightchallenge.ui.SettingsFragment.NIGHT_HOURS_ALARM_ID;
 import static com.jakubokrasa.uprightchallenge.ui.SettingsFragment.NIGHT_HOURS_OFF_ACTION;
 import static com.jakubokrasa.uprightchallenge.ui.SettingsFragment.NIGHT_HOURS_ON_ACTION;
 import static com.jakubokrasa.uprightchallenge.ui.SettingsFragment.NOTIFICATION_ID;
+import static com.jakubokrasa.uprightchallenge.ui.SettingsFragment.RESET_ALARM_ID;
 import static com.jakubokrasa.uprightchallenge.ui.SettingsFragment.sharedPrefsFile;
 
-public class RepeatingNotifService extends Service {
+public class RepeatingNotifService extends Service { // TODO: 10/1/2020 rename to PostureNotifService
     private static final String PRIMARY_CHANNEL_ID = "primary_notification_channel";
     private NotificationManager mNotifyManager;
     private final String LOG_TAG = RepeatingNotifService.class.getSimpleName();
@@ -29,16 +39,21 @@ public class RepeatingNotifService extends Service {
     private static final String PREF_KEY_BAD_POSTURE_COUNT = "bad_posture_count";
     public static final String GOOD_POSTURE_ACTION = BuildConfig.APPLICATION_ID + ".GOOD_POSTURE_ACTION";
     public static final String BAD_POSTURE_ACTION = BuildConfig.APPLICATION_ID + ".BAD_POSTURE_ACTION";
+    private RepeatingNotifHelper notifHelper;
 
     @Override
     public void onCreate() {
         super.onCreate();
         createNotificationChannel();
-        registerReceiver(postureBroadcastReceiver, new IntentFilter(GOOD_POSTURE_ACTION));
-        registerReceiver(postureBroadcastReceiver, new IntentFilter(BAD_POSTURE_ACTION));
+        IntentFilter postureFilter = new IntentFilter();
+        postureFilter.addAction(GOOD_POSTURE_ACTION);
+        postureFilter.addAction(BAD_POSTURE_ACTION);
+        registerReceiver(postureBroadcastReceiver, postureFilter);
 
-        registerReceiver(nightHoursReceiver, new IntentFilter(NIGHT_HOURS_ON_ACTION));
-        registerReceiver(nightHoursReceiver, new IntentFilter(NIGHT_HOURS_OFF_ACTION));
+        IntentFilter nightHoursFilter = new IntentFilter();
+        nightHoursFilter.addAction(NIGHT_HOURS_ON_ACTION);
+        nightHoursFilter.addAction(NIGHT_HOURS_OFF_ACTION);
+        registerReceiver(nightHoursReceiver, nightHoursFilter);
     }
 
     @Override
@@ -98,18 +113,26 @@ public class RepeatingNotifService extends Service {
     BroadcastReceiver nightHoursReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            if(notifHelper==null) {
+                notifHelper = new RepeatingNotifHelper(context); }
             SharedPreferences preferences = context.getSharedPreferences(sharedPrefsFile, Context.MODE_PRIVATE);
-        SharedPreferences.Editor prefEditor = preferences.edit();
-            Log.d(LOG_TAG, "NIGHT_RECEIVER: received");
+            SharedPreferences.Editor prefEditor = preferences.edit();
             if (intent.getAction().equals(NIGHT_HOURS_ON_ACTION)) {
-            Log.d(LOG_TAG, "NIGHT_RECEIVER: action on night hours received");
-            prefEditor.putBoolean("pref_key_switch_notifications", false);
-        }
-        else if(intent.getAction().equals(NIGHT_HOURS_OFF_ACTION)) {
-            Log.d(LOG_TAG, "NIGHT_RECEIVER: action off night hours received");
-            prefEditor.putBoolean("pref_key_switch_notifications", true); // TODO: 9/28/2020 check if pref changed manually
-        }
-        prefEditor.apply();
+                Log.d(LOG_TAG, "NIGHT_RECEIVER: action on night hours received");
+                prefEditor.putBoolean("pref_key_switch_notifications", false);
+                notifHelper.cancelAlarmPendingIntent();
+                mNotifyManager.cancelAll();
+            }
+            else if(intent.getAction().equals(NIGHT_HOURS_OFF_ACTION)) {
+                Log.d(LOG_TAG, "NIGHT_RECEIVER: action off night hours received");
+                prefEditor.putBoolean("pref_key_switch_notifications", true);
+                notifHelper.setAlarmPendingIntent();
+            }
+            prefEditor.apply();
         }
     };
+
+
+
+
 }

@@ -13,33 +13,34 @@
         android:roundIcon="@drawable/ic_spine_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity
-            android:name="com.jakubokrasa.uprightchallenge.ui.SettingsActivity"
+            android:name=".ui.SettingsActivity"
             android:label="Settings"
-            android:parentActivityName="com.jakubokrasa.uprightchallenge.ui.MainActivity">
+            android:parentActivityName=".ui.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.jakubokrasa.uprightchallenge.ui.MainActivity"/>
+                android:value="com.jakubokrasa.uprightchallenge.ui.MainActivity" />
         </activity>
 
         <receiver
-            android:name="com.jakubokrasa.uprightchallenge.receiver.NotifAlarmReceiver"
+            android:name=".receiver.NotifAlarmReceiver"
+            android:enabled="true"
+            android:exported="false" />
+        <receiver
+            android:name=".receiver.ResetAlarmReceiver"
             android:enabled="true"
             android:exported="false" />
 
-        <receiver android:name="com.jakubokrasa.uprightchallenge.receiver.ResetAlarmReceiver"
-            android:enabled="true"
-            android:exported="false"/>
-
         <service
-            android:name="com.jakubokrasa.uprightchallenge.service.RepeatingNotifService"
+            android:name=".service.RepeatingNotifService"
             android:enabled="true"
             android:exported="false" />
 
         <activity
-            android:name="com.jakubokrasa.uprightchallenge.ui.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:launchMode="singleInstance">
+            android:name=".ui.MainActivity"
+            android:launchMode="singleInstance"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
