@@ -113,19 +113,20 @@ public class RepeatingNotifService extends Service { // TODO: 10/1/2020 rename t
     BroadcastReceiver nightHoursReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(notifHelper==null) { notifHelper = new RepeatingNotifHelper(context); }
+            if(notifHelper==null) {
+                notifHelper = new RepeatingNotifHelper(context); }
             SharedPreferences preferences = context.getSharedPreferences(sharedPrefsFile, Context.MODE_PRIVATE);
             SharedPreferences.Editor prefEditor = preferences.edit();
-            Log.d(LOG_TAG, "NIGHT_RECEIVER: received");
             if (intent.getAction().equals(NIGHT_HOURS_ON_ACTION)) {
                 Log.d(LOG_TAG, "NIGHT_RECEIVER: action on night hours received");
                 prefEditor.putBoolean("pref_key_switch_notifications", false);
-                notifHelper.turnOffNotifications();
+                notifHelper.cancelAlarmPendingIntent();
+                mNotifyManager.cancelAll();
             }
             else if(intent.getAction().equals(NIGHT_HOURS_OFF_ACTION)) {
                 Log.d(LOG_TAG, "NIGHT_RECEIVER: action off night hours received");
                 prefEditor.putBoolean("pref_key_switch_notifications", true);
-                notifHelper.turnOnNotifications();
+                notifHelper.setAlarmPendingIntent();
             }
             prefEditor.apply();
         }
