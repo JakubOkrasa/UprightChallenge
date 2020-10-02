@@ -71,7 +71,9 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     if(notificationsOn) {
                         Log.d(LOG_TAG, "notifications on");
                         if(preferences!=null) {
-                            notifHelper.turnOnNotifications();
+                            notifHelper.setAlarmPendingIntent();
+                            notifHelper.setResetPendingIntent();
+                            notifHelper.setNightHoursAlarm();
                         }
                     }
                     else {

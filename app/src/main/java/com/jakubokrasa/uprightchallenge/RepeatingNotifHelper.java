@@ -37,12 +37,6 @@ public class RepeatingNotifHelper {
         this.preferences = context.getSharedPreferences(sharedPrefsFile, MODE_PRIVATE);
     }
 
-    public void turnOnNotifications() { //todo consider name change
-        setAlarmPendingIntent();
-        setResetPendingIntent();
-        setNightHoursAlarm();
-    }
-
     public void turnOffNotifications() { //todo consider name change
         ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE)).cancelAll();
         cancelAlarmPendingIntent(); // cancel repeating intent messages for AlarmReceiver
@@ -69,7 +63,7 @@ public class RepeatingNotifHelper {
         }
     }
 
-    private void setResetPendingIntent() { // TODO: rename/extract this and similar methods in this class. There is not only pending intent set.
+    public void setResetPendingIntent() { // TODO: rename/extract this and similar methods in this class. There is not only pending intent set.
         AlarmManager mAlarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
@@ -83,7 +77,8 @@ public class RepeatingNotifHelper {
     }
 
     // Set the alarm to start approximately at midnight. The alarm will be used to reset counters every night and save results in database
-    private void setNightHoursAlarm() {
+    // TODO: 10/2/2020 not always works - fix that
+    public void setNightHoursAlarm() {
         Intent nightHoursOnIntent = new Intent(NIGHT_HOURS_ON_ACTION);
         Intent nightHoursOffIntent = new Intent(NIGHT_HOURS_OFF_ACTION);
         PendingIntent nightHoursOnPendingIntent = PendingIntent.getBroadcast(context, NIGHT_HOURS_ALARM_ID, nightHoursOnIntent, PendingIntent.FLAG_UPDATE_CURRENT);
