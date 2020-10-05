@@ -13,6 +13,7 @@ import androidx.preference.SwitchPreferenceCompat;
 
 import android.util.Log;
 
+import com.dr1009.app.chronodialogpreference.ChronoPreferenceFragment;
 import com.jakubokrasa.uprightchallenge.RepeatingNotifHelper;
 import com.jakubokrasa.uprightchallenge.data.PostureStatDatabase;
 import com.jakubokrasa.uprightchallenge.BuildConfig;
@@ -22,7 +23,7 @@ import com.jakubokrasa.uprightchallenge.service.RepeatingNotifService;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SettingsFragment extends PreferenceFragmentCompat {
+public class SettingsFragment extends ChronoPreferenceFragment {
 
     public static final String NIGHT_HOURS_ON_ACTION = BuildConfig.APPLICATION_ID + ".NIGHT_HOURS_ON_ACTION";
     public static final String NIGHT_HOURS_OFF_ACTION = BuildConfig.APPLICATION_ID + ".NIGHT_HOURS_OFF_ACTION";

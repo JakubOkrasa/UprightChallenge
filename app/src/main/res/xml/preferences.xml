@@ -6,6 +6,16 @@
         android:key="pref_key_switch_notifications"
         android:summary="@string/prefs_notif_switch_summary"
         android:title="Notifications" />
+    <com.dr1009.app.chronodialogpreference.TimeDialogPreference
+        android:defaultValue="07:30"
+        android:key="pref_key_night_hours_end"
+        android:title="Notifications time start"
+        />
+    <com.dr1009.app.chronodialogpreference.TimeDialogPreference
+        android:defaultValue="21:00"
+        android:key="pref_key_night_hours_start"
+        android:title="Notifications time end"
+        />
     <androidx.preference.ListPreference
         android:defaultValue="1800000"
         android:entries="@array/intervals_array_labels"
