@@ -64,6 +64,7 @@ public class SettingsFragment extends ChronoPreferenceFragment {
         SwitchPreferenceCompat notificationSwitch = findPreference("pref_key_switch_notifications");
         ListPreference intervalListPref = findPreference("pref_key_interval"); //todo ListPreference is created twice: here and inner class. Maybe it is possible to create one
         TimeDialogPreference timeNotifBeginPref = findPreference("pref_key_night_hours_end");
+        TimeDialogPreference timeNotifEndPref = findPreference("pref_key_night_hours_start");
 
         if(notificationSwitch!=null) {
             notificationSwitch.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
@@ -98,6 +99,18 @@ public class SettingsFragment extends ChronoPreferenceFragment {
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
                     String time = (String) newValue;
                     prefsEditor.putString("pref_key_night_hours_end", time).apply();
+                    notifHelper.setNightHoursAlarm();
+                    return true;
+                }
+            });
+        }
+
+        if(timeNotifEndPref!=null) {
+            timeNotifEndPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    String time = (String) newValue;
+                    prefsEditor.putString("pref_key_night_hours_start", time).apply();
                     notifHelper.setNightHoursAlarm();
                     return true;
                 }
