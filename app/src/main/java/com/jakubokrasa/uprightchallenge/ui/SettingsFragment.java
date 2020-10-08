@@ -14,6 +14,7 @@ import androidx.preference.SwitchPreferenceCompat;
 import android.util.Log;
 
 import com.dr1009.app.chronodialogpreference.ChronoPreferenceFragment;
+import com.dr1009.app.chronodialogpreference.TimeDialogPreference;
 import com.jakubokrasa.uprightchallenge.RepeatingNotifHelper;
 import com.jakubokrasa.uprightchallenge.data.PostureStatDatabase;
 import com.jakubokrasa.uprightchallenge.BuildConfig;
