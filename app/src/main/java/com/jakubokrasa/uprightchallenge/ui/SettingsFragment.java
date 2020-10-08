@@ -40,6 +40,7 @@ public class SettingsFragment extends ChronoPreferenceFragment {
     @Override
     public void onStart() {
         super.onStart();
+        prefsEditor = preferences.edit();
         SwitchPreferenceCompat notificationSwitch = findPreference("pref_key_switch_notifications");
         if(notificationSwitch!=null) {
             notificationSwitch.setChecked(preferences.getBoolean("pref_key_switch_notifications", false));
@@ -62,6 +63,7 @@ public class SettingsFragment extends ChronoPreferenceFragment {
 
         SwitchPreferenceCompat notificationSwitch = findPreference("pref_key_switch_notifications");
         ListPreference intervalListPref = findPreference("pref_key_interval"); //todo ListPreference is created twice: here and inner class. Maybe it is possible to create one
+        TimeDialogPreference timeNotifBeginPref = findPreference("pref_key_night_hours_end");
 
         if(notificationSwitch!=null) {
             notificationSwitch.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
@@ -83,9 +85,20 @@ public class SettingsFragment extends ChronoPreferenceFragment {
                         notifHelper.turnOffNotifications();
                     }
                     // save changes to SharedPreferences
-                    prefsEditor = preferences.edit();
                     prefsEditor.putBoolean(preference.getKey(), notificationsOn).apply();
                     intervalListPref.setEnabled(notificationsOn);
+                    return true;
+                }
+            });
+        }
+
+        if(timeNotifBeginPref!=null) {
+            timeNotifBeginPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    String time = (String) newValue;
+                    prefsEditor.putString("pref_key_night_hours_end", time).apply();
+                    notifHelper.setNightHoursAlarm();
                     return true;
                 }
             });
@@ -98,7 +111,6 @@ public class SettingsFragment extends ChronoPreferenceFragment {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
                     String interval =(String) newValue;
-                    prefsEditor = preferences.edit();
                     prefsEditor.putLong(preference.getKey(), Long.parseLong(interval)).apply();
                     notifHelper.setAlarmPendingIntent();
                     return true;
