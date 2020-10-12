@@ -91,19 +91,21 @@ public class RepeatingNotifHelper {
         calendar.setTimeInMillis(System.currentTimeMillis());
         String nightEnd = preferences.getString("pref_key_night_hours_end", "7:30");
         Log.d(LOG_TAG, "notif begin time: " + nightEnd);
-        String[] time = nightEnd.split(":");
-        calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(time[0])); //todo extract method
-        calendar.set(Calendar.MINUTE, Integer.parseInt(time[1]));
+        setCalendar(calendar, nightEnd);
         mAlarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, nightHoursOnPendingIntent);
 
         //set turn on notifications time
         String nightStart = preferences.getString("pref_key_night_hours_start", "21:00");
-        time = nightStart.split(":");
-        calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(time[0])); //todo extract method
-        calendar.set(Calendar.MINUTE, Integer.parseInt(time[1]));
+        setCalendar(calendar, nightStart);
 
 //            calendar.add(Calendar.DATE, 1); //uncomment if not debug todo handle cases when DATE + 1 is unwanted
         mAlarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, nightHoursOffPendingIntent);
 
+    }
+
+    private void setCalendar(Calendar calendar, String timePref) {
+        String[] timeArr = timePref.split(":");
+        calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(timeArr[0]));
+        calendar.set(Calendar.MINUTE, Integer.parseInt(timeArr[1]));
     }
 }
