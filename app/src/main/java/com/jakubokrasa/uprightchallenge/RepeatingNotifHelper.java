@@ -87,14 +87,14 @@ public class RepeatingNotifHelper {
         AlarmManager mAlarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Calendar calendar = Calendar.getInstance();
 
-        //set turn off notifications time
+        //set turn on notifications time
         calendar.setTimeInMillis(System.currentTimeMillis());
         String nightEnd = preferences.getString("pref_key_night_hours_end", "7:30");
         Log.d(LOG_TAG, "notif begin time: " + nightEnd);
         setCalendar(calendar, nightEnd);
         mAlarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, nightHoursOnPendingIntent);
 
-        //set turn on notifications time
+        //set turn off notifications time
         String nightStart = preferences.getString("pref_key_night_hours_start", "21:00");
         setCalendar(calendar, nightStart);
 
