@@ -13,6 +13,9 @@ import com.jakubokrasa.uprightchallenge.R;
 import com.jakubokrasa.uprightchallenge.service.RepeatingNotifService;
 import com.jakubokrasa.uprightchallenge.ui.MainActivity;
 
+import static com.jakubokrasa.uprightchallenge.service.RepeatingNotifService.BAD_POSTURE_ACTION;
+import static com.jakubokrasa.uprightchallenge.service.RepeatingNotifService.GOOD_POSTURE_ACTION;
+
 //receive periodically notifications pending intents
 public class NotifAlarmReceiver extends BroadcastReceiver {
 
@@ -40,11 +43,13 @@ public class NotifAlarmReceiver extends BroadcastReceiver {
         );
 
         // after you click action button on notification, the intent will be sent
-        Intent postureYesIntent = new Intent(RepeatingNotifService.GOOD_POSTURE_ACTION);
-        PendingIntent yesPendingIntent = PendingIntent.getBroadcast(context, NOTIFICATION_ID, postureYesIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        Intent postureYesIntent = new Intent(context, RepeatingNotifService.class);
+        postureYesIntent.setAction(GOOD_POSTURE_ACTION);
+        PendingIntent yesPendingIntent = PendingIntent.getService(context, NOTIFICATION_ID, postureYesIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Intent postureNoIntent = new Intent(RepeatingNotifService.BAD_POSTURE_ACTION);
-        PendingIntent noPendingIntent = PendingIntent.getBroadcast(context, NOTIFICATION_ID, postureNoIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        Intent postureNoIntent = new Intent(context, RepeatingNotifService.class);
+        postureNoIntent.setAction(BAD_POSTURE_ACTION);
+        PendingIntent noPendingIntent = PendingIntent.getService(context, NOTIFICATION_ID, postureNoIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, PRIMARY_CHANNEL_ID)
                 .setContentTitle("Are you straighten up?")

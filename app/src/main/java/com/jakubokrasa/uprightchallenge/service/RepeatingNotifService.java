@@ -39,11 +39,6 @@ public class RepeatingNotifService extends Service { // TODO: 10/1/2020 rename t
     public void onCreate() {
         super.onCreate();
         createNotificationChannel();
-        IntentFilter postureFilter = new IntentFilter();
-        postureFilter.addAction(GOOD_POSTURE_ACTION);
-        postureFilter.addAction(BAD_POSTURE_ACTION);
-        registerReceiver(postureBroadcastReceiver, postureFilter);
-
         IntentFilter filter = new IntentFilter();
         filter.addAction(SCHEDULED_NOTIF_OFF_ACTION);
         filter.addAction(SCHEDULED_NOTIF_ON_ACTION);
@@ -52,12 +47,12 @@ public class RepeatingNotifService extends Service { // TODO: 10/1/2020 rename t
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        handlePostureIntent(intent);
         return START_STICKY;
     }
 
     @Override
     public void onDestroy() {
-        unregisterReceiver(postureBroadcastReceiver);
         unregisterReceiver(notifOnTimeReceiver);
         super.onDestroy();
     }
@@ -83,26 +78,25 @@ public class RepeatingNotifService extends Service { // TODO: 10/1/2020 rename t
         return null;
     }
 
-    BroadcastReceiver postureBroadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            final String sharedPrefFile = BuildConfig.APPLICATION_ID;
-            SharedPreferences preferences =  context.getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
-            SharedPreferences.Editor prefEditor = preferences.edit();
+    private void handlePostureIntent(Intent intent) {
+        if (intent.getAction()==null) {return;}
+        final String sharedPrefFile = BuildConfig.APPLICATION_ID;
+        SharedPreferences preferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE);
+        SharedPreferences.Editor prefEditor = preferences.edit();
+        mNotifyManager.cancel(NOTIFICATION_ID);
+        if (intent.getAction().equals(GOOD_POSTURE_ACTION)) {
+            Log.d(LOG_TAG, "yes option clicked");
             mNotifyManager.cancel(NOTIFICATION_ID);
-            if (intent.getAction().equals(GOOD_POSTURE_ACTION)) {
-                Log.d(LOG_TAG, "yes option clicked");
-                int count = preferences.getInt(PREF_KEY_GOOD_POSTURE_COUNT, 0);
-                prefEditor.putInt(PREF_KEY_GOOD_POSTURE_COUNT, ++count).apply();
-//
-            }
-            else {
-                Log.d(LOG_TAG, "no option clicked");
-                int count = preferences.getInt(PREF_KEY_BAD_POSTURE_COUNT, 0);
-                prefEditor.putInt(PREF_KEY_BAD_POSTURE_COUNT, ++count).apply();
-            }
+            int count = preferences.getInt(PREF_KEY_GOOD_POSTURE_COUNT, 0);
+            prefEditor.putInt(PREF_KEY_GOOD_POSTURE_COUNT, ++count).apply();
         }
-    };
+        else if (intent.getAction().equals(BAD_POSTURE_ACTION)) {
+            Log.d(LOG_TAG, "no option clicked");
+            mNotifyManager.cancel(NOTIFICATION_ID);
+            int count = preferences.getInt(PREF_KEY_BAD_POSTURE_COUNT, 0);
+            prefEditor.putInt(PREF_KEY_BAD_POSTURE_COUNT, ++count).apply();
+        }
+    }
 
     // receives when is time to switch on/off notifications (user chooses time when he will be given notifications, usually notifications at night are unwanted)
     BroadcastReceiver notifOnTimeReceiver = new BroadcastReceiver() {
