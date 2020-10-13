@@ -234,18 +234,4 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     private float getSumOfCorrectAndBadPostures(PostureStat stat) {
         return stat.getBadPostureCount() + stat.getCorrectPostureCount();
     }
-
-    public void sendNotifOnIntent(View view) { sendBroadcast(new Intent(SCHEDULED_NOTIF_ON_ACTION)); }
-
-    public void sendNotifOffIntent(View view) { sendBroadcast(new Intent(SCHEDULED_NOTIF_OFF_ACTION)); }
-
-    public void checkNotifSw(View view) {
-        SharedPreferences preferences = getSharedPreferences(sharedPrefsFile, MODE_PRIVATE);
-        TextView tv = (TextView) view;
-        if (preferences.getBoolean("pref_key_switch_notifications", true)) {
-            tv.setText("notif are ON");
-        } else {
-            tv.setText("notif are OFF");
-        }
-    }
 }
