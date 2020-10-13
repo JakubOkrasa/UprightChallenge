@@ -6,24 +6,18 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.SystemClock;
 import android.util.Log;
 
-import androidx.annotation.RequiresApi;
-
 import com.jakubokrasa.uprightchallenge.receiver.NotifAlarmReceiver;
 import com.jakubokrasa.uprightchallenge.receiver.ResetAlarmReceiver;
-import com.jakubokrasa.uprightchallenge.service.RepeatingNotifService;
 
-import java.time.LocalDateTime;
 import java.util.Calendar;
-import java.util.Map;
 
 import static android.content.Context.MODE_PRIVATE;
 import static com.jakubokrasa.uprightchallenge.ui.SettingsFragment.NIGHT_HOURS_ALARM_ID;
-import static com.jakubokrasa.uprightchallenge.ui.SettingsFragment.NIGHT_HOURS_OFF_ACTION;
-import static com.jakubokrasa.uprightchallenge.ui.SettingsFragment.NIGHT_HOURS_ON_ACTION;
+import static com.jakubokrasa.uprightchallenge.ui.SettingsFragment.NOTIF_ON_TIME_ACTION;
+import static com.jakubokrasa.uprightchallenge.ui.SettingsFragment.NOTIF_OFF_TIME_ACTION;
 import static com.jakubokrasa.uprightchallenge.ui.SettingsFragment.NOTIFICATION_ID;
 import static com.jakubokrasa.uprightchallenge.ui.SettingsFragment.RESET_ALARM_ID;
 
@@ -64,6 +58,7 @@ public class RepeatingNotifHelper {
         }
     }
 
+    // Set the alarm to start approximately at midnight. The alarm will be used to reset counters every night and save results in database
     public void setResetPendingIntent() { // TODO: rename/extract this and similar methods in this class. There is not only pending intent set.
         AlarmManager mAlarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Calendar calendar = Calendar.getInstance();
@@ -77,29 +72,34 @@ public class RepeatingNotifHelper {
         mAlarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, resetAlarmPendingIntent);
     }
 
-    // Set the alarm to start approximately at midnight. The alarm will be used to reset counters every night and save results in database
-    // TODO: 10/2/2020 not always works - fix that
-    public void setNightHoursAlarm() {
-        Intent nightHoursOnIntent = new Intent(NIGHT_HOURS_ON_ACTION);
-        Intent nightHoursOffIntent = new Intent(NIGHT_HOURS_OFF_ACTION);
-        PendingIntent nightHoursOnPendingIntent = PendingIntent.getBroadcast(context, NIGHT_HOURS_ALARM_ID, nightHoursOnIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        PendingIntent nightHoursOffPendingIntent = PendingIntent.getBroadcast(context, NIGHT_HOURS_ALARM_ID, nightHoursOffIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+    public void setNotifOnTimeRange() {
+        Intent notifOnTimeIntent = new Intent(NOTIF_ON_TIME_ACTION);
+        Intent notifOffTimeIntent = new Intent(NOTIF_OFF_TIME_ACTION);
+        PendingIntent notifOnTimePendingIntent = PendingIntent.getBroadcast(context, NIGHT_HOURS_ALARM_ID, notifOnTimeIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent notifOffTimePendingIntent = PendingIntent.getBroadcast(context, NIGHT_HOURS_ALARM_ID, notifOffTimeIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager mAlarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Calendar calendar = Calendar.getInstance();
 
         //set turn on notifications time
         calendar.setTimeInMillis(System.currentTimeMillis());
-        String nightEnd = preferences.getString("pref_key_night_hours_end", "7:30");
-        Log.d(LOG_TAG, "notif begin time: " + nightEnd);
-        setCalendar(calendar, nightEnd);
-        mAlarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, nightHoursOnPendingIntent);
+        String notifOnTime = preferences.getString(context.getResources().getString(R.string.pref_key_notif_on_time), "7:30");
+        String notifOffTime = preferences.getString(context.getResources().getString(R.string.pref_key_notif_off_time), "21:00");
+        // TODO: 10/12/2020 check if notifOnTime<notifOffTime, otherwise day+1
+        // TODO: 10/12/2020 what if
+        //  1. start nofif set at 10 
+        //  2. end notif set at 7 (+1day)
+        //  3. start notif set at 5 and now is 3.
+        //  >> end notif will be on the next day
+        Log.d(LOG_TAG, "notif begin time: " + notifOnTime);
+        Log.d(LOG_TAG, "notif end time: " + notifOffTime);
+        setCalendar(calendar, notifOnTime);
+        mAlarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, notifOnTimePendingIntent);
 
         //set turn off notifications time
-        String nightStart = preferences.getString("pref_key_night_hours_start", "21:00");
-        setCalendar(calendar, nightStart);
+        setCalendar(calendar, notifOffTime);
 
 //            calendar.add(Calendar.DATE, 1); //uncomment if not debug todo handle cases when DATE + 1 is unwanted
-        mAlarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, nightHoursOffPendingIntent);
+        mAlarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, notifOffTimePendingIntent);
 
     }
 
@@ -108,4 +108,5 @@ public class RepeatingNotifHelper {
         calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(timeArr[0]));
         calendar.set(Calendar.MINUTE, Integer.parseInt(timeArr[1]));
     }
+
 }

@@ -30,8 +30,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import static com.jakubokrasa.uprightchallenge.ui.SettingsFragment.NIGHT_HOURS_OFF_ACTION;
-import static com.jakubokrasa.uprightchallenge.ui.SettingsFragment.NIGHT_HOURS_ON_ACTION;
+import static com.jakubokrasa.uprightchallenge.ui.SettingsFragment.NOTIF_ON_TIME_ACTION;
+import static com.jakubokrasa.uprightchallenge.ui.SettingsFragment.NOTIF_OFF_TIME_ACTION;
 import static com.jakubokrasa.uprightchallenge.ui.SettingsFragment.sharedPrefsFile;
 
 // todo #later show daily progress in notifications
@@ -236,11 +236,11 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
     }
 
     public void nightON(View view) {
-        sendBroadcast(new Intent(NIGHT_HOURS_ON_ACTION));
+        sendBroadcast(new Intent(NOTIF_OFF_TIME_ACTION));
     }
 
     public void nightOFF(View view) {
-        sendBroadcast(new Intent(NIGHT_HOURS_OFF_ACTION));
+        sendBroadcast(new Intent(NOTIF_ON_TIME_ACTION));
     }
 
     public void checkNotifSw(View view) {

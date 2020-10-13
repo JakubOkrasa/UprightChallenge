@@ -8,12 +8,12 @@
         android:title="Notifications" />
     <com.dr1009.app.chronodialogpreference.TimeDialogPreference
         android:defaultValue="07:30"
-        android:key="pref_key_night_hours_end"
+        android:key="@string/pref_key_notif_on_time"
         android:title="Notifications time start"
         />
     <com.dr1009.app.chronodialogpreference.TimeDialogPreference
         android:defaultValue="21:00"
-        android:key="pref_key_night_hours_start"
+        android:key="@string/pref_key_notif_off_time"
         android:title="Notifications time end"
         />
     <androidx.preference.ListPreference

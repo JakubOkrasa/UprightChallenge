@@ -8,7 +8,6 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
-import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreferenceCompat;
 
 import android.util.Log;
@@ -26,8 +25,8 @@ import com.jakubokrasa.uprightchallenge.service.RepeatingNotifService;
  */
 public class SettingsFragment extends ChronoPreferenceFragment {
 
-    public static final String NIGHT_HOURS_ON_ACTION = BuildConfig.APPLICATION_ID + ".NIGHT_HOURS_ON_ACTION";
-    public static final String NIGHT_HOURS_OFF_ACTION = BuildConfig.APPLICATION_ID + ".NIGHT_HOURS_OFF_ACTION";
+    public static final String NOTIF_OFF_TIME_ACTION = BuildConfig.APPLICATION_ID + ".NIGHT_HOURS_ON_ACTION";
+    public static final String NOTIF_ON_TIME_ACTION = BuildConfig.APPLICATION_ID + ".NIGHT_HOURS_OFF_ACTION";
     private SharedPreferences preferences;
     public static final String sharedPrefsFile = BuildConfig.APPLICATION_ID;
     private SharedPreferences.Editor prefsEditor;
@@ -63,8 +62,8 @@ public class SettingsFragment extends ChronoPreferenceFragment {
 
         SwitchPreferenceCompat notificationSwitch = findPreference("pref_key_switch_notifications");
         ListPreference intervalListPref = findPreference("pref_key_interval"); //todo ListPreference is created twice: here and inner class. Maybe it is possible to create one
-        TimeDialogPreference timeNotifBeginPref = findPreference("pref_key_night_hours_end");
-        TimeDialogPreference timeNotifEndPref = findPreference("pref_key_night_hours_start");
+        TimeDialogPreference timeNotifBeginPref = findPreference(getContext().getResources().getString(R.string.pref_key_notif_on_time));
+        TimeDialogPreference timeNotifEndPref = findPreference(getContext().getResources().getString(R.string.pref_key_notif_off_time));
 
         if(notificationSwitch!=null) {
             notificationSwitch.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
@@ -78,7 +77,7 @@ public class SettingsFragment extends ChronoPreferenceFragment {
                         if(preferences!=null) {
                             notifHelper.setAlarmPendingIntent();
                             notifHelper.setResetPendingIntent();
-                            notifHelper.setNightHoursAlarm();
+                            notifHelper.setNotifOnTimeRange();
                         }
                     }
                     else {
@@ -98,8 +97,8 @@ public class SettingsFragment extends ChronoPreferenceFragment {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
                     String time = (String) newValue;
-                    prefsEditor.putString("pref_key_night_hours_end", time).apply();
-                    notifHelper.setNightHoursAlarm();
+                    prefsEditor.putString(getContext().getResources().getString(R.string.pref_key_notif_on_time), time).apply();
+                    notifHelper.setNotifOnTimeRange();
                     return true;
                 }
             });
@@ -110,8 +109,8 @@ public class SettingsFragment extends ChronoPreferenceFragment {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
                     String time = (String) newValue;
-                    prefsEditor.putString("pref_key_night_hours_start", time).apply();
-                    notifHelper.setNightHoursAlarm();
+                    prefsEditor.putString(getContext().getResources().getString(R.string.pref_key_notif_off_time), time).apply();
+                    notifHelper.setNotifOnTimeRange();
                     return true;
                 }
             });

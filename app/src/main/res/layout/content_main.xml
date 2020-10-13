@@ -55,7 +55,7 @@
                 android:id="@+id/button_night_on"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="night mode on"
+                android:text="turn off notifs"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 android:onClick="nightON"/>
@@ -64,7 +64,7 @@
                 android:id="@+id/button_night_off"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="night mode off"
+                android:text="turn on notifs"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 android:onClick="nightOFF"/>
