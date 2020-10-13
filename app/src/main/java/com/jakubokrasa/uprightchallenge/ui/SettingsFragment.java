@@ -20,6 +20,8 @@ import com.jakubokrasa.uprightchallenge.BuildConfig;
 import com.jakubokrasa.uprightchallenge.R;
 import com.jakubokrasa.uprightchallenge.service.RepeatingNotifService;
 
+import java.util.Objects;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -62,8 +64,8 @@ public class SettingsFragment extends ChronoPreferenceFragment {
 
         SwitchPreferenceCompat notificationSwitch = findPreference("pref_key_switch_notifications");
         ListPreference intervalListPref = findPreference("pref_key_interval"); //todo ListPreference is created twice: here and inner class. Maybe it is possible to create one
-        TimeDialogPreference timeNotifBeginPref = findPreference(getContext().getResources().getString(R.string.pref_key_notif_on_time));
-        TimeDialogPreference timeNotifEndPref = findPreference(getContext().getResources().getString(R.string.pref_key_notif_off_time));
+        final TimeDialogPreference timeNotifBeginPref = findPreference(requireContext().getResources().getString(R.string.pref_key_notif_on_time));
+        final TimeDialogPreference timeNotifEndPref = findPreference(requireContext().getResources().getString(R.string.pref_key_notif_off_time));
 
         if(notificationSwitch!=null) {
             notificationSwitch.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
@@ -86,7 +88,9 @@ public class SettingsFragment extends ChronoPreferenceFragment {
                     }
                     // save changes to SharedPreferences
                     prefsEditor.putBoolean(preference.getKey(), notificationsOn).apply();
-                    intervalListPref.setEnabled(notificationsOn);
+                    intervalListPref.setEnabled(notificationsOn); //does it can be removed? >> final field outside? Test timeNotifPrefs
+                    timeNotifBeginPref.setEnabled(notificationsOn);
+                    timeNotifEndPref.setEnabled(notificationsOn);
                     return true;
                 }
             });
@@ -129,7 +133,10 @@ public class SettingsFragment extends ChronoPreferenceFragment {
                 }
             });
         }
-          intervalListPref.setEnabled(preferences.getBoolean("pref_key_switch_notifications", false));
+
+        intervalListPref.setEnabled(preferences.getBoolean("pref_key_switch_notifications", false));
+        timeNotifBeginPref.setEnabled(preferences.getBoolean("pref_key_switch_notifications", false));
+        timeNotifEndPref.setEnabled(preferences.getBoolean("pref_key_switch_notifications", false));
 
         //only for tests
         Preference populateWithSampleDataBtnPref = findPreference("pref_key_populate");
@@ -146,6 +153,10 @@ public class SettingsFragment extends ChronoPreferenceFragment {
             });
         }
 
+    }
+
+    private void enablePrefsNotifRelated() {
+        
     }
 
 
