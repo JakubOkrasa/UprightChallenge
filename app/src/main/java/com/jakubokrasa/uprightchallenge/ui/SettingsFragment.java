@@ -20,8 +20,6 @@ import com.jakubokrasa.uprightchallenge.BuildConfig;
 import com.jakubokrasa.uprightchallenge.R;
 import com.jakubokrasa.uprightchallenge.service.RepeatingNotifService;
 
-import java.util.Objects;
-
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -62,10 +60,12 @@ public class SettingsFragment extends ChronoPreferenceFragment {
             preferences = getActivity().getSharedPreferences(sharedPrefsFile, Context.MODE_PRIVATE);
         }
 
+        enableOrDisablePrefsRelatedWithNotifs();
+
         SwitchPreferenceCompat notificationSwitch = findPreference("pref_key_switch_notifications");
         ListPreference intervalListPref = findPreference("pref_key_interval"); //todo ListPreference is created twice: here and inner class. Maybe it is possible to create one
-        final TimeDialogPreference timeNotifBeginPref = findPreference(requireContext().getResources().getString(R.string.pref_key_notif_on_time));
-        final TimeDialogPreference timeNotifEndPref = findPreference(requireContext().getResources().getString(R.string.pref_key_notif_off_time));
+        TimeDialogPreference timeNotifBeginPref = findPreference(requireContext().getResources().getString(R.string.pref_key_notif_on_time));
+        TimeDialogPreference timeNotifEndPref = findPreference(requireContext().getResources().getString(R.string.pref_key_notif_off_time));
 
         if(notificationSwitch!=null) {
             notificationSwitch.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
@@ -73,7 +73,6 @@ public class SettingsFragment extends ChronoPreferenceFragment {
                 public boolean onPreferenceChange(Preference preference, Object notificationsOnObject) {
                     Log.d(LOG_TAG, "notif switch preference change");
                     boolean notificationsOn = (Boolean) notificationsOnObject;
-                    ListPreference intervalListPref = findPreference("pref_key_interval");
                     if(notificationsOn) {
                         Log.d(LOG_TAG, "notifications on");
                         if(preferences!=null) {
@@ -88,9 +87,7 @@ public class SettingsFragment extends ChronoPreferenceFragment {
                     }
                     // save changes to SharedPreferences
                     prefsEditor.putBoolean(preference.getKey(), notificationsOn).apply();
-                    intervalListPref.setEnabled(notificationsOn); //does it can be removed? >> final field outside? Test timeNotifPrefs
-                    timeNotifBeginPref.setEnabled(notificationsOn);
-                    timeNotifEndPref.setEnabled(notificationsOn);
+                    enableOrDisablePrefsRelatedWithNotifs();
                     return true;
                 }
             });
@@ -134,9 +131,6 @@ public class SettingsFragment extends ChronoPreferenceFragment {
             });
         }
 
-        intervalListPref.setEnabled(preferences.getBoolean("pref_key_switch_notifications", false));
-        timeNotifBeginPref.setEnabled(preferences.getBoolean("pref_key_switch_notifications", false));
-        timeNotifEndPref.setEnabled(preferences.getBoolean("pref_key_switch_notifications", false));
 
         //only for tests
         Preference populateWithSampleDataBtnPref = findPreference("pref_key_populate");
@@ -155,8 +149,13 @@ public class SettingsFragment extends ChronoPreferenceFragment {
 
     }
 
-    private void enablePrefsNotifRelated() {
-        
+    private void enableOrDisablePrefsRelatedWithNotifs() {
+        ListPreference intervalListPref = findPreference("pref_key_interval");
+        TimeDialogPreference timeNotifBeginPref = findPreference(requireContext().getResources().getString(R.string.pref_key_notif_on_time));
+        TimeDialogPreference timeNotifEndPref = findPreference(requireContext().getResources().getString(R.string.pref_key_notif_off_time));
+        intervalListPref.setEnabled(preferences.getBoolean("pref_key_switch_notifications", false));
+        timeNotifBeginPref.setEnabled(preferences.getBoolean("pref_key_switch_notifications", false));
+        timeNotifEndPref.setEnabled(preferences.getBoolean("pref_key_switch_notifications", false));
     }
 
 
