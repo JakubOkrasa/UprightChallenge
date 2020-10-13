@@ -15,9 +15,9 @@ import com.jakubokrasa.uprightchallenge.receiver.ResetAlarmReceiver;
 import java.util.Calendar;
 
 import static android.content.Context.MODE_PRIVATE;
-import static com.jakubokrasa.uprightchallenge.ui.SettingsFragment.NIGHT_HOURS_ALARM_ID;
-import static com.jakubokrasa.uprightchallenge.ui.SettingsFragment.NOTIF_ON_TIME_ACTION;
-import static com.jakubokrasa.uprightchallenge.ui.SettingsFragment.NOTIF_OFF_TIME_ACTION;
+import static com.jakubokrasa.uprightchallenge.ui.SettingsFragment.NOTIF_ON_TIME_ALARM;
+import static com.jakubokrasa.uprightchallenge.ui.SettingsFragment.SCHEDULED_NOTIF_ON_ACTION;
+import static com.jakubokrasa.uprightchallenge.ui.SettingsFragment.SCHEDULED_NOTIF_OFF_ACTION;
 import static com.jakubokrasa.uprightchallenge.ui.SettingsFragment.NOTIFICATION_ID;
 import static com.jakubokrasa.uprightchallenge.ui.SettingsFragment.RESET_ALARM_ID;
 
@@ -73,10 +73,10 @@ public class RepeatingNotifHelper {
     }
 
     public void setNotifOnTimeRange() {
-        Intent notifOnTimeIntent = new Intent(NOTIF_ON_TIME_ACTION);
-        Intent notifOffTimeIntent = new Intent(NOTIF_OFF_TIME_ACTION);
-        PendingIntent notifOnTimePendingIntent = PendingIntent.getBroadcast(context, NIGHT_HOURS_ALARM_ID, notifOnTimeIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        PendingIntent notifOffTimePendingIntent = PendingIntent.getBroadcast(context, NIGHT_HOURS_ALARM_ID, notifOffTimeIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        Intent notifOnTimeIntent = new Intent(SCHEDULED_NOTIF_ON_ACTION);
+        Intent notifOffTimeIntent = new Intent(SCHEDULED_NOTIF_OFF_ACTION);
+        PendingIntent notifOnTimePendingIntent = PendingIntent.getBroadcast(context, NOTIF_ON_TIME_ALARM, notifOnTimeIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent notifOffTimePendingIntent = PendingIntent.getBroadcast(context, NOTIF_ON_TIME_ALARM, notifOffTimeIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager mAlarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Calendar calendar = Calendar.getInstance();
 

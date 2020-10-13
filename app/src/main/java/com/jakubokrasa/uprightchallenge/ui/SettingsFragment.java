@@ -25,15 +25,15 @@ import com.jakubokrasa.uprightchallenge.service.RepeatingNotifService;
  */
 public class SettingsFragment extends ChronoPreferenceFragment {
 
-    public static final String NOTIF_OFF_TIME_ACTION = BuildConfig.APPLICATION_ID + ".NIGHT_HOURS_ON_ACTION";
-    public static final String NOTIF_ON_TIME_ACTION = BuildConfig.APPLICATION_ID + ".NIGHT_HOURS_OFF_ACTION";
+    public static final String SCHEDULED_NOTIF_OFF_ACTION = BuildConfig.APPLICATION_ID + ".SCHEDULED_NOTIF_OFF_ACTION";
+    public static final String SCHEDULED_NOTIF_ON_ACTION = BuildConfig.APPLICATION_ID + ".SCHEDULED_NOTIF_ON_ACTION";
     private SharedPreferences preferences;
     public static final String sharedPrefsFile = BuildConfig.APPLICATION_ID;
     private SharedPreferences.Editor prefsEditor;
     private final String LOG_TAG = SettingsFragment.class.getSimpleName();
     public static final int NOTIFICATION_ID = 0;
     public static final int RESET_ALARM_ID = 1;
-    public static final int NIGHT_HOURS_ALARM_ID = 2;
+    public static final int NOTIF_ON_TIME_ALARM = 2;
     RepeatingNotifHelper notifHelper;
 
     @Override

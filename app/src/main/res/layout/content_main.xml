@@ -58,7 +58,7 @@
                 android:text="turn off notifs"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:onClick="nightON"/>
+                android:onClick="sendNotifOffIntent"/>
 
             <Button
                 android:id="@+id/button_night_off"
@@ -67,7 +67,7 @@
                 android:text="turn on notifs"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:onClick="nightOFF"/>
+                android:onClick="sendNotifOnIntent"/>
             <Button
                 android:id="@+id/button_check"
                 android:layout_width="match_parent"

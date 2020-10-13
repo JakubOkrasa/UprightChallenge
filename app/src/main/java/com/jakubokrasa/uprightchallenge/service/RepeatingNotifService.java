@@ -20,8 +20,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
-import static com.jakubokrasa.uprightchallenge.ui.SettingsFragment.NOTIF_ON_TIME_ACTION;
-import static com.jakubokrasa.uprightchallenge.ui.SettingsFragment.NOTIF_OFF_TIME_ACTION;
+import static com.jakubokrasa.uprightchallenge.ui.SettingsFragment.SCHEDULED_NOTIF_ON_ACTION;
+import static com.jakubokrasa.uprightchallenge.ui.SettingsFragment.SCHEDULED_NOTIF_OFF_ACTION;
 import static com.jakubokrasa.uprightchallenge.ui.SettingsFragment.NOTIFICATION_ID;
 import static com.jakubokrasa.uprightchallenge.ui.SettingsFragment.sharedPrefsFile;
 
@@ -44,10 +44,10 @@ public class RepeatingNotifService extends Service { // TODO: 10/1/2020 rename t
         postureFilter.addAction(BAD_POSTURE_ACTION);
         registerReceiver(postureBroadcastReceiver, postureFilter);
 
-        IntentFilter nightHoursFilter = new IntentFilter();
-        nightHoursFilter.addAction(NOTIF_OFF_TIME_ACTION);
-        nightHoursFilter.addAction(NOTIF_ON_TIME_ACTION);
-        registerReceiver(nightHoursReceiver, nightHoursFilter);
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(SCHEDULED_NOTIF_OFF_ACTION);
+        filter.addAction(SCHEDULED_NOTIF_ON_ACTION);
+        registerReceiver(notifOnTimeReceiver, filter);
     }
 
     @Override
@@ -58,7 +58,7 @@ public class RepeatingNotifService extends Service { // TODO: 10/1/2020 rename t
     @Override
     public void onDestroy() {
         unregisterReceiver(postureBroadcastReceiver);
-        unregisterReceiver(nightHoursReceiver);
+        unregisterReceiver(notifOnTimeReceiver);
         super.onDestroy();
     }
 
@@ -104,20 +104,21 @@ public class RepeatingNotifService extends Service { // TODO: 10/1/2020 rename t
         }
     };
 
-    BroadcastReceiver nightHoursReceiver = new BroadcastReceiver() {
+    // receives when is time to switch on/off notifications (user chooses time when he will be given notifications, usually notifications at night are unwanted)
+    BroadcastReceiver notifOnTimeReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if(notifHelper==null) {
                 notifHelper = new RepeatingNotifHelper(context); }
             SharedPreferences preferences = context.getSharedPreferences(sharedPrefsFile, Context.MODE_PRIVATE);
             SharedPreferences.Editor prefEditor = preferences.edit();
-            if (intent.getAction().equals(NOTIF_OFF_TIME_ACTION)) {
+            if (intent.getAction().equals(SCHEDULED_NOTIF_OFF_ACTION)) {
                 Log.d(LOG_TAG, getTime() + " action notif OFF received");
                 prefEditor.putBoolean("pref_key_switch_notifications", false);
                 notifHelper.cancelAlarmPendingIntent();
                 mNotifyManager.cancelAll();
             }
-            else if(intent.getAction().equals(NOTIF_ON_TIME_ACTION)) {
+            else if(intent.getAction().equals(SCHEDULED_NOTIF_ON_ACTION)) {
                 Log.d(LOG_TAG, getTime() + " action notif ON received");
                 prefEditor.putBoolean("pref_key_switch_notifications", true);
                 notifHelper.setAlarmPendingIntent();
