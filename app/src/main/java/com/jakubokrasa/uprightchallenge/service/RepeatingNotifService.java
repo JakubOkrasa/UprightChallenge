@@ -14,10 +14,18 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 
 import com.jakubokrasa.uprightchallenge.BuildConfig;
+import com.jakubokrasa.uprightchallenge.RepeatingNotifHelper;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
+
+import static com.jakubokrasa.uprightchallenge.ui.SettingsFragment.SCHEDULED_NOTIF_ON_ACTION;
+import static com.jakubokrasa.uprightchallenge.ui.SettingsFragment.SCHEDULED_NOTIF_OFF_ACTION;
 import static com.jakubokrasa.uprightchallenge.ui.SettingsFragment.NOTIFICATION_ID;
+import static com.jakubokrasa.uprightchallenge.ui.SettingsFragment.sharedPrefsFile;
 
-public class RepeatingNotifService extends Service {
+public class RepeatingNotifService extends Service { // TODO: 10/1/2020 rename to PostureNotifService
     private static final String PRIMARY_CHANNEL_ID = "primary_notification_channel";
     private NotificationManager mNotifyManager;
     private final String LOG_TAG = RepeatingNotifService.class.getSimpleName();
@@ -25,13 +33,21 @@ public class RepeatingNotifService extends Service {
     private static final String PREF_KEY_BAD_POSTURE_COUNT = "bad_posture_count";
     public static final String GOOD_POSTURE_ACTION = BuildConfig.APPLICATION_ID + ".GOOD_POSTURE_ACTION";
     public static final String BAD_POSTURE_ACTION = BuildConfig.APPLICATION_ID + ".BAD_POSTURE_ACTION";
+    private RepeatingNotifHelper notifHelper;
 
     @Override
     public void onCreate() {
         super.onCreate();
         createNotificationChannel();
-        registerReceiver(postureBroadcastReceiver, new IntentFilter(GOOD_POSTURE_ACTION));
-        registerReceiver(postureBroadcastReceiver, new IntentFilter(BAD_POSTURE_ACTION));
+        IntentFilter postureFilter = new IntentFilter();
+        postureFilter.addAction(GOOD_POSTURE_ACTION);
+        postureFilter.addAction(BAD_POSTURE_ACTION);
+        registerReceiver(postureBroadcastReceiver, postureFilter);
+
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(SCHEDULED_NOTIF_OFF_ACTION);
+        filter.addAction(SCHEDULED_NOTIF_ON_ACTION);
+        registerReceiver(notifOnTimeReceiver, filter);
     }
 
     @Override
@@ -42,6 +58,7 @@ public class RepeatingNotifService extends Service {
     @Override
     public void onDestroy() {
         unregisterReceiver(postureBroadcastReceiver);
+        unregisterReceiver(notifOnTimeReceiver);
         super.onDestroy();
     }
 
@@ -86,4 +103,32 @@ public class RepeatingNotifService extends Service {
             }
         }
     };
+
+    // receives when is time to switch on/off notifications (user chooses time when he will be given notifications, usually notifications at night are unwanted)
+    BroadcastReceiver notifOnTimeReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(notifHelper==null) {
+                notifHelper = new RepeatingNotifHelper(context); }
+            SharedPreferences preferences = context.getSharedPreferences(sharedPrefsFile, Context.MODE_PRIVATE);
+            SharedPreferences.Editor prefEditor = preferences.edit();
+            if (intent.getAction().equals(SCHEDULED_NOTIF_OFF_ACTION)) {
+                Log.d(LOG_TAG, getTime() + " action notif OFF received");
+                prefEditor.putBoolean("pref_key_switch_notifications", false);
+                notifHelper.cancelAlarmPendingIntent();
+                mNotifyManager.cancelAll();
+            }
+            else if(intent.getAction().equals(SCHEDULED_NOTIF_ON_ACTION)) {
+                Log.d(LOG_TAG, getTime() + " action notif ON received");
+                prefEditor.putBoolean("pref_key_switch_notifications", true);
+                notifHelper.setAlarmPendingIntent();
+            }
+            prefEditor.apply();
+        }
+    };
+
+    //for debugging only
+    private String getTime() {
+        return new SimpleDateFormat("HH:mm:ss", Locale.ROOT).format(Calendar.getInstance().getTime());
+    }
 }

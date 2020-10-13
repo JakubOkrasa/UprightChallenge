@@ -24,4 +24,7 @@
     <string name="label_progress">Your progress:</string>
     <string name="chart_percentStat_label">Percent of correct postures in consecutive days</string>
     <string name="chart_usageStat_label">How often you use the app (sum of \'yes\' and \'no\' taps)</string>
+
+    <string name="pref_key_notif_on_time">pref_key_notif_on_time</string>
+    <string name="pref_key_notif_off_time">pref_key_notif_off_time</string>
 </resources>

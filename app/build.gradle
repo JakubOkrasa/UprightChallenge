@@ -63,5 +63,8 @@ dependencies {
     //with this you can call suspend Kotlin functions from Java (this requires API level 24 or above)
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.0.1"
 
+    //Time/date picker
+    implementation 'com.github.koji-1009:ChronoDialogPreference:2.1.0'
+
 
 }
