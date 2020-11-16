@@ -10,7 +10,7 @@ word was used in the app's code to represent user's result from a single day.
  */
 @Entity
 data class PostureStat(
-        @field:PrimaryKey(autoGenerate = true) val statId: Long,
+        @PrimaryKey(autoGenerate = true) val statId: Long,
         val correctPostureCount: Int,
         val badPostureCount: Int
 )
