@@ -1,16 +1,17 @@
 package com.jakubokrasa.uprightchallenge.data
 
 import androidx.room.Dao
+import androidx.room.Insert
 import androidx.room.Query
 
 @Dao
 interface PostureStatDao {
-    @androidx.room.Insert
-    fun insert(postureStat: PostureStat?)
+    @Insert
+    suspend fun insert(postureStat: PostureStat?)
 
-    @get:Query("SELECT * from PostureStat ORDER BY statId ASC")
-    val allStats: List<PostureStat?>?
+    @Query("SELECT * from PostureStat ORDER BY statId ASC")
+    suspend fun getAllStats(): List<PostureStat?>?
 
-    @androidx.room.Query("DELETE FROM PostureStat")
-    fun deleteAll()
+    @Query("DELETE FROM PostureStat")
+    suspend fun deleteAll()
 }
