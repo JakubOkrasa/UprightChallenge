@@ -44,6 +44,6 @@ class PostureStatRepository(private val psDao: PostureStatDao) {
 //            return INSTANCE
 //        }
 
-    // TODO: 11/17/2020 move to PostureStatViewModel
+    // TODO: 11/17/2020 move to MainViewModel
 
 }

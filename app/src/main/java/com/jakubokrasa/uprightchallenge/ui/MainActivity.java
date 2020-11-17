@@ -30,15 +30,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import static com.jakubokrasa.uprightchallenge.ui.SettingsFragment.SCHEDULED_NOTIF_ON_ACTION;
-import static com.jakubokrasa.uprightchallenge.ui.SettingsFragment.SCHEDULED_NOTIF_OFF_ACTION;
 import static com.jakubokrasa.uprightchallenge.ui.SettingsFragment.sharedPrefsFile;
 
 // todo #later show daily progress in notifications
 // todo extract getting preferences method
 public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
-    private PostureStatViewModel mPostureStatVM;
+    private MainViewModel MainViewModel;
 
     TextView mPercentStatTextView;
     private static final String PREF_KEY_GOOD_POSTURE_COUNT = "good_posture_count";
@@ -52,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
         androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        mPostureStatVM = new ViewModelProvider(this).get(PostureStatViewModel.class);
+        MainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
 
         Log.d(LOG_TAG, "A: onCreate");
     }
@@ -93,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
     @Override
     protected void onStart() {
-        mPostureStatVM.refreshAllStats();
+        MainViewModel.refreshAllStats();
         super.onStart();
         TextView notifOffInfo = findViewById(R.id.notif_off_warning);
         String sharedPrefsFile = BuildConfig.APPLICATION_ID;
@@ -198,7 +196,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
     private List<BarEntry> getPercentBarEntries() {
         List<BarEntry> entries = new ArrayList<>();
-        List<PostureStat> stats = mPostureStatVM.getAllStats();
+        List<PostureStat> stats = MainViewModel.getAllStats();
         for (int i = 0; i < stats.size(); i++) {
             entries.add(new BarEntry(i, getPercentageOfCorrectPostures(stats.get(i))));
         }
@@ -207,7 +205,7 @@ public class MainActivity extends AppCompatActivity implements SharedPreferences
 
     private List<BarEntry> getUsageBarEntries() {
         List<BarEntry> entries = new ArrayList<>();
-        List<PostureStat> stats = mPostureStatVM.getAllStats();
+        List<PostureStat> stats = MainViewModel.getAllStats();
         for (int i = 0; i < stats.size(); i++) {
             entries.add(new BarEntry(i, getSumOfCorrectAndBadPostures(stats.get(i))));
         }

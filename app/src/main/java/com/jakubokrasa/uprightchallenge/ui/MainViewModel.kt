@@ -9,7 +9,7 @@ import com.jakubokrasa.uprightchallenge.data.PostureStatDatabase
 import com.jakubokrasa.uprightchallenge.data.PostureStatRepository
 import kotlinx.coroutines.launch
 
-class PostureStatViewModel(application: Application) : AndroidViewModel(application) {
+class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val mRepository: PostureStatRepository
 
     init {
