@@ -28,7 +28,6 @@ import java.util.*
 // todo extract getting preferences method
 class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
     private lateinit var mainViewModel: MainViewModel
-    private lateinit var postureStats: List<PostureStat>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,7 +35,7 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
         setSupportActionBar(toolbar)
         mainViewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         mainViewModel.getAllStats().observe(this, {
-            postureStats = it // todo ?
+            stats -> showStatsChart(stats)
         })
         Log.d(LOG_TAG, "A: onCreate")
     }
@@ -75,7 +74,7 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
             notif_off_warning.visibility = View.GONE
         }
         txt_percent_stat.text = getPercentStat()
-        showStatsChart()
+//        showStatsChart() //todo if it is not done by observer, show stats onStart
         Log.d(LOG_TAG, "A: onStart")
     }
 
@@ -124,10 +123,10 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
         txt_percent_stat.setTextColor(ContextCompat.getColor(this, color))
     }
 
-    private fun showStatsChart() {
-        val percentBars = getPercentBarEntries()
+    private fun showStatsChart(postureStats: List<PostureStat>) {
+        val percentBars = getPercentBarEntries(postureStats)
         if (percentBars.isNotEmpty()) {
-            val usageBars = getUsageBarEntries()
+            val usageBars = getUsageBarEntries(postureStats)
             adjustChartStyle(stats_chart)
             val barData = BarData(getPercentDataSet(percentBars), getUsageDataSet(usageBars))
             barData.barWidth = 0.45f
@@ -164,18 +163,16 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
         chart.description.isEnabled = false
     }
 
-    private fun getPercentBarEntries(): List<BarEntry> {
+    private fun getPercentBarEntries(postureStats: List<PostureStat>): List<BarEntry> {
             val entries: MutableList<BarEntry> = ArrayList()
-            val stats: List<PostureStat> = postureStats //todo ?
-            for ((index, stat) in stats.withIndex()) {
+            for ((index, stat) in postureStats.withIndex()) {
                 entries.add(BarEntry(index.toFloat(), getPercentageOfCorrectPostures(stat)))
             }
             return entries
     }
-    private fun getUsageBarEntries(): List<BarEntry> {
+    private fun getUsageBarEntries(postureStats: List<PostureStat>): List<BarEntry> {
             val entries: MutableList<BarEntry> = ArrayList()
-            val stats: List<PostureStat> = postureStats // todo ?
-            for ((index, stat) in stats.withIndex()) {
+            for ((index, stat) in postureStats.withIndex()) {
                 entries.add(BarEntry(index.toFloat(), getSumOfCorrectAndBadPostures(stat)))
             }
             return entries

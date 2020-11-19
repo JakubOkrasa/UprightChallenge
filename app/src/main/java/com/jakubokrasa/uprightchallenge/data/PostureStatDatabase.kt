@@ -10,7 +10,6 @@ abstract class PostureStatDatabase : RoomDatabase() {
     abstract fun postureStatDao(): PostureStatDao
 
     companion object {
-        @Volatile
         private var INSTANCE: PostureStatDatabase? = null
 
         fun getDatabase(context: Context): PostureStatDatabase {

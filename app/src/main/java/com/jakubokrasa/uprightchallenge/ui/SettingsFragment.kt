@@ -7,6 +7,7 @@ import android.content.SharedPreferences.Editor
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.SwitchPreferenceCompat
@@ -25,8 +26,11 @@ class SettingsFragment : ChronoPreferenceFragment() {
     private lateinit var preferences: SharedPreferences // TODO: 11/18/2020 Shared prefs handling to distinct file
     private lateinit var prefsEditor: Editor
     private lateinit var notifHelper: RepeatingNotifHelper
+    private lateinit var mainViewModel: MainViewModel
 
-    override fun onCreatePreferences(savedInstanceState: Bundle, rootKey: String) {
+
+    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+        mainViewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         val startServiceIntent = Intent(context, RepeatingNotifService::class.java)
         requireContext().startService(startServiceIntent)
         notifHelper = RepeatingNotifHelper(requireContext())
@@ -50,10 +54,10 @@ class SettingsFragment : ChronoPreferenceFragment() {
                         notifHelper.setNotifOnTimeRange()
                 } else {
                     Log.d(LOG_TAG, "notifications off")
-                    notifHelper!!.turnOffNotifications()
+                    notifHelper.turnOffNotifications()
                 }
                 // save changes to SharedPreferences
-                prefsEditor!!.putBoolean(preference.key, notificationsOn).apply()
+                prefsEditor.putBoolean(preference.key, notificationsOn).apply()
                 enableOrDisablePrefsRelatedWithNotifs()
                 true
             }
@@ -91,8 +95,9 @@ class SettingsFragment : ChronoPreferenceFragment() {
         if (populateWithSampleDataBtnPref != null) {
             populateWithSampleDataBtnPref.onPreferenceClickListener = Preference.OnPreferenceClickListener { //Although it's not a good practice to call Database layer method from UI,
                 //it was done only for app testing/debugging purposes and will be removed in the official
-                // version of the app TODO remove in official version
-                PostureStatDatabase.getDatabase(requireContext()).populateDbWithSampleData()
+                // version of the app TODO remove in production version
+//                PostureStatDatabase.getDatabase(requireContext()).populateDbWithSampleData()
+                mainViewModel.populateDbWithSampleData()
                 true
             }
         }
