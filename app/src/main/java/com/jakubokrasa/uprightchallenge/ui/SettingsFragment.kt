@@ -43,8 +43,8 @@ class SettingsFragment : ChronoPreferenceFragment() {
         val intervalListPref = findPreference<ListPreference>("pref_key_interval")
         val timeNotifBeginPref: TimeDialogPreference? = findPreference(requireContext().resources.getString(R.string.pref_key_notif_on_time))
         val timeNotifEndPref: TimeDialogPreference? = findPreference(requireContext().resources.getString(R.string.pref_key_notif_off_time))
-        if (notificationSwitch != null) {
-            notificationSwitch.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { preference, notificationsOnObject ->
+        notificationSwitch?.let {
+            it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { preference, notificationsOnObject ->
                 Log.d(LOG_TAG, "notif switch preference change")
                 val notificationsOn = notificationsOnObject as Boolean
                 if (notificationsOn) {
@@ -56,14 +56,13 @@ class SettingsFragment : ChronoPreferenceFragment() {
                     Log.d(LOG_TAG, "notifications off")
                     notifHelper.turnOffNotifications()
                 }
-                // save changes to SharedPreferences
                 prefsEditor.putBoolean(preference.key, notificationsOn).apply()
                 enableOrDisablePrefsRelatedWithNotifs()
                 true
             }
         }
-        timeNotifBeginPref.let {
-            timeNotifBeginPref!!.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
+        timeNotifBeginPref?.let {
+            it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
                 val time = newValue as String
                 prefsEditor.putString(requireContext().resources.getString(R.string.pref_key_notif_on_time), time).apply()
                 notifHelper.setNotifOnTimeRange()
@@ -71,17 +70,17 @@ class SettingsFragment : ChronoPreferenceFragment() {
             }
         }
 
-        timeNotifEndPref.let {
-            timeNotifEndPref!!.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
+        timeNotifEndPref?.let {
+            it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
                 val time = newValue as String
                 prefsEditor.putString(requireContext().resources.getString(R.string.pref_key_notif_off_time), time).apply()
                 notifHelper.setNotifOnTimeRange()
                 true
             }
         }
-        intervalListPref.let {
+        intervalListPref?.let {
             Log.d(LOG_TAG, "intervalListPref: $intervalListPref")
-            intervalListPref!!.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { preference, newValue ->
+            it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { preference, newValue ->
                 val interval = newValue as String
                 prefsEditor.putLong(preference.key, interval.toLong()).apply()
                 notifHelper.setAlarmPendingIntent()
@@ -116,9 +115,10 @@ class SettingsFragment : ChronoPreferenceFragment() {
         val intervalListPref = findPreference<ListPreference>("pref_key_interval")
         val timeNotifBeginPref = findPreference<TimeDialogPreference>(resources.getString(R.string.pref_key_notif_on_time))
         val timeNotifEndPref = findPreference<TimeDialogPreference>(resources.getString(R.string.pref_key_notif_off_time))
-        intervalListPref!!.isEnabled = preferences.getBoolean("pref_key_switch_notifications", false)
-        timeNotifBeginPref!!.isEnabled = preferences.getBoolean("pref_key_switch_notifications", false)
-        timeNotifEndPref!!.isEnabled = preferences.getBoolean("pref_key_switch_notifications", false)
+        val notifOn = preferences.getBoolean("pref_key_switch_notifications", false)
+        intervalListPref!!.isEnabled = notifOn
+        timeNotifBeginPref!!.isEnabled = notifOn
+        timeNotifEndPref!!.isEnabled = notifOn
     }
 
     companion object {
