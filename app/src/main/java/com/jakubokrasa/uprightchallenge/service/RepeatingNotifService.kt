@@ -17,7 +17,7 @@ import com.jakubokrasa.uprightchallenge.getTime
 
 class RepeatingNotifService : Service() {
     private lateinit var mNotifyManager: NotificationManager
-    private var notifHelper: RepeatingNotifHelper? = null
+    private lateinit var notifHelper: RepeatingNotifHelper
     override fun onCreate() {
         super.onCreate()
         createNotificationChannel()
@@ -48,7 +48,7 @@ class RepeatingNotifService : Service() {
             notificationChannel.description = "notification check posture"
             notificationChannel.enableVibration(true)
             notificationChannel.vibrationPattern = vibPattern
-            mNotifyManager!!.createNotificationChannel(notificationChannel)
+            mNotifyManager.createNotificationChannel(notificationChannel)
         }
     }
 
@@ -63,15 +63,15 @@ class RepeatingNotifService : Service() {
         val sharedPrefFile = BuildConfig.APPLICATION_ID
         val preferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE)
         val prefEditor = preferences.edit()
-        mNotifyManager!!.cancel(SettingsFragment.NOTIFICATION_ID)
+        mNotifyManager.cancel(SettingsFragment.NOTIFICATION_ID)
         if (intent.action == GOOD_POSTURE_ACTION) {
             Log.d(LOG_TAG, "yes option clicked")
-            mNotifyManager!!.cancel(SettingsFragment.NOTIFICATION_ID)
+            mNotifyManager.cancel(SettingsFragment.NOTIFICATION_ID)
             var count = preferences.getInt(PREF_KEY_GOOD_POSTURE_COUNT, 0)
             prefEditor.putInt(PREF_KEY_GOOD_POSTURE_COUNT, ++count).apply()
         } else if (intent.action == BAD_POSTURE_ACTION) {
             Log.d(LOG_TAG, "no option clicked")
-            mNotifyManager!!.cancel(SettingsFragment.NOTIFICATION_ID)
+            mNotifyManager.cancel(SettingsFragment.NOTIFICATION_ID)
             var count = preferences.getInt(PREF_KEY_BAD_POSTURE_COUNT, 0)
             prefEditor.putInt(PREF_KEY_BAD_POSTURE_COUNT, ++count).apply()
         }
@@ -88,19 +88,18 @@ class RepeatingNotifService : Service() {
             if (intent.action == SettingsFragment.SCHEDULED_NOTIF_OFF_ACTION) {
                 Log.d(LOG_TAG, getTime() + " action notif OFF received")
                 prefEditor.putBoolean("pref_key_switch_notifications", false)
-                notifHelper!!.cancelAlarmPendingIntent()
-                mNotifyManager!!.cancelAll()
+                notifHelper.cancelAlarmPendingIntent()
+                mNotifyManager.cancelAll()
             } else if (intent.action == SettingsFragment.SCHEDULED_NOTIF_ON_ACTION) {
                 Log.d(LOG_TAG, getTime() + " action notif ON received")
                 prefEditor.putBoolean("pref_key_switch_notifications", true)
-                notifHelper!!.setAlarmPendingIntent()
+                notifHelper.setAlarmPendingIntent()
             }
             prefEditor.apply()
         }
     }
 
     companion object {
-        // TODO: 10/1/2020 rename to PostureNotifService
         private const val PRIMARY_CHANNEL_ID = "primary_notification_channel"
         private const val PREF_KEY_GOOD_POSTURE_COUNT = "good_posture_count"
         private const val PREF_KEY_BAD_POSTURE_COUNT = "bad_posture_count"
