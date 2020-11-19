@@ -1,6 +1,5 @@
 package com.jakubokrasa.uprightchallenge.receiver
 
-import android.app.Application
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -17,7 +16,7 @@ class ResetAlarmReceiver() : BroadcastReceiver() {
         val preferences = context.getSharedPreferences(sharedPrefsFile, Context.MODE_PRIVATE)
         val prefsEditor = preferences.edit()
         val psDao : PostureStatDao = PostureStatDatabase
-                .getDatabase(context as Application)
+                .getDatabase(context)
                 .postureStatDao()
 
         // save stats to repository
