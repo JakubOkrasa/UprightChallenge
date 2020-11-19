@@ -15,7 +15,11 @@ import java.util.*
 
 class RepeatingNotifHelper(private val context: Context) {
     private val preferences: SharedPreferences
-    private val LOG_TAG = RepeatingNotifHelper::class.java.simpleName
+
+    init {
+        preferences = context.getSharedPreferences(sharedPrefsFile, Context.MODE_PRIVATE)
+    }
+
     fun turnOffNotifications() { //todo consider name change
         (context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).cancelAll()
         cancelAlarmPendingIntent() // cancel repeating intent messages for AlarmReceiver
@@ -28,14 +32,14 @@ class RepeatingNotifHelper(private val context: Context) {
         val repeatInterval = preferences.getLong("pref_key_interval", AlarmManager.INTERVAL_HALF_HOUR)
         val triggerTime = SystemClock.elapsedRealtime() + repeatInterval
         Log.d(LOG_TAG, "repeat interval: $repeatInterval")
-        mAlarmManager?.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerTime, repeatInterval, alarmPendingIntent)
+        mAlarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerTime, repeatInterval, alarmPendingIntent)
     }
 
     fun cancelAlarmPendingIntent() {
         val alarmIntent = Intent(context, NotifAlarmReceiver::class.java)
         val alarmPendingIntent = PendingIntent.getBroadcast(context, SettingsFragment.NOTIFICATION_ID, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT)
         val mAlarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        mAlarmManager?.cancel(alarmPendingIntent)
+        mAlarmManager.cancel(alarmPendingIntent)
     }
 
     // Set the alarm to start approximately at midnight. The alarm will be used to reset counters every night and save results in database
@@ -46,7 +50,6 @@ class RepeatingNotifHelper(private val context: Context) {
         calendar[Calendar.HOUR_OF_DAY] = 0 // set calendar hour to 0 a.m.
         calendar[Calendar.MINUTE] = 0
         calendar.add(Calendar.DATE, 1)
-        //        calendar.set(Calendar.MINUTE, 29); //for debug only
         val resetAlarmIntent = Intent(context, ResetAlarmReceiver::class.java)
         val resetAlarmPendingIntent = PendingIntent.getBroadcast(context, SettingsFragment.RESET_ALARM_ID, resetAlarmIntent, PendingIntent.FLAG_UPDATE_CURRENT)
         mAlarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, AlarmManager.INTERVAL_DAY, resetAlarmPendingIntent)
@@ -82,9 +85,7 @@ class RepeatingNotifHelper(private val context: Context) {
 
     companion object {
         const val sharedPrefsFile = BuildConfig.APPLICATION_ID
+        private val LOG_TAG = RepeatingNotifHelper::class.java.simpleName
     }
 
-    init {
-        preferences = context.getSharedPreferences(sharedPrefsFile, Context.MODE_PRIVATE)
-    }
 }
