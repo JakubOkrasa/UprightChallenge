@@ -101,10 +101,10 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
         val badPostureCount = preferences.getInt(PREF_KEY_BAD_POSTURE_COUNT, 0)
         return if (correctPostureCount == 0 && badPostureCount == 0) { "--" }
         else {
-            val result = correctPostureCount.toFloat() / (correctPostureCount + badPostureCount) as Float
+            val result = correctPostureCount.toFloat() / (correctPostureCount + badPostureCount).toFloat()
             setPercentStatColor(result)
             val percentageFormat = NumberFormat.getPercentInstance(Locale.US)
-            return percentageFormat.format(result.toDouble()) }
+            return percentageFormat.format(result.toFloat()) }
     }
 
     private fun setPercentStatColor(result: Float) {
