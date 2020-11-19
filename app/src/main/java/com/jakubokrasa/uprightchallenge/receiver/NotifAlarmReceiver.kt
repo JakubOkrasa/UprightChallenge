@@ -13,11 +13,12 @@ import com.jakubokrasa.uprightchallenge.ui.MainActivity
 
 //receive periodically notifications pending intents
 class NotifAlarmReceiver : BroadcastReceiver() {
-    private var mNotificationManager: NotificationManager? = null
+    private lateinit var mNotificationManager: NotificationManager
+
     override fun onReceive(context: Context, intent: Intent) {
         mNotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         deliverNotification(context)
-        Log.d(LOG_TAG, "notification fired!")
+        Log.d(LOG_TAG, "notification fired")
     }
 
     private fun deliverNotification(context: Context) {
@@ -38,15 +39,15 @@ class NotifAlarmReceiver : BroadcastReceiver() {
         postureNoIntent.action = RepeatingNotifService.BAD_POSTURE_ACTION
         val noPendingIntent = PendingIntent.getService(context, NOTIFICATION_ID, postureNoIntent, PendingIntent.FLAG_UPDATE_CURRENT)
         val builder = NotificationCompat.Builder(context, PRIMARY_CHANNEL_ID)
-                .setContentTitle("Are you straighten up?")
+                .setContentTitle(context.getString(R.string.posture_notif_question))
                 .setSmallIcon(R.drawable.ic_notify)
                 .setAutoCancel(true) // closes the notification when user taps on it
                 .setContentIntent(notifClickPendingIntent)
-                .addAction(R.drawable.ic_posture_yes, "yes", yesPendingIntent)
-                .addAction(R.drawable.ic_posture_no, "no", noPendingIntent)
+                .addAction(R.drawable.ic_posture_yes, context.getString(R.string.posture_notif_positive_label), yesPendingIntent)
+                .addAction(R.drawable.ic_posture_no, context.getString(R.string.posture_notif_negative_label), noPendingIntent)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setDefaults(NotificationCompat.DEFAULT_ALL)
-        mNotificationManager!!.notify(NOTIFICATION_ID, builder.build())
+        mNotificationManager.notify(NOTIFICATION_ID, builder.build())
     }
 
     companion object {
