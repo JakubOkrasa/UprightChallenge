@@ -74,7 +74,6 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
             notif_off_warning.visibility = View.GONE
         }
         txt_percent_stat.text = getPercentStat()
-//        showStatsChart() //todo if it is not done by observer, show stats onStart
         Log.d(LOG_TAG, "A: onStart")
     }
 
