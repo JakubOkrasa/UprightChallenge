@@ -80,7 +80,7 @@ class RepeatingNotifService : Service() {
     // receives when is time to switch on/off notifications (user chooses time when he will be given notifications, usually notifications at night are unwanted)
     var notifOnTimeReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            if (notifHelper == null) {
+            if (!(this@RepeatingNotifService::notifHelper.isInitialized)) {
                 notifHelper = RepeatingNotifHelper(context)
             }
             val preferences = context.getSharedPreferences(SettingsFragment.sharedPrefsFile, MODE_PRIVATE)
