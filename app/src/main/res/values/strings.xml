@@ -27,4 +27,7 @@
 
     <string name="pref_key_notif_on_time">pref_key_notif_on_time</string>
     <string name="pref_key_notif_off_time">pref_key_notif_off_time</string>
+    <string name="posture_notif_question">Are you straighten up?</string>
+    <string name="posture_notif_positive_label">yes</string>
+    <string name="posture_notif_negative_label">no</string>
 </resources>
