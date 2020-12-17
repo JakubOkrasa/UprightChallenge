@@ -21,20 +21,11 @@ class RepeatingNotifService : Service() {
     override fun onCreate() {
         super.onCreate()
         createNotificationChannel()
-        val filter = IntentFilter()
-        filter.addAction(SettingsFragment.SCHEDULED_NOTIF_OFF_ACTION)
-        filter.addAction(SettingsFragment.SCHEDULED_NOTIF_ON_ACTION)
-        registerReceiver(notifOnTimeReceiver, filter)
     }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         handlePostureIntent(intent)
         return START_STICKY
-    }
-
-    override fun onDestroy() {
-        unregisterReceiver(notifOnTimeReceiver)
-        super.onDestroy()
     }
 
     private fun createNotificationChannel() {
@@ -64,39 +55,32 @@ class RepeatingNotifService : Service() {
         val preferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE)
         val prefEditor = preferences.edit()
         mNotifyManager.cancel(SettingsFragment.NOTIFICATION_ID)
-        if (intent.action == GOOD_POSTURE_ACTION) {
-            Log.d(LOG_TAG, "yes option clicked")
-            mNotifyManager.cancel(SettingsFragment.NOTIFICATION_ID)
-            var count = preferences.getInt(PREF_KEY_GOOD_POSTURE_COUNT, 0)
-            prefEditor.putInt(PREF_KEY_GOOD_POSTURE_COUNT, ++count).apply()
-        } else if (intent.action == BAD_POSTURE_ACTION) {
-            Log.d(LOG_TAG, "no option clicked")
-            mNotifyManager.cancel(SettingsFragment.NOTIFICATION_ID)
-            var count = preferences.getInt(PREF_KEY_BAD_POSTURE_COUNT, 0)
-            prefEditor.putInt(PREF_KEY_BAD_POSTURE_COUNT, ++count).apply()
-        }
-    }
-
-    // receives when is time to switch on/off notifications (user chooses time when he will be given notifications, usually notifications at night are unwanted)
-    var notifOnTimeReceiver: BroadcastReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context, intent: Intent) {
-            if (!(this@RepeatingNotifService::notifHelper.isInitialized)) {
-                notifHelper = RepeatingNotifHelper(context)
+        when (intent.action) {
+            GOOD_POSTURE_ACTION -> {
+                Log.d(LOG_TAG, "yes option clicked")
+                mNotifyManager.cancel(SettingsFragment.NOTIFICATION_ID)
+                var count = preferences.getInt(PREF_KEY_GOOD_POSTURE_COUNT, 0)
+                prefEditor.putInt(PREF_KEY_GOOD_POSTURE_COUNT, ++count)
             }
-            val preferences = context.getSharedPreferences(SettingsFragment.sharedPrefsFile, MODE_PRIVATE)
-            val prefEditor = preferences.edit()
-            if (intent.action == SettingsFragment.SCHEDULED_NOTIF_OFF_ACTION) {
+            BAD_POSTURE_ACTION -> {
+                Log.d(LOG_TAG, "no option clicked")
+                mNotifyManager.cancel(SettingsFragment.NOTIFICATION_ID)
+                var count = preferences.getInt(PREF_KEY_BAD_POSTURE_COUNT, 0)
+                prefEditor.putInt(PREF_KEY_BAD_POSTURE_COUNT, ++count)
+            }
+            SettingsFragment.SCHEDULED_NOTIF_OFF_ACTION -> {
                 Log.d(LOG_TAG, getTime() + " action notif OFF received")
                 prefEditor.putBoolean("pref_key_switch_notifications", false)
                 notifHelper.cancelAlarmPendingIntent()
                 mNotifyManager.cancelAll()
-            } else if (intent.action == SettingsFragment.SCHEDULED_NOTIF_ON_ACTION) {
+            }
+            SettingsFragment.SCHEDULED_NOTIF_ON_ACTION -> {
                 Log.d(LOG_TAG, getTime() + " action notif ON received")
                 prefEditor.putBoolean("pref_key_switch_notifications", true)
                 notifHelper.setAlarmPendingIntent()
             }
-            prefEditor.apply()
         }
+        prefEditor.apply()
     }
 
     companion object {
