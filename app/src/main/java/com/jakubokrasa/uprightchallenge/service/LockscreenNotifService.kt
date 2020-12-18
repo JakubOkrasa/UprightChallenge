@@ -61,9 +61,9 @@ class LockscreenNotifService : Service() {
                 .setDefaults(NotificationCompat.DEFAULT_ALL)
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
 
-        val view = RemoteViews(packageName, R.layout.notification)
-        view.setOnClickPendingIntent(R.drawable.ic_posture_yes, yesPendingIntent)
-        builder.setContent(view)
+        val lockscreenNotif = RemoteViews(packageName, R.layout.lockscreen_notification)
+        lockscreenNotif.setOnClickPendingIntent(R.drawable.ic_posture_yes, yesPendingIntent)
+        builder.setContent(lockscreenNotif)
         mNotificationManager.notify(NOTIFICATION_ID, builder.build())
     }
 
