@@ -50,8 +50,11 @@ class LockscreenNotifService : Service() {
         val postureNoIntent = Intent(context, RepeatingNotifService::class.java)
         postureNoIntent.action = RepeatingNotifService.BAD_POSTURE_ACTION
         val noPendingIntent = PendingIntent.getService(context, NOTIFICATION_ID, postureNoIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+
         val lockscreenNotif = RemoteViews(packageName, R.layout.lockscreen_notification)
-        lockscreenNotif.setOnClickPendingIntent(R.drawable.ic_posture_yes, yesPendingIntent)
+        lockscreenNotif.setOnClickPendingIntent(R.id.notif_positive_btn, yesPendingIntent)
+        lockscreenNotif.setOnClickPendingIntent(R.id.notif_negative_btn, noPendingIntent)
+
         val builder = NotificationCompat.Builder(context!!, PRIMARY_CHANNEL_ID)
                 .setContentTitle(context.getString(R.string.posture_notif_question))
                 .setSmallIcon(R.drawable.ic_notify)
