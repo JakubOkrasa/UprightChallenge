@@ -128,6 +128,7 @@ class SettingsFragment : ChronoPreferenceFragment() {
         const val NOTIFICATION_ID = 0
         const val RESET_ALARM_ID = 1
         const val NOTIF_ON_TIME_ALARM = 2
+        const val NOTIF_OFF_TIME_ALARM = 3
         private val LOG_TAG = SettingsFragment::class.java.simpleName
     }
 }
