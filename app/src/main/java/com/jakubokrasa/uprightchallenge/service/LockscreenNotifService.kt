@@ -69,10 +69,6 @@ class LockscreenNotifService : Service() {
 
     companion object {
         private const val PRIMARY_CHANNEL_ID = "primary_notification_channel"
-        private const val PREF_KEY_GOOD_POSTURE_COUNT = "good_posture_count"
-        private const val PREF_KEY_BAD_POSTURE_COUNT = "bad_posture_count"
-        const val GOOD_POSTURE_ACTION = BuildConfig.APPLICATION_ID + ".GOOD_POSTURE_ACTION"
-        const val BAD_POSTURE_ACTION = BuildConfig.APPLICATION_ID + ".BAD_POSTURE_ACTION"
         private val LOG_TAG = LockscreenNotifService::class.java.simpleName
     }
 }
