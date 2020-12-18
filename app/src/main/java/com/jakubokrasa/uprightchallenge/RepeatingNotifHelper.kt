@@ -62,7 +62,7 @@ class RepeatingNotifHelper(private val context: Context) {
         notifOnTimeIntent.action = SettingsFragment.SCHEDULED_NOTIF_ON_ACTION
         notifOffTimeIntent.action = SettingsFragment.SCHEDULED_NOTIF_OFF_ACTION
         val notifOnTimePendingIntent = PendingIntent.getService(context, SettingsFragment.NOTIF_ON_TIME_ALARM, notifOnTimeIntent, PendingIntent.FLAG_UPDATE_CURRENT)
-        val notifOffTimePendingIntent = PendingIntent.getService(context, SettingsFragment.NOTIF_ON_TIME_ALARM, notifOffTimeIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val notifOffTimePendingIntent = PendingIntent.getService(context, SettingsFragment.NOTIF_OFF_TIME_ALARM, notifOffTimeIntent, PendingIntent.FLAG_UPDATE_CURRENT)
         val mAlarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val notifOnTime = preferences.getString(context.resources.getString(R.string.pref_key_notif_on_time), "7:30")
         val notifOffTime = preferences.getString(context.resources.getString(R.string.pref_key_notif_off_time), "21:00")
