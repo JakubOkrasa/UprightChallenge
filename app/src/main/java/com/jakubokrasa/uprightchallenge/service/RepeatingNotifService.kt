@@ -17,7 +17,6 @@ import com.jakubokrasa.uprightchallenge.getTime
 
 class RepeatingNotifService : Service() {
     private lateinit var mNotifyManager: NotificationManager
-    private lateinit var notifHelper: RepeatingNotifHelper
     override fun onCreate() {
         super.onCreate()
         createNotificationChannel()
@@ -51,6 +50,7 @@ class RepeatingNotifService : Service() {
         if (intent.action == null) {
             return
         }
+        val notifHelper = RepeatingNotifHelper(this)
         val sharedPrefFile = BuildConfig.APPLICATION_ID
         val preferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE)
         val prefEditor = preferences.edit()
