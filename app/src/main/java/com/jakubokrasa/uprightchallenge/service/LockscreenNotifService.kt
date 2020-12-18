@@ -56,12 +56,9 @@ class LockscreenNotifService : Service() {
         lockscreenNotif.setOnClickPendingIntent(R.id.notif_negative_btn, noPendingIntent)
 
         val builder = NotificationCompat.Builder(context!!, PRIMARY_CHANNEL_ID)
-                .setContentTitle(context.getString(R.string.posture_notif_question))
                 .setSmallIcon(R.drawable.ic_notify)
                 .setAutoCancel(true) // closes the notification when user taps on it
                 .setContentIntent(notifClickPendingIntent)
-                .addAction(R.drawable.ic_posture_yes, context.getString(R.string.posture_notif_positive_label), yesPendingIntent)
-                .addAction(R.drawable.ic_posture_no, context.getString(R.string.posture_notif_negative_label), noPendingIntent)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setDefaults(NotificationCompat.DEFAULT_ALL)
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
