@@ -1,27 +1,39 @@
-package com.jakubokrasa.uprightchallenge.receiver
+package com.jakubokrasa.uprightchallenge.service
 
 import android.app.NotificationManager
 import android.app.PendingIntent
-import android.content.BroadcastReceiver
+import android.app.Service
 import android.content.Context
 import android.content.Intent
+import android.os.IBinder
 import android.util.Log
+import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
+import com.jakubokrasa.uprightchallenge.BuildConfig
 import com.jakubokrasa.uprightchallenge.R
-import com.jakubokrasa.uprightchallenge.service.RepeatingNotifService
 import com.jakubokrasa.uprightchallenge.ui.MainActivity
+import com.jakubokrasa.uprightchallenge.ui.SettingsFragment.Companion.NOTIFICATION_ID
 
-//receive periodically notifications pending intents
-class NotifAlarmReceiver : BroadcastReceiver() {
+
+class LockscreenNotifService : Service() {
     private lateinit var mNotificationManager: NotificationManager
 
-    override fun onReceive(context: Context, intent: Intent) {
-        mNotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        deliverNotification(context)
+    override fun onBind(p0: Intent?): IBinder? {
+        return null
+    }
+
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        handleNotifIntent(intent)
+        return START_STICKY
+    }
+
+    private fun handleNotifIntent(intent: Intent?) {
+        mNotificationManager = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        deliverNotification(applicationContext)
         Log.d(LOG_TAG, "notification fired")
     }
 
-    private fun deliverNotification(context: Context) {
+    private fun deliverNotification(context: Context?) {
         //this intent causes that when the notification is clicked, the MainActivity is launched
         val notifClickIntent = Intent(context, MainActivity::class.java)
         val notifClickPendingIntent = PendingIntent.getActivity(
@@ -38,21 +50,25 @@ class NotifAlarmReceiver : BroadcastReceiver() {
         val postureNoIntent = Intent(context, RepeatingNotifService::class.java)
         postureNoIntent.action = RepeatingNotifService.BAD_POSTURE_ACTION
         val noPendingIntent = PendingIntent.getService(context, NOTIFICATION_ID, postureNoIntent, PendingIntent.FLAG_UPDATE_CURRENT)
-        val builder = NotificationCompat.Builder(context, PRIMARY_CHANNEL_ID)
-                .setContentTitle(context.getString(R.string.posture_notif_question))
+
+        val lockscreenNotif = RemoteViews(packageName, R.layout.lockscreen_notification)
+        lockscreenNotif.setOnClickPendingIntent(R.id.notif_positive_btn, yesPendingIntent)
+        lockscreenNotif.setOnClickPendingIntent(R.id.notif_negative_btn, noPendingIntent)
+
+        val builder = NotificationCompat.Builder(context!!, PRIMARY_CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_notify)
                 .setAutoCancel(true) // closes the notification when user taps on it
                 .setContentIntent(notifClickPendingIntent)
-                .addAction(R.drawable.ic_posture_yes, context.getString(R.string.posture_notif_positive_label), yesPendingIntent)
-                .addAction(R.drawable.ic_posture_no, context.getString(R.string.posture_notif_negative_label), noPendingIntent)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setDefaults(NotificationCompat.DEFAULT_ALL)
+                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                .setContent(lockscreenNotif)
+
         mNotificationManager.notify(NOTIFICATION_ID, builder.build())
     }
 
     companion object {
-        private const val NOTIFICATION_ID = 0
         private const val PRIMARY_CHANNEL_ID = "primary_notification_channel"
-        private val LOG_TAG = NotifAlarmReceiver::class.java.simpleName
+        private val LOG_TAG = LockscreenNotifService::class.java.simpleName
     }
 }

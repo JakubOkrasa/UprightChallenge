@@ -37,6 +37,11 @@
             android:enabled="true"
             android:exported="false" />
 
+        <service
+            android:name=".service.LockscreenNotifService"
+            android:enabled="true"
+            android:exported="false" />
+
         <activity
             android:name=".ui.MainActivity"
             android:launchMode="singleInstance"

@@ -8,8 +8,8 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.SystemClock
 import android.util.Log
-import com.jakubokrasa.uprightchallenge.receiver.NotifAlarmReceiver
 import com.jakubokrasa.uprightchallenge.receiver.ResetAlarmReceiver
+import com.jakubokrasa.uprightchallenge.service.LockscreenNotifService
 import com.jakubokrasa.uprightchallenge.service.RepeatingNotifService
 import com.jakubokrasa.uprightchallenge.ui.SettingsFragment
 import java.util.*
@@ -28,8 +28,8 @@ class RepeatingNotifHelper(private val context: Context) {
 
     fun setAlarmPendingIntent() { //todo consider name change
         val mAlarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val alarmIntent = Intent(context, NotifAlarmReceiver::class.java)
-        val alarmPendingIntent = PendingIntent.getBroadcast(context, SettingsFragment.NOTIFICATION_ID, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT) //todo rename to NotifAlarmPendingIntent, similarly alarmIntent
+        val alarmIntent = Intent(context, LockscreenNotifService::class.java)
+        val alarmPendingIntent = PendingIntent.getService(context, SettingsFragment.NOTIFICATION_ID, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT) //todo rename to NotifAlarmPendingIntent, similarly alarmIntent
         val repeatInterval = preferences.getLong("pref_key_interval", AlarmManager.INTERVAL_HALF_HOUR)
         val triggerTime = SystemClock.elapsedRealtime() + repeatInterval
         Log.d(LOG_TAG, "repeat interval: $repeatInterval")
@@ -37,8 +37,8 @@ class RepeatingNotifHelper(private val context: Context) {
     }
 
     fun cancelAlarmPendingIntent() {
-        val alarmIntent = Intent(context, NotifAlarmReceiver::class.java)
-        val alarmPendingIntent = PendingIntent.getBroadcast(context, SettingsFragment.NOTIFICATION_ID, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT)
+        val alarmIntent = Intent(context, LockscreenNotifService::class.java)
+        val alarmPendingIntent = PendingIntent.getService(context, SettingsFragment.NOTIFICATION_ID, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT)
         val mAlarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         mAlarmManager.cancel(alarmPendingIntent)
     }
