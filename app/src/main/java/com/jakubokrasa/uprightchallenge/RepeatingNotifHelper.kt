@@ -11,6 +11,9 @@ import android.util.Log
 import com.jakubokrasa.uprightchallenge.receiver.ResetAlarmReceiver
 import com.jakubokrasa.uprightchallenge.service.LockscreenNotifService
 import com.jakubokrasa.uprightchallenge.service.RepeatingNotifService
+import com.jakubokrasa.uprightchallenge.service.RepeatingNotifService.Companion.DELIVER_REPEATING_NOTIF_ACTION
+import com.jakubokrasa.uprightchallenge.service.RepeatingNotifService.Companion.SCHEDULED_NOTIF_OFF_ACTION
+import com.jakubokrasa.uprightchallenge.service.RepeatingNotifService.Companion.SCHEDULED_NOTIF_ON_ACTION
 import com.jakubokrasa.uprightchallenge.ui.SettingsFragment
 import java.util.*
 
@@ -28,7 +31,8 @@ class RepeatingNotifHelper(private val context: Context) {
 
     fun setAlarmPendingIntent() { //todo consider name change
         val mAlarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val alarmIntent = Intent(context, LockscreenNotifService::class.java)
+        val alarmIntent = Intent(context, RepeatingNotifService::class.java)
+        alarmIntent.action = DELIVER_REPEATING_NOTIF_ACTION
         val alarmPendingIntent = PendingIntent.getService(context, SettingsFragment.NOTIFICATION_ID, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT) //todo rename to NotifAlarmPendingIntent, similarly alarmIntent
         val repeatInterval = preferences.getLong("pref_key_interval", AlarmManager.INTERVAL_HALF_HOUR)
         val triggerTime = SystemClock.elapsedRealtime() + repeatInterval
@@ -37,7 +41,8 @@ class RepeatingNotifHelper(private val context: Context) {
     }
 
     fun cancelAlarmPendingIntent() {
-        val alarmIntent = Intent(context, LockscreenNotifService::class.java)
+        val alarmIntent = Intent(context, RepeatingNotifService::class.java)
+        alarmIntent.action = DELIVER_REPEATING_NOTIF_ACTION
         val alarmPendingIntent = PendingIntent.getService(context, SettingsFragment.NOTIFICATION_ID, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT)
         val mAlarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         mAlarmManager.cancel(alarmPendingIntent)
@@ -59,8 +64,8 @@ class RepeatingNotifHelper(private val context: Context) {
     fun setNotifOnTimeRange() {
         val notifOnTimeIntent = Intent(context, RepeatingNotifService::class.java)
         val notifOffTimeIntent = Intent(context, RepeatingNotifService::class.java)
-        notifOnTimeIntent.action = SettingsFragment.SCHEDULED_NOTIF_ON_ACTION
-        notifOffTimeIntent.action = SettingsFragment.SCHEDULED_NOTIF_OFF_ACTION
+        notifOnTimeIntent.action = SCHEDULED_NOTIF_ON_ACTION
+        notifOffTimeIntent.action = SCHEDULED_NOTIF_OFF_ACTION
         val notifOnTimePendingIntent = PendingIntent.getService(context, SettingsFragment.NOTIF_ON_TIME_ALARM, notifOnTimeIntent, PendingIntent.FLAG_UPDATE_CURRENT)
         val notifOffTimePendingIntent = PendingIntent.getService(context, SettingsFragment.NOTIF_OFF_TIME_ALARM, notifOffTimeIntent, PendingIntent.FLAG_UPDATE_CURRENT)
         val mAlarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager

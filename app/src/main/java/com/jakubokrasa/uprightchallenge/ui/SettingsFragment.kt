@@ -122,8 +122,6 @@ class SettingsFragment : ChronoPreferenceFragment() {
     }
 
     companion object {
-        const val SCHEDULED_NOTIF_OFF_ACTION = BuildConfig.APPLICATION_ID + ".SCHEDULED_NOTIF_OFF_ACTION"
-        const val SCHEDULED_NOTIF_ON_ACTION = BuildConfig.APPLICATION_ID + ".SCHEDULED_NOTIF_ON_ACTION"
         const val sharedPrefsFile = BuildConfig.APPLICATION_ID
         const val NOTIFICATION_ID = 0
         const val RESET_ALARM_ID = 1
