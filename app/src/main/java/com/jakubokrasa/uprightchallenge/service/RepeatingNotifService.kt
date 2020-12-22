@@ -62,13 +62,13 @@ class RepeatingNotifService : Service() {
             SCHEDULED_NOTIF_OFF_ACTION -> {
                 Log.d(LOG_TAG, getTime() + " action notif OFF received")
                 prefEditor.putBoolean("pref_key_switch_notifications", false)
-                notifHelper.cancelAlarmPendingIntent()
+                notifHelper.cancelNotifAlarm()
                 mNotifyManager.cancelAll()
             }
             SCHEDULED_NOTIF_ON_ACTION -> {
                 Log.d(LOG_TAG, getTime() + " action notif ON received")
                 prefEditor.putBoolean("pref_key_switch_notifications", true)
-                notifHelper.setAlarmPendingIntent()
+                notifHelper.setNotifAlarm()
             }
         }
         prefEditor.apply()

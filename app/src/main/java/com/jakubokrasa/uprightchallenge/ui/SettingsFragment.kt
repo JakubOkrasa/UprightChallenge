@@ -16,7 +16,6 @@ import com.dr1009.app.chronodialogpreference.TimeDialogPreference
 import com.jakubokrasa.uprightchallenge.BuildConfig
 import com.jakubokrasa.uprightchallenge.R
 import com.jakubokrasa.uprightchallenge.RepeatingNotifHelper
-import com.jakubokrasa.uprightchallenge.data.PostureStatDatabase
 import com.jakubokrasa.uprightchallenge.service.RepeatingNotifService
 
 /**
@@ -49,8 +48,8 @@ class SettingsFragment : ChronoPreferenceFragment() {
                 val notificationsOn = notificationsOnObject as Boolean
                 if (notificationsOn) {
                     Log.d(LOG_TAG, "notifications on")
-                        notifHelper.setAlarmPendingIntent()
-                        notifHelper.setResetPendingIntent()
+                        notifHelper.setNotifAlarm()
+                        notifHelper.setSaveStatsAlarm()
                         notifHelper.setNotifOnTimeRange()
                 } else {
                     Log.d(LOG_TAG, "notifications off")
@@ -83,7 +82,7 @@ class SettingsFragment : ChronoPreferenceFragment() {
             it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { preference, newValue ->
                 val interval = newValue as String
                 prefsEditor.putLong(preference.key, interval.toLong()).apply()
-                notifHelper.setAlarmPendingIntent()
+                notifHelper.setNotifAlarm()
                 true
             }
         }

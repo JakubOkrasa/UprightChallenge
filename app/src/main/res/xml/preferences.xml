@@ -8,6 +8,7 @@
         android:title="Notifications" />
     <com.dr1009.app.chronodialogpreference.TimeDialogPreference
         android:defaultValue="07:30"
+
         android:key="@string/pref_key_notif_on_time"
         android:title="Notifications time start"
         />

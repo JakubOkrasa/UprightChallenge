@@ -28,7 +28,7 @@
             android:enabled="true"
             android:exported="false" />
         <receiver
-            android:name=".receiver.ResetAlarmReceiver"
+            android:name=".receiver.SaveStatsAlarmReceiver"
             android:enabled="true"
             android:exported="false" />
 

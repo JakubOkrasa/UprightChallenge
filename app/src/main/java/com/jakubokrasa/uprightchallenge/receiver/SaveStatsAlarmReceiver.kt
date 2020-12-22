@@ -11,7 +11,7 @@ import com.jakubokrasa.uprightchallenge.data.PostureStatDatabase
 import com.jakubokrasa.uprightchallenge.data.PostureStatRepository
 import kotlinx.coroutines.runBlocking
 
-class ResetAlarmReceiver() : BroadcastReceiver() {
+class SaveStatsAlarmReceiver() : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         val preferences = context.getSharedPreferences(sharedPrefsFile, Context.MODE_PRIVATE)
         val prefsEditor = preferences.edit()
@@ -39,6 +39,6 @@ class ResetAlarmReceiver() : BroadcastReceiver() {
         const val sharedPrefsFile = BuildConfig.APPLICATION_ID
         private const val PREF_KEY_GOOD_POSTURE_COUNT = "good_posture_count"
         private const val PREF_KEY_BAD_POSTURE_COUNT = "bad_posture_count"
-        val LOG_TAG = ResetAlarmReceiver::class.java.simpleName
+        val LOG_TAG = SaveStatsAlarmReceiver::class.java.simpleName
     }
 }
