@@ -9,7 +9,6 @@ import android.content.SharedPreferences
 import android.os.SystemClock
 import android.util.Log
 import com.jakubokrasa.uprightchallenge.receiver.ResetAlarmReceiver
-import com.jakubokrasa.uprightchallenge.service.LockscreenNotifService
 import com.jakubokrasa.uprightchallenge.service.RepeatingNotifService
 import com.jakubokrasa.uprightchallenge.service.RepeatingNotifService.Companion.DELIVER_REPEATING_NOTIF_ACTION
 import com.jakubokrasa.uprightchallenge.service.RepeatingNotifService.Companion.SCHEDULED_NOTIF_OFF_ACTION

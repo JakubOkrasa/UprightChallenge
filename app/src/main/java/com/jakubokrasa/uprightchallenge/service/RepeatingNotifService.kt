@@ -6,6 +6,7 @@ import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Build
 import android.os.IBinder
 import android.util.Log
@@ -20,8 +21,11 @@ import com.jakubokrasa.uprightchallenge.ui.SettingsFragment
 
 class RepeatingNotifService : Service() {
     private lateinit var mNotifyManager: NotificationManager
+    private lateinit var preferences: SharedPreferences
+    private lateinit var prefEditor: SharedPreferences.Editor
     override fun onCreate() {
         super.onCreate()
+        preferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE)
         createNotificationChannel()
     }
 
@@ -39,8 +43,7 @@ class RepeatingNotifService : Service() {
             return
         }
         val notifHelper = RepeatingNotifHelper(this)
-        val preferences = getSharedPreferences(sharedPrefFile, MODE_PRIVATE)
-        val prefEditor = preferences.edit()
+        prefEditor = preferences.edit()
         when (intent.action) {
             DELIVER_REPEATING_NOTIF_ACTION -> {
                 deliverNotification(applicationContext)
@@ -49,14 +52,12 @@ class RepeatingNotifService : Service() {
             GOOD_POSTURE_ACTION -> {
                 Log.d(LOG_TAG, "yes option clicked")
                 mNotifyManager.cancel(SettingsFragment.NOTIFICATION_ID)
-                var count = preferences.getInt(PREF_KEY_GOOD_POSTURE_COUNT, 0)
-                prefEditor.putInt(PREF_KEY_GOOD_POSTURE_COUNT, ++count)
+                increasePostureCount(true)
             }
             BAD_POSTURE_ACTION -> {
                 Log.d(LOG_TAG, "no option clicked")
                 mNotifyManager.cancel(SettingsFragment.NOTIFICATION_ID)
-                var count = preferences.getInt(PREF_KEY_BAD_POSTURE_COUNT, 0)
-                prefEditor.putInt(PREF_KEY_BAD_POSTURE_COUNT, ++count)
+                increasePostureCount(false)
             }
             SCHEDULED_NOTIF_OFF_ACTION -> {
                 Log.d(LOG_TAG, getTime() + " action notif OFF received")
@@ -71,6 +72,13 @@ class RepeatingNotifService : Service() {
             }
         }
         prefEditor.apply()
+    }
+
+    private fun increasePostureCount(correctPosture: Boolean) {
+        val key : String = if(correctPosture) PREF_KEY_GOOD_POSTURE_COUNT
+        else PREF_KEY_BAD_POSTURE_COUNT
+        var count = preferences.getInt(key, 0)
+        prefEditor.putInt(key, ++count)
     }
 
     private fun createNotificationChannel() {
