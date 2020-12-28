@@ -27,5 +27,6 @@
     <Preference
         android:title="@string/pref_label_populate_db"
         android:key="pref_key_populate"
-        android:summary="Tap this preference to display sample data in the MainActivity (for tests)"/>
+        android:summary="@string/pref_summary_populate_db"
+        app:isPreferenceVisible="false"/>
 </androidx.preference.PreferenceScreen>
