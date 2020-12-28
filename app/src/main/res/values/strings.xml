@@ -32,4 +32,7 @@
     <string name="posture_notif_negative_label">no</string>
     <string name="pref_label_notif_on_time">Turn on notifications time</string>
     <string name="pref_label_notif_off_time">Turn off notifications time</string>
+    <string name="pref_label_notifications_switch">Notifications</string>
+    <string name="pref_label_populate_db">Populate DB with sample data</string>
+    <string name="pref_summary_populate_db">Tap this preference to display sample data in the MainActivity (for tests)</string>
 </resources>
