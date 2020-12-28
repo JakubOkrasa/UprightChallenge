@@ -5,17 +5,17 @@
         android:defaultValue="false"
         android:key="pref_key_switch_notifications"
         android:summary="@string/prefs_notif_switch_summary"
-        android:title="Notifications" />
+        android:title="@string/pref_label_notifications_switch" />
     <com.dr1009.app.chronodialogpreference.TimeDialogPreference
         android:defaultValue="07:30"
 
         android:key="@string/pref_key_notif_on_time"
-        android:title="Notifications time start"
+        android:title="@string/pref_label_notif_on_time"
         />
     <com.dr1009.app.chronodialogpreference.TimeDialogPreference
         android:defaultValue="21:00"
         android:key="@string/pref_key_notif_off_time"
-        android:title="Notifications time end"
+        android:title="@string/pref_label_notif_off_time"
         />
     <androidx.preference.ListPreference
         android:defaultValue="1800000"
@@ -24,17 +24,9 @@
         android:key="pref_key_interval"
         android:summary="%s"
         android:title="@string/interval_list_pref" />
-    <androidx.preference.CheckBoxPreference
-        android:defaultValue="true"
-        android:key="checkbox_vibrate"
-        android:title="Vibrate"
-        android:enabled="false"/>
-    <androidx.preference.CheckBoxPreference
-        android:defaultValue="true"
-        android:key="checkbox_sound"
-        android:title="Sound"
-        android:enabled="false"/>
-    <Preference android:title="Populate DB with sample data"
+    <Preference
+        android:title="@string/pref_label_populate_db"
         android:key="pref_key_populate"
-        android:summary="Tap this preference to display sample data in the MainActivity (for tests)"/>
+        android:summary="@string/pref_summary_populate_db"
+        app:isPreferenceVisible="false"/>
 </androidx.preference.PreferenceScreen>
