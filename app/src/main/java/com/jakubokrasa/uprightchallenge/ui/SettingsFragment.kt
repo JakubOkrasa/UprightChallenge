@@ -87,18 +87,18 @@ class SettingsFragment : ChronoPreferenceFragment() {
             }
         }
 
-
-        //only for tests
-        val populateWithSampleDataBtnPref = findPreference<Preference>("pref_key_populate")
-        if (populateWithSampleDataBtnPref != null) {
-            populateWithSampleDataBtnPref.onPreferenceClickListener = Preference.OnPreferenceClickListener { //Although it's not a good practice to call Database layer method from UI,
-                //it was done only for app testing/debugging purposes and will be removed in the official
-                // version of the app TODO remove in production version
-//                PostureStatDatabase.getDatabase(requireContext()).populateDbWithSampleData()
-                mainViewModel.populateDbWithSampleData()
-                true
+        if(BuildConfig.DEBUG) {
+            val populateWithSampleDataBtnPref = findPreference<Preference>("pref_key_populate")
+            populateWithSampleDataBtnPref?.let {
+                it.isVisible = true
+                it.onPreferenceClickListener = Preference.OnPreferenceClickListener { //Although it's not a good practice to call Database layer method from UI,
+                    //it was done only for app testing/debugging purposes
+                    mainViewModel.populateDbWithSampleData()
+                    true
+                }
             }
         }
+
     }
 
     override fun onStart() {
