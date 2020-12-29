@@ -40,12 +40,6 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
         Log.d(LOG_TAG, "A: onCreate")
     }
 
-    override fun onResume() {
-        super.onResume()
-        val preferences = getSharedPreferences(SettingsFragment.sharedPrefsFile, MODE_PRIVATE)
-        preferences.registerOnSharedPreferenceChangeListener(this)
-    }
-
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.menu_main, menu)
@@ -61,6 +55,20 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
             return true
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onResume() {
+        Log.d(LOG_TAG, "A: onResume")
+        super.onResume()
+        val preferences = getSharedPreferences(SettingsFragment.sharedPrefsFile, MODE_PRIVATE)
+        preferences.registerOnSharedPreferenceChangeListener(this)
+    }
+
+    override fun onPause() {
+        Log.d(LOG_TAG, "A: onPause")
+        val preferences = getSharedPreferences(SettingsFragment.sharedPrefsFile, MODE_PRIVATE)
+        preferences.unregisterOnSharedPreferenceChangeListener(this)
+        super.onPause()
     }
 
     override fun onStart() {
