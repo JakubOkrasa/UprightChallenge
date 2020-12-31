@@ -23,21 +23,12 @@
         </activity>
 
         <receiver
-            android:name=".receiver.NotifAlarmReceiver"
-            android:enabled="true"
-            android:exported="false" />
-        <receiver
             android:name=".receiver.SaveStatsAlarmReceiver"
             android:enabled="true"
             android:exported="false" />
 
         <service
             android:name=".service.RepeatingNotifService"
-            android:enabled="true"
-            android:exported="false" />
-
-        <service
-            android:name=".service.LockscreenNotifService"
             android:enabled="true"
             android:exported="false" />
 
