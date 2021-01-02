@@ -116,7 +116,7 @@ class MainActivity : AppCompatActivity(), OnSharedPreferenceChangeListener {
 
     private fun setPercentStatColor(result: Float) {
         val color: Int =
-            if (result > 0 && result < 0.4) {
+            if (result >= 0 && result < 0.4) {
                 R.color.red
             } else if (result >= 0.4 && result < 0.6) {
                 R.color.orange
