@@ -83,15 +83,13 @@ class RepeatingNotifService : Service() {
 
     private fun createNotificationChannel() {
         mNotifyManager = baseContext.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-        val vibPattern = longArrayOf(0, 200, 200, 200, 200, 200) //{delay1, vibDuration1, delay2, vibDuration2...}
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val notificationChannel = NotificationChannel(
                     PRIMARY_CHANNEL_ID,
                     "Check posture notification",
                     NotificationManager.IMPORTANCE_HIGH)
-            notificationChannel.description = "notification check posture"
+            notificationChannel.description = "Notification with the question relevant to your posture"
             notificationChannel.enableVibration(true)
-            notificationChannel.vibrationPattern = vibPattern
             mNotifyManager.createNotificationChannel(notificationChannel)
         }
     }

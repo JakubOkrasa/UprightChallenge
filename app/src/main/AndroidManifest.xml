@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.jakubokrasa.uprightchallenge">
 
-    <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
@@ -24,21 +23,12 @@
         </activity>
 
         <receiver
-            android:name=".receiver.NotifAlarmReceiver"
-            android:enabled="true"
-            android:exported="false" />
-        <receiver
             android:name=".receiver.SaveStatsAlarmReceiver"
             android:enabled="true"
             android:exported="false" />
 
         <service
             android:name=".service.RepeatingNotifService"
-            android:enabled="true"
-            android:exported="false" />
-
-        <service
-            android:name=".service.LockscreenNotifService"
             android:enabled="true"
             android:exported="false" />
 

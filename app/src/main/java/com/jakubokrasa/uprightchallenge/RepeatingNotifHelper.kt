@@ -8,6 +8,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.SystemClock
 import android.util.Log
+import android.widget.Toast
 import com.jakubokrasa.uprightchallenge.receiver.SaveStatsAlarmReceiver
 import com.jakubokrasa.uprightchallenge.service.RepeatingNotifService
 import com.jakubokrasa.uprightchallenge.service.RepeatingNotifService.Companion.DELIVER_REPEATING_NOTIF_ACTION
