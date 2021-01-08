@@ -56,7 +56,7 @@ class SettingsFragment : ChronoPreferenceFragment() {
                     Log.d(LOG_TAG, "notifications off")
                     notifHelper.turnOffNotifications()
                     Toast.makeText(context, "The notifications will be turned back on at " +  // TODO: 1/2/2021 make it compatible with 12 hours mode (in prefs time is always in 24h mode
-                            preferences.getString(this.resources.getString(R.string.pref_key_notif_on_time), "no data error"), Toast.LENGTH_LONG).show()
+                            preferences.getString(this.resources.getString(R.string.pref_key_notif_on_time), "07:30"), Toast.LENGTH_LONG).show()
                 }
                 prefsEditor.putBoolean(preference.key, notificationsOn).apply()
                 enableOrDisablePrefsRelatedWithNotifs()
