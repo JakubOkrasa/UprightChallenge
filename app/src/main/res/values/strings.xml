@@ -33,4 +33,6 @@
     <string name="pref_label_notifications_switch">Notifications</string>
     <string name="pref_label_populate_db">Populate DB with sample data</string>
     <string name="pref_summary_populate_db">Tap this preference to display sample data in the MainActivity (for tests)</string>
+    <string name="pref_summary_cb_test_interval">only for tests and debug</string>
+    <string name="pref_label_cb_test_interval">test repeat interval - 30 seconds</string>
 </resources>
