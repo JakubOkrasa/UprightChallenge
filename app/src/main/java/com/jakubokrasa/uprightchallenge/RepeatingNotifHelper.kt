@@ -29,7 +29,12 @@ class RepeatingNotifHelper(private val context: Context) {
         val alarmIntent = Intent(context, RepeatingNotifService::class.java)
         alarmIntent.action = DELIVER_REPEATING_NOTIF_ACTION
         val alarmPendingIntent = PendingIntent.getService(context, SettingsFragment.NOTIFICATION_ID, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT) //todo rename to NotifAlarmPendingIntent, similarly alarmIntent
-        val repeatInterval = preferences.getLong("pref_key_interval", AlarmManager.INTERVAL_HALF_HOUR)
+        val repeatInterval = if(BuildConfig.DEBUG && preferences.getBoolean("pref_key_cb_test_interval", false)) {
+            30_000 // test interval - 30 seconds
+        }
+        else {
+            preferences.getLong("pref_key_interval", AlarmManager.INTERVAL_HALF_HOUR)
+        }
         val triggerTime = SystemClock.elapsedRealtime() + repeatInterval
         Log.d(LOG_TAG, "repeat interval: $repeatInterval")
         mAlarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerTime, repeatInterval, alarmPendingIntent)

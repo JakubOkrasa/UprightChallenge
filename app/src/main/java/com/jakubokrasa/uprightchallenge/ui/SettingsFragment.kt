@@ -9,6 +9,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.preference.CheckBoxPreference
 import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.SwitchPreferenceCompat
@@ -60,6 +61,7 @@ class SettingsFragment : ChronoPreferenceFragment() {
                 }
                 prefsEditor.putBoolean(preference.key, notificationsOn).apply()
                 enableOrDisablePrefsRelatedWithNotifs()
+                if (intervalListPref != null) intervalListPref.isEnabled = !preferences.getBoolean("pref_key_cb_test_interval", false)
                 true
             }
         }
@@ -81,6 +83,7 @@ class SettingsFragment : ChronoPreferenceFragment() {
             }
         }
         intervalListPref?.let {
+            intervalListPref.isEnabled = !preferences.getBoolean("pref_key_cb_test_interval", false)
             Log.d(LOG_TAG, "intervalListPref: $intervalListPref")
             it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { preference, newValue ->
                 val interval = newValue as String
@@ -97,6 +100,18 @@ class SettingsFragment : ChronoPreferenceFragment() {
                 it.onPreferenceClickListener = Preference.OnPreferenceClickListener { //Although it's not a good practice to call Database layer method from UI,
                     //it was done only for app testing/debugging purposes
                     mainViewModel.populateDbWithSampleData()
+                    true
+                }
+            }
+            val testIntervalCbPref = findPreference<Preference>(requireContext().resources.getString(R.string.pref_key_cb_test_interval))
+            testIntervalCbPref?.let {
+                it.isVisible = true
+//                intervalListPref.isEnabled = false
+                it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
+                    val isTestInterval = newValue as Boolean
+                    prefsEditor.putBoolean("pref_key_cb_test_interval", isTestInterval).apply()
+                    if(intervalListPref!=null) intervalListPref.isEnabled = !isTestInterval
+                    notifHelper.setNotifAlarm()
                     true
                 }
             }
@@ -117,10 +132,12 @@ class SettingsFragment : ChronoPreferenceFragment() {
         val intervalListPref = findPreference<ListPreference>("pref_key_interval")
         val timeNotifBeginPref = findPreference<TimeDialogPreference>(resources.getString(R.string.pref_key_notif_on_time))
         val timeNotifEndPref = findPreference<TimeDialogPreference>(resources.getString(R.string.pref_key_notif_off_time))
+        val testIntervalPref = findPreference<CheckBoxPreference>(requireContext().resources.getString(R.string.pref_key_cb_test_interval))
         val notifOn = preferences.getBoolean("pref_key_switch_notifications", false)
         intervalListPref!!.isEnabled = notifOn
         timeNotifBeginPref!!.isEnabled = notifOn
         timeNotifEndPref!!.isEnabled = notifOn
+        testIntervalPref!!.isEnabled = notifOn
     }
 
     companion object {
