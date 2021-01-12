@@ -11,6 +11,8 @@
 /.idea/dbnavigator.xml
 .DS_Store
 /build
+/debug
+/release
 /captures
 .externalNativeBuild
 .cxx
